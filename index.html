@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Naves - DP World Posorja</title>
+<style>
+:root{--bg:#f3f6f9;--card:#fff;--text:#1f2937;--muted:#64748b;--border:#dbe2ea;--blue:#0b5ed7;--green:#198754;--yellow:#f0ad00;--red:#dc3545;--shadow:0 4px 15px rgba(0,0,0,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+header{background:#073b73;color:#fff;padding:18px 24px;box-shadow:var(--shadow)}header h1{margin:0;font-size:24px}header p{margin:5px 0 0;opacity:.85;font-size:13px}
+.container{max-width:1600px;margin:20px auto;padding:0 15px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+button,select,input{border:1px solid var(--border);background:#fff;border-radius:7px;padding:10px 12px;font-size:14px}button{cursor:pointer;background:#073b73;color:#fff;border-color:#073b73}button.secondary{background:#fff;color:#073b73}input{min-width:260px;flex:1}
+.info{background:#eaf4ff;border:1px solid #b6d7ff;color:#174a7c;padding:10px 12px;border-radius:8px;margin-bottom:15px;font-size:12px}
+.error{display:none;background:#ffe0e3;color:#842029;border:1px solid #f5c2c7;padding:12px;border-radius:8px;margin-bottom:15px}
+.leyenda{margin:0 0 15px;color:#475569;font-size:12px}.tag{font-size:10px;padding:3px 6px;border-radius:12px;margin-left:5px;font-weight:bold;display:inline-block}.hoy{background:#ffc107;color:#5c4300}.manana{background:#0dcaf0;color:#064b59}.operacion{background:#0b5ed7;color:#fff}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}.card{background:var(--card);padding:16px;border-radius:10px;box-shadow:var(--shadow);border-left:5px solid #64748b}.arribo{border-color:var(--yellow)}.trabajo{border-color:var(--blue)}.zarpo{border-color:var(--green)}.atrasada{border-color:var(--red)}.total{border-color:#334155}.num{font-size:28px;font-weight:bold}.label{font-size:12px;color:var(--muted);margin-top:4px}
+.section{background:#fff;border-radius:10px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}.section-title{padding:13px 16px;font-size:17px;font-weight:bold;border-bottom:1px solid var(--border)}.section-title span{float:right;font-size:12px;color:var(--muted);font-weight:normal}.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:1250px}th,td{padding:10px 9px;border-bottom:1px solid #edf1f5;text-align:left;font-size:13px;white-space:nowrap}th{background:#f7f9fb;color:#475569;position:sticky;top:0;z-index:1}.nave{font-weight:bold}
+tr.fila-hoy{background:#fff4cc}tr.fila-manana{background:#e8f4ff}tr.fila-trabajando{background:#dceeff;box-shadow:inset 5px 0 0 #0b5ed7}tr.fila-atrasada{background:#ffe0e3;box-shadow:inset 5px 0 0 #dc3545}tr.fila-zarpo{background:#e3f5eb;box-shadow:inset 5px 0 0 #198754}
+.status{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:bold}.status-arribo{background:#fff3cd;color:#8a6500}.status-trabajo{background:#dbeafe;color:#0756a6}.status-zarpo{background:#d1e7dd;color:#146c43}.status-atrasada{background:#f8d7da;color:#842029}.status-desconocido{background:#e2e3e5;color:#41464b}
+.countdown{font-weight:bold;color:#0756a6}.empty{text-align:center;padding:25px;color:var(--muted)}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.cards{grid-template-columns:1fr}.toolbar>*{width:100%}input{min-width:0}}
+</style>
+</head>
+<body>
+<header><h1>⚓ Control de Naves - DP World Posorja</h1><p>Seguimiento de arribos, operación y zarpes según el itinerario publicado por DP World</p></header>
+<div class="container">
+  <div class="toolbar">
+    <input id="buscar" type="search" placeholder="Buscar nave, viaje, línea, servicio..." aria-label="Buscar nave">
+    <select id="filtro">
+      <option value="TODOS">Todos los estados</option><option value="POR ARRIBAR">Por arribar</option>
+      <option value="TRABAJANDO">Trabajando / En operación</option><option value="ATRASADA">Atrasadas</option><option value="ZARPÓ">Zarpó</option>
+    </select>
+    <button onclick="cargarDatos()">↻ Actualizar ahora</button><button class="secondary" onclick="window.print()">🖨 Imprimir</button>
+  </div>
+  <div id="errorBox" class="error"></div>
+  <div class="info"><b>Fuente:</b> DP World Posorja · <b>STATUS web:</b> tiene prioridad para detectar <b>IN OPERATION</b>, pero <b>ATD</b> marca el fin real de la operación. · <span id="actualizado"></span></div>
+  <div class="leyenda"><b>Resaltado:</b> <span class="tag hoy">HOY</span> <span class="tag manana">MAÑANA</span> <span class="tag operacion">EN OPERACIÓN</span></div>
+
+  <div class="cards">
+    <div class="card total"><div class="num" id="total">0</div><div class="label">TOTAL REGISTROS</div></div>
+    <div class="card arribo"><div class="num" id="porArribar">0</div><div class="label">🟡 POR ARRIBAR</div></div>
+    <div class="card trabajo"><div class="num" id="trabajando">0</div><div class="label">🔵 TRABAJANDO / EN PUERTO</div></div>
+    <div class="card atrasada"><div class="num" id="atrasadas">0</div><div class="label">🔴 ATRASADAS</div></div>
+    <div class="card zarpo"><div class="num" id="zarparon">0</div><div class="label">🟢 ZARPES</div></div>
+  </div>
+
+  <div class="section"><div class="section-title">🟡 PRÓXIMAS NAVES A ARRIBAR <span>Ordenadas por ETB</span></div><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>Cuenta regresiva</th><th>STATUS WEB</th><th>Estado</th><th>Origen</th><th>Destino</th><th>Servicio</th></tr></thead>
+    <tbody id="tablaArribos"></tbody></table></div></div>
+
+  <div class="section"><div class="section-title">🔵 NAVES TRABAJANDO / EN PUERTO <span>Desde ATA hasta ATD / fin de operación</span></div><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ATA</th><th>ETD</th><th>ATD</th><th>Tiempo en puerto</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr></thead>
+    <tbody id="tablaTrabajo"></tbody></table></div></div>
+
+  <div class="section"><div class="section-title">🔴 NAVES ATRASADAS <span>ETB vencida sin operación confirmada</span></div><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>Demora</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr></thead>
+    <tbody id="tablaAtrasadas"></tbody></table></div></div>
+
+  <div class="section"><div class="section-title">🟢 ZARPES REALIZADOS <span>Ordenados por ATD</span></div><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>ATA</th><th>ATD</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr></thead>
+    <tbody id="tablaZarpes"></tbody></table></div></div>
+  <footer>Los datos se actualizan mediante GitHub Actions y se guardan en <b>datos.json</b>. La página se refresca automáticamente.</footer>
+</div>
+
+<script>
+let NAVES=[];
+const AHORA_TOLERANCIA_MS=5*60*1000;
+
+function fecha(s){
+  if(!s || String(s).trim()==="" || String(s).toLowerCase()==="null") return null;
+  const d=new Date(String(s).trim().replace(/\.0+$/,"").replace(" ","T"));
+  return isNaN(d)?null:d;
+}
+function fmt(s){const d=fecha(s);return d?d.toLocaleString("es-EC",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:false}):"—";}
+function horasTexto(ms){
+  if(ms<0)ms=0;const d=Math.floor(ms/86400000),h=Math.floor(ms%86400000/3600000),m=Math.floor(ms%3600000/60000);
+  return d?`${d}d ${h}h ${m}m`:`${h}h ${m}m`;
+}
+function normStatus(s){return String(s||"").trim().toUpperCase().replace(/\s+/g," ");}
+function estado(n){
+  const s=normStatus(n.status),now=new Date(),etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
+  // ATD es el cierre de la operación: nunca mostrar una nave como trabajando después de su salida.
+  if(atd || s==="DEPARTED" || s.includes("SAILED")) return "ZARPÓ";
+  // STATUS publicado por DP World es la señal principal de operación mientras no exista ATD.
+  if(s.includes("IN OPERATION") || s.includes("OPERATING") || s==="WORKING"){
+    if(etb && now < etb) return "POR ARRIBAR";
+    if(etd && now > etd && !atd) return "TRABAJANDO";
+    return "TRABAJANDO";
+  }
+  // ATA sin ATD significa que la nave ya está en puerto.
+  if(ata && !atd) return "TRABAJANDO";
+  // TO ARRIVE se evalúa contra ETB.
+  if(s.includes("TO ARRIVE")){
+    return etb && now < etb ? "POR ARRIBAR" : "ATRASADA";
+  }
+  // Respaldo por ventana de fechas.
+  if(etb && now < etb) return "POR ARRIBAR";
+  if(etb && now >= etb && (!etd || now <= etd)) return "TRABAJANDO";
+  if(etd && now > etd) return "ATRASADA";
+  return "POR ARRIBAR";
+}
+function claseEstado(e){return e==="ZARPÓ"?"status-zarpo":e==="TRABAJANDO"?"status-trabajo":e==="ATRASADA"?"status-atrasada":e==="POR ARRIBAR"?"status-arribo":"status-desconocido";}
+function badge(e){return `<span class="status ${claseEstado(e)}">${e}</span>`;}
+function badgeWeb(s){
+  const v=String(s||"SIN STATUS"),u=normStatus(v);
+  let c="status-desconocido";if(u.includes("IN OPERATION"))c="status-trabajo";else if(u==="DEPARTED"||u.includes("SAILED"))c="status-zarpo";else if(u.includes("TO ARRIVE"))c="status-arribo";
+  return `<span class="status ${c}">${v}</span>`;
+}
+function mismoDia(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+function claseFila(n,e,ref="etb"){
+  const now=new Date(),d=fecha(n[ref]);let c=e==="TRABAJANDO"?"fila-trabajando":e==="ATRASADA"?"fila-atrasada":e==="ZARPÓ"?"fila-zarpo":"";
+  if(d&&mismoDia(d,now))c+=" fila-hoy";const man=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);if(d&&mismoDia(d,man))c+=" fila-manana";return c.trim();
+}
+function marcadorDia(n){
+  const d=fecha(n.etb),now=new Date();if(!d)return "";
+  if(mismoDia(d,now))return '<span class="tag hoy">HOY</span>';
+  const man=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);return mismoDia(d,man)?'<span class="tag manana">MAÑANA</span>':"";
+}
+function filaArribo(x,i){
+  const n=x.nave,e=x.est,etb=fecha(n.etb),dif=etb?etb-new Date():0;
+  return `<tr class="${claseFila(n,e)}"><td>${i+1}</td><td class="nave">${n.nave} ${marcadorDia(n)}</td><td>${n.viaje||"—"}</td><td>${n.linea||"—"}</td><td>${fmt(n.etb)}</td><td>${fmt(n.etd)}</td><td class="countdown">${e==="POR ARRIBAR"?(dif>0?horasTexto(dif):"AHORA"):"—"}</td><td>${badgeWeb(n.status)}</td><td>${badge(e)}</td><td>${n.origen||"—"}</td><td>${n.destino||"—"}</td><td>${n.servicio||"—"}</td></tr>`;
+}
+function filaTrabajo(x,i){
+  const n=x.nave,e=x.est,ata=fecha(n.ata),fin=fecha(n.atd);
+  const tiempo=ata?horasTexto((fin||new Date())-ata):"Pendiente ATA";
+  return `<tr class="${claseFila(n,e,"ata")}"><td>${i+1}</td><td class="nave">${n.nave} <span class="tag operacion">EN OPERACIÓN</span></td><td>${n.viaje||"—"}</td><td>${n.linea||"—"}</td><td>${fmt(n.etb)}</td><td>${fmt(n.ata)}</td><td>${fmt(n.etd)}</td><td>${fmt(n.atd)}</td><td>${tiempo}</td><td>${badgeWeb(n.status)}</td><td>${badge(e)}</td><td>${n.servicio||"—"}</td></tr>`;
+}
+function filaAtrasada(x,i){
+  const n=x.nave,e=x.est,etb=fecha(n.etb),dem=etb?new Date()-etb:0;
+  return `<tr class="${claseFila(n,e)}"><td>${i+1}</td><td class="nave">${n.nave} ${marcadorDia(n)}</td><td>${n.viaje||"—"}</td><td>${n.linea||"—"}</td><td>${fmt(n.etb)}</td><td>${fmt(n.etd)}</td><td>${horasTexto(dem)}</td><td>${badgeWeb(n.status)}</td><td>${badge(e)}</td><td>${n.servicio||"—"}</td></tr>`;
+}
+function filaZarpe(x,i){
+  const n=x.nave,e=x.est;return `<tr class="${claseFila(n,e,"atd")}"><td>${i+1}</td><td class="nave">${n.nave}</td><td>${n.viaje||"—"}</td><td>${n.linea||"—"}</td><td>${fmt(n.etb)}</td><td>${fmt(n.etd)}</td><td>${fmt(n.ata)}</td><td>${fmt(n.atd)}</td><td>${badgeWeb(n.status)}</td><td>${badge(e)}</td><td>${n.servicio||"—"}</td></tr>`;
+}
+function render(){
+  const q=document.getElementById("buscar").value.toLowerCase().trim(),f=document.getElementById("filtro").value;
+  const mapped=NAVES.map(n=>({nave:n,est:estado(n)})).filter(x=>{const t=Object.values(x.nave).join(" ").toLowerCase();return(!q||t.includes(q))&&(f==="TODOS"||x.est===f);});
+  const arr=mapped.filter(x=>x.est==="POR ARRIBAR").sort((a,b)=>(fecha(a.nave.etb)||0)-(fecha(b.nave.etb)||0));
+  const tra=mapped.filter(x=>x.est==="TRABAJANDO").sort((a,b)=>(fecha(a.nave.etd)||0)-(fecha(b.nave.etd)||0));
+  const atr=mapped.filter(x=>x.est==="ATRASADA").sort((a,b)=>(fecha(a.nave.etb)||0)-(fecha(b.nave.etb)||0));
+  const zar=mapped.filter(x=>x.est==="ZARPÓ").sort((a,b)=>(fecha(b.nave.atd)||0)-(fecha(a.nave.atd)||0));
+  total.textContent=mapped.length;porArribar.textContent=arr.length;trabajando.textContent=tra.length;atrasadas.textContent=atr.length;zarparon.textContent=zar.length;
+  tablaArribos.innerHTML=arr.length?arr.map(filaArribo).join(""):'<tr><td colspan="12" class="empty">No hay naves por arribar.</td></tr>';
+  tablaTrabajo.innerHTML=tra.length?tra.map(filaTrabajo).join(""):'<tr><td colspan="12" class="empty">No hay naves trabajando / en puerto.</td></tr>';
+  tablaAtrasadas.innerHTML=atr.length?atr.map(filaAtrasada).join(""):'<tr><td colspan="10" class="empty">No hay naves atrasadas.</td></tr>';
+  tablaZarpes.innerHTML=zar.length?zar.map(filaZarpe).join(""):'<tr><td colspan="11" class="empty">No hay zarpes registrados.</td></tr>';
+}
+async function cargarDatos(){
+  try{
+    const r=await fetch("datos.json?ts="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
+    const d=await r.json();if(!Array.isArray(d.naves))throw new Error("datos.json no contiene el arreglo naves");
+    NAVES=d.naves;document.getElementById("errorBox").style.display="none";render();
+    actualizado.textContent="Última actualización de datos: "+(d.actualizado_ec||d.actualizado_utc||"—");
+  }catch(e){
+    const box=document.getElementById("errorBox");box.textContent="No se pudo leer datos.json: "+e.message;box.style.display="block";
+  }
+}
+buscar.addEventListener("input",render);filtro.addEventListener("change",render);cargarDatos();setInterval(cargarDatos,60000);
+</script>
+</body>
+</html>
