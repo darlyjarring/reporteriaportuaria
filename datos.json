@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-15T23:42:23.303575+00:00",
-  "actualizado_ec": "2026-09-15 18:42:23",
+  "actualizado_utc": "2026-09-16T01:46:23.158224+00:00",
+  "actualizado_ec": "2026-09-15 20:46:23",
   "total": 57,
   "naves": [
     {
@@ -283,7 +283,7 @@
       "etb": "2026-09-15 02:00:00",
       "etd": "2026-09-15 18:30:00",
       "ata": "2026-09-15 02:50:00",
-      "atd": "",
+      "atd": "2026-09-15 19:05:00",
       "status": "IN OPERATION",
       "origen": "COCTG",
       "destino": "COCTG",
