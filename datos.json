@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-16T20:15:43.407974+00:00",
-  "actualizado_ec": "2026-09-16 15:15:43",
+  "actualizado_utc": "2026-09-16T23:02:32.873430+00:00",
+  "actualizado_ec": "2026-09-16 18:02:32",
   "total": 56,
   "naves": [
     {
@@ -175,8 +175,8 @@
       "reefer": "2026-09-19 17:00:00.0",
       "dry": "2026-09-19 17:00:00.0",
       "linea": "MAE",
-      "etb": "2026-09-19 23:00:00",
-      "etd": "2026-09-21 05:00:00",
+      "etb": "2026-09-19 15:00:00",
+      "etd": "2026-09-20 22:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -200,21 +200,6 @@
       "servicio": "ACSA"
     },
     {
-      "nave": "CMA2026104 - CMA CGM BOLDNESS",
-      "viaje": "0DVQFN1MA",
-      "reefer": "2026-09-16 19:00:00.0",
-      "dry": "2026-09-16 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-09-17 20:00:00",
-      "etd": "2026-09-18 07:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
-    },
-    {
       "nave": "HLC2026083 - CALLAO EXPRESS",
       "viaje": "6231N",
       "reefer": "2026-09-17 07:00:00.0",
@@ -228,6 +213,21 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
+    },
+    {
+      "nave": "CMA2026104 - CMA CGM BOLDNESS",
+      "viaje": "0DVQFN1MA",
+      "reefer": "2026-09-16 19:00:00.0",
+      "dry": "2026-09-16 19:00:00.0",
+      "linea": "CMA",
+      "etb": "2026-09-17 14:00:00",
+      "etd": "2026-09-18 01:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
     },
     {
       "nave": "XPF2026012 - ECO SIROCCO",
