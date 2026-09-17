@@ -79,25 +79,84 @@ function horasTexto(ms){
 }
 function normStatus(s){return String(s||"").trim().toUpperCase().replace(/\s+/g," ");}
 function estado(n){
-  const s=normStatus(n.status),now=new Date(),etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
-  // ATD es el cierre de la operación: nunca mostrar una nave como trabajando después de su salida.
-  if(atd || s==="DEPARTED" || s.includes("SAILED")) return "ZARPÓ";
-  // STATUS publicado por DP World es la señal principal de operación mientras no exista ATD.
-  if(s.includes("IN OPERATION") || s.includes("OPERATING") || s==="WORKING"){
-    if(etb && now < etb) return "POR ARRIBAR";
-    if(etd && now > etd && !atd) return "TRABAJANDO";
+  const s = normStatus(n.status);
+  const now = new Date();
+
+  const etb = fecha(n.etb);
+  const ata = fecha(n.ata);
+  const etd = fecha(n.etd);
+  const atd = fecha(n.atd);
+
+  // ==========================================================
+  // 1. ATD = salida real de la nave
+  // Si existe ATD, la nave ya terminó su operación.
+  // ==========================================================
+  if (atd) {
+    return "ZARPÓ";
+  }
+
+  // También consideramos estos estados como salida final.
+  if (s === "DEPARTED" || s.includes("SAILED")) {
+    return "ZARPÓ";
+  }
+
+  // ==========================================================
+  // 2. IN OPERATION = nave trabajando
+  // STATUS de DP World tiene prioridad.
+  // NO usamos ETD para sacarla de "TRABAJANDO".
+  // ==========================================================
+  if (
+    s.includes("IN OPERATION") ||
+    s.includes("OPERATING") ||
+    s === "WORKING"
+  ) {
     return "TRABAJANDO";
   }
-  // ATA sin ATD significa que la nave ya está en puerto.
-  if(ata && !atd) return "TRABAJANDO";
-  // TO ARRIVE se evalúa contra ETB.
-  if(s.includes("TO ARRIVE")){
-    return etb && now < etb ? "POR ARRIBAR" : "ATRASADA";
+
+  // ==========================================================
+  // 3. ATA sin ATD = ya llegó al puerto y sigue trabajando
+  // ==========================================================
+  if (ata && !atd) {
+    return "TRABAJANDO";
   }
-  // Respaldo por ventana de fechas.
-  if(etb && now < etb) return "POR ARRIBAR";
-  if(etb && now >= etb && (!etd || now <= etd)) return "TRABAJANDO";
-  if(etd && now > etd) return "ATRASADA";
+
+  // ==========================================================
+  // 4. TO ARRIVE
+  // Si todavía no llega ETB = POR ARRIBAR.
+  // Si ya pasó ETB = ATRASADA.
+  // ==========================================================
+  if (s.includes("TO ARRIVE")) {
+
+    if (etb && now < etb) {
+      return "POR ARRIBAR";
+    }
+
+    if (etb && now >= etb) {
+      return "ATRASADA";
+    }
+
+    // Si no existe ETB, mantenemos el estado publicado.
+    return "POR ARRIBAR";
+  }
+
+  // ==========================================================
+  // 5. RESPALDO POR FECHAS
+  // Se utiliza cuando STATUS no permite determinar el estado.
+  // ==========================================================
+
+  // ETB futura = todavía no llega
+  if (etb && now < etb) {
+    return "POR ARRIBAR";
+  }
+
+  // ETB pasada y no hay ATD = asumimos que está en operación
+  if (etb && now >= etb && !atd) {
+    return "TRABAJANDO";
+  }
+
+  // ==========================================================
+  // 6. Estado por defecto
+  // ==========================================================
   return "POR ARRIBAR";
 }
 function claseEstado(e){return e==="ZARPÓ"?"status-zarpo":e==="TRABAJANDO"?"status-trabajo":e==="ATRASADA"?"status-atrasada":e==="POR ARRIBAR"?"status-arribo":"status-desconocido";}
