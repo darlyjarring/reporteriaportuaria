@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-17T20:12:08.482968+00:00",
-  "actualizado_ec": "2026-09-17 15:12:08",
+  "actualizado_utc": "2026-09-17T22:54:44.902506+00:00",
+  "actualizado_ec": "2026-09-17 17:54:44",
   "total": 56,
   "naves": [
     {
@@ -237,9 +237,9 @@
       "linea": "HLC",
       "etb": "2026-09-17 17:00:00",
       "etd": "2026-09-18 16:00:00",
-      "ata": "",
+      "ata": "2026-09-17 16:45:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
@@ -252,9 +252,9 @@
       "linea": "CMA",
       "etb": "2026-09-17 16:00:00",
       "etd": "2026-09-17 23:00:00",
-      "ata": "",
+      "ata": "2026-09-17 14:50:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
