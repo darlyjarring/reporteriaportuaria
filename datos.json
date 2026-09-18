@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-17T22:54:44.902506+00:00",
-  "actualizado_ec": "2026-09-17 17:54:44",
-  "total": 56,
+  "actualizado_utc": "2026-09-18T01:10:57.636636+00:00",
+  "actualizado_ec": "2026-09-17 20:10:57",
+  "total": 57,
   "naves": [
     {
       "nave": "CMA2026110 - CMA CGM ESTELLE",
@@ -86,6 +86,21 @@
       "dry": "",
       "linea": "MAE",
       "etb": "2026-09-27 18:00:00",
+      "etd": "2026-09-28 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "MX_WCSA"
+    },
+    {
+      "nave": "MAE2026114 - SEALAND PHILADELPHIA",
+      "viaje": "638S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-09-27 16:00:00",
       "etd": "2026-09-28 22:00:00",
       "ata": "",
       "atd": "",
