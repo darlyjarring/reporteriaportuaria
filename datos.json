@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-18T11:10:22.346656+00:00",
-  "actualizado_ec": "2026-09-18 06:10:22",
-  "total": 56,
+  "actualizado_utc": "2026-09-18T15:02:26.827652+00:00",
+  "actualizado_ec": "2026-09-18 10:02:26",
+  "total": 55,
   "naves": [
     {
       "nave": "CMA2026111 - CMA CGM CHILE",
@@ -95,7 +95,7 @@
       "servicio": "SWX_SB"
     },
     {
-      "nave": "MAE2026112 - MAERSK NEWCASTLE",
+      "nave": "MAE2026114 - SEALAND PHILADELPHIA",
       "viaje": "638S",
       "reefer": "",
       "dry": "",
@@ -107,22 +107,7 @@
       "status": "TO ARRIVE",
       "origen": "PABLB",
       "destino": "PABLB",
-      "servicio": "MX_WCSA"
-    },
-    {
-      "nave": "MAE2026114 - SEALAND PHILADELPHIA",
-      "viaje": "638S",
-      "reefer": "",
-      "dry": "",
-      "linea": "MAE",
-      "etb": "2026-09-27 16:00:00",
-      "etd": "2026-09-28 22:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "MX_WCSA"
+      "servicio": "WCSA-SHTL"
     },
     {
       "nave": "MAE2026107 - MAERSK NOKWANDA",
@@ -227,7 +212,7 @@
       "status": "TO ARRIVE",
       "origen": "PABLB",
       "destino": "PABLB",
-      "servicio": "MX_WCSA"
+      "servicio": "WCSA-SHTL"
     },
     {
       "nave": "MAE2026108 - LARS MAERSK",
