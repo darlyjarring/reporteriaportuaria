@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-19T19:34:10.925988+00:00",
-  "actualizado_ec": "2026-09-19 14:34:10",
+  "actualizado_utc": "2026-09-19T21:45:15.459590+00:00",
+  "actualizado_ec": "2026-09-19 16:45:15",
   "total": 55,
   "naves": [
     {
@@ -269,7 +269,7 @@
       "etd": "2026-09-17 23:00:00",
       "ata": "2026-09-17 14:50:00",
       "atd": "2026-09-17 23:35:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
