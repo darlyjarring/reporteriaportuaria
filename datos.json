@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-19T01:28:35.265593+00:00",
-  "actualizado_ec": "2026-09-18 20:28:35",
+  "actualizado_utc": "2026-09-19T06:32:26.097384+00:00",
+  "actualizado_ec": "2026-09-19 01:32:26",
   "total": 55,
   "naves": [
     {
@@ -237,9 +237,9 @@
       "linea": "CMA",
       "etb": "2026-09-18 21:00:00",
       "etd": "2026-09-20 09:00:00",
-      "ata": "",
+      "ata": "2026-09-18 20:26:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
