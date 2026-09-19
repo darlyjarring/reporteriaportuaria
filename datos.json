@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-19T14:47:24.220393+00:00",
-  "actualizado_ec": "2026-09-19 09:47:24",
+  "actualizado_utc": "2026-09-19T17:30:01.027892+00:00",
+  "actualizado_ec": "2026-09-19 12:30:01",
   "total": 55,
   "naves": [
     {
@@ -299,7 +299,7 @@
       "etd": "2026-09-17 14:00:00",
       "ata": "2026-09-15 21:00:00",
       "atd": "2026-09-17 13:58:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "AC2"
