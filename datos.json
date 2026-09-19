@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-18T23:22:56.343124+00:00",
-  "actualizado_ec": "2026-09-18 18:22:56",
+  "actualizado_utc": "2026-09-19T01:28:35.265593+00:00",
+  "actualizado_ec": "2026-09-18 20:28:35",
   "total": 55,
   "naves": [
     {
@@ -253,7 +253,7 @@
       "etb": "2026-09-17 17:00:00",
       "etd": "2026-09-18 17:30:00",
       "ata": "2026-09-17 16:45:00",
-      "atd": "",
+      "atd": "2026-09-18 18:24:00",
       "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
