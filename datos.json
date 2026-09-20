@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-20T01:42:11.496093+00:00",
-  "actualizado_ec": "2026-09-19 20:42:11",
-  "total": 55,
+  "actualizado_utc": "2026-09-20T07:06:29.120275+00:00",
+  "actualizado_ec": "2026-09-20 02:06:29",
+  "total": 54,
   "naves": [
+    {
+      "nave": "MAE2026112 - MAERSK NEWCASTLE",
+      "viaje": "638S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-04 18:00:00",
+      "etd": "2026-10-05 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
     {
       "nave": "CMA2026111 - CMA CGM CHILE",
       "viaje": "1MHTRW1MA",
@@ -67,8 +82,8 @@
     {
       "nave": "HMM2026008 - HYUNDAI FORCE",
       "viaje": "0118W",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-09-28 21:00:00.0",
+      "dry": "2026-09-28 21:00:00.0",
       "linea": "HMM",
       "etb": "2026-09-29 09:00:00",
       "etd": "2026-09-30 09:00:00",
@@ -82,8 +97,8 @@
     {
       "nave": "HLC2026089 - SALVADOR EXPRESS",
       "viaje": "6235S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-09-28 07:00:00.0",
+      "dry": "2026-09-28 07:00:00.0",
       "linea": "HLC",
       "etb": "2026-09-28 17:00:00",
       "etd": "2026-09-29 07:00:00",
@@ -97,8 +112,8 @@
     {
       "nave": "MAE2026114 - SEALAND PHILADELPHIA",
       "viaje": "638S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-09-27 12:00:00.0",
+      "dry": "2026-09-27 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-09-27 18:00:00",
       "etd": "2026-09-28 22:00:00",
@@ -798,36 +813,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
-    },
-    {
-      "nave": "XPF2026010 - ECO MARIN",
-      "viaje": "26034S",
-      "reefer": "",
-      "dry": "",
-      "linea": "XPF",
-      "etb": "2026-08-20 15:20:00",
-      "etd": "2026-08-20 19:20:00",
-      "ata": "2026-08-20 15:20:00",
-      "atd": "2026-08-20 19:48:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "WSX"
-    },
-    {
-      "nave": "CMA2026090 - CMA CGM IMAGINATION",
-      "viaje": "0DVPXN1MA",
-      "reefer": "2026-08-19 19:00:00.0",
-      "dry": "2026-08-19 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-08-20 07:50:00",
-      "etd": "2026-08-20 18:30:00",
-      "ata": "2026-08-20 07:50:00",
-      "atd": "2026-08-20 18:30:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
     }
   ]
 }
