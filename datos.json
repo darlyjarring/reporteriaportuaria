@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-20T16:25:34.969316+00:00",
-  "actualizado_ec": "2026-09-20 11:25:34",
+  "actualizado_utc": "2026-09-20T19:00:00.402389+00:00",
+  "actualizado_ec": "2026-09-20 14:00:00",
   "total": 54,
   "naves": [
     {
@@ -251,7 +251,7 @@
       "dry": "2026-09-18 23:00:00.0",
       "linea": "CMA",
       "etb": "2026-09-18 21:00:00",
-      "etd": "2026-09-20 19:45:00",
+      "etd": "2026-09-20 20:30:00",
       "ata": "2026-09-18 20:26:00",
       "atd": "",
       "status": "IN OPERATION",
