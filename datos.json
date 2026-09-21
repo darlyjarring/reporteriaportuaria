@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-21T19:34:46.927365+00:00",
-  "actualizado_ec": "2026-09-21 14:34:46",
+  "actualizado_utc": "2026-09-21T22:49:18.780688+00:00",
+  "actualizado_ec": "2026-09-21 17:49:18",
   "total": 53,
   "naves": [
     {
@@ -222,9 +222,9 @@
       "linea": "HLC",
       "etb": "2026-09-21 15:00:00",
       "etd": "2026-09-22 09:00:00",
-      "ata": "",
+      "ata": "2026-09-21 14:48:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_SB"
