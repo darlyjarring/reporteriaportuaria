@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tráfico de Naves - Línea de Tiempo</title>
+<style>
+*{box-sizing:border-box}
+:root{--azul:#123b5d;--borde:#dbe2ea;--fondo:#eef1f5}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:#1f2937}
+header{background:#a51f35;color:#fff;padding:16px 20px}
+header h1{margin:0 0 4px;font-size:25px} header p{margin:0;opacity:.92}
+.panel{max-width:1700px;margin:16px auto;padding:0 12px}
+.controles{background:#fff;padding:13px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;align-items:end;gap:9px}
+.campo{display:flex;flex-direction:column;gap:4px}.campo label{font-size:12px;font-weight:bold}.campo input{height:38px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px}
+button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--azul);color:#fff;font-weight:bold;cursor:pointer}button:hover{opacity:.9}button.secundario{background:#64748b}
+.zoom-box{display:flex;align-items:center;gap:7px;background:#f8fafc;border:1px solid var(--borde);padding:4px 7px;border-radius:7px;height:38px}.zoom-box label{font-size:12px;font-weight:bold}.zoom-box input{width:120px}.zoom-num{min-width:46px;text-align:center;font-size:12px;font-weight:bold}
+.fuente{margin-top:8px;font-size:12px;color:#64748b}.fuente.ok{color:#166534}.fuente.error{color:#b91c1c}
+.resumen{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}.resumen span{background:#fff;padding:8px 12px;border-radius:7px;box-shadow:0 2px 6px rgba(0,0,0,.06);font-size:13px}
+.timeline-box{margin-top:12px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
+.timeline-scroll{overflow:auto;position:relative;max-height:72vh}
+.timeline{position:relative;min-width:900px}
+.axis{position:sticky;top:0;z-index:30;height:66px;background:#f8fafc;border-bottom:2px solid #cbd5e1}
+.axis-inner{position:relative;height:100%}.day{position:absolute;top:0;height:66px;border-left:1px solid #cbd5e1;padding:8px 5px;font-weight:bold;color:#334155;white-space:nowrap;font-size:12px}.hour{position:absolute;bottom:6px;font-size:10px;color:#64748b;transform:translateX(-50%);white-space:nowrap}
+.lane-title{position:sticky;left:0;z-index:22;width:72px;min-width:72px;height:42px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;color:#475569;box-shadow:2px 0 3px rgba(0,0,0,.05)}
+.rows{position:relative}.lane{position:relative;min-height:82px;border-bottom:1px solid #cbd5e1;display:flex;align-items:stretch}.lane-bg{position:absolute;inset:0;pointer-events:none}.row-line{position:absolute;top:0;bottom:0;width:1px;background:#eef2f7}.lane-content{position:relative;height:82px;margin-left:72px}
+.vessel{position:absolute;top:14px;height:52px;min-width:42px;border-radius:6px;color:#fff;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.22);overflow:hidden;transition:transform .12s,box-shadow .12s;border:1px solid rgba(0,0,0,.12)}
+.vessel:hover{transform:translateY(-2px);box-shadow:0 5px 10px rgba(0,0,0,.25)}
+.vessel .nombre{padding:5px 7px 0;font-weight:bold;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vessel .linea{padding:1px 7px;font-size:9px;white-space:nowrap}.estado{position:absolute;right:4px;bottom:3px;font-size:8px;background:rgba(0,0,0,.28);padding:2px 4px;border-radius:3px;white-space:nowrap}
+.ahora{position:absolute;top:0;bottom:0;width:2px;background:#dc2626;z-index:20;pointer-events:none}.ahora-label{position:absolute;top:2px;left:4px;color:#dc2626;font-size:9px;font-weight:bold;white-space:nowrap;background:#fff;padding:1px 2px}
+.sin-datos{padding:40px;text-align:center;color:#64748b}
+.leyenda{background:#fff;margin-top:12px;padding:12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.leyenda h3{margin:0 0 8px}.leyenda-item{display:inline-flex;align-items:center;margin:4px 14px 4px 0;font-size:12px}.color{width:15px;height:15px;border-radius:4px;margin-right:5px}
+.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:15px}.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3)}.modal-header{background:var(--azul);color:#fff;padding:14px;display:flex;justify-content:space-between;align-items:center}.modal-header h2{margin:0;font-size:19px}.cerrar{background:transparent;font-size:25px;padding:0 5px}.detalle{padding:14px}.detalle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detalle-item{background:#f8fafc;padding:9px;border-radius:6px}.detalle-item strong{display:block;color:#64748b;font-size:10px;margin-bottom:3px}.estado-grande{display:inline-block;margin-top:10px;padding:7px 10px;border-radius:6px;font-weight:bold;background:#e2e8f0}
+.nota{font-size:11px;color:#64748b;margin-top:7px}
+@media(max-width:700px){header h1{font-size:20px}.panel{padding:0 7px}.controles{align-items:stretch}.campo{flex:1 1 130px}.zoom-box{flex:1 1 100%}.zoom-box input{flex:1}.detalle-grid{grid-template-columns:1fr}.timeline-scroll{max-height:75vh}.timeline{min-width:700px}.day{font-size:10px}.vessel .nombre{font-size:10px}.vessel .linea{font-size:8px}}
+</style>
+</head>
+<body>
+<header>
+<h1>TRÁFICO DE NAVES - POSORJA</h1>
+<p>Línea de tiempo de arribos, operaciones y zarpes</p>
+</header>
+<div class="panel">
+<div class="controles">
+<div class="campo"><label>Desde</label><input type="date" id="fechaDesde"></div>
+<div class="campo"><label>Hasta</label><input type="date" id="fechaHasta"></div>
+<button onclick="consultar()">CONSULTAR</button>
+<button class="secundario" onclick="hoy()">HOY</button>
+<button class="secundario" onclick="rango7()">7 DÍAS</button>
+<div class="zoom-box">
+<label>ESCALA</label>
+<button type="button" class="secundario" onclick="cambiarZoom(-1)">−</button>
+<input type="range" id="zoom" min="12" max="120" value="42" step="2" oninput="aplicarZoom(this.value)">
+<button type="button" class="secundario" onclick="cambiarZoom(1)">+</button>
+<span class="zoom-num" id="zoomNum">42 px/h</span>
+</div>
+</div>
+<div class="fuente" id="fuente">Cargando datos...</div>
+<div class="resumen">
+<span>Naves: <b id="cantidad">0</b></span><span>Por arribar: <b id="porArribar">0</b></span><span>Trabajando: <b id="trabajando">0</b></span><span>Atrasadas: <b id="atrasadas">0</b></span><span>Zarparon: <b id="zarparon">0</b></span>
+</div>
+<div class="timeline-box"><div class="timeline-scroll" id="scroll"><div class="timeline" id="timeline"></div></div></div>
+<div class="nota">NORTE/SUR se distribuye automáticamente según el orden cronológico de llegada. Si dos naves llegan en fechas/horas cercanas, se reparten entre ambas líneas para evitar que se tapen.</div>
+<div class="leyenda"><h3>Líneas navieras</h3><div id="leyenda"></div></div>
+</div>
+<div class="modal-fondo" id="modalFondo" onclick="cerrarModal(event)"><div class="modal"><div class="modal-header"><h2 id="modalTitulo">Nave</h2><button class="cerrar" onclick="cerrarModal()">×</button></div><div class="detalle"><div class="detalle-grid" id="modalDatos"></div><div id="modalEstado"></div></div></div></div>
+<script>
+/*
+  ESTA PÁGINA SE CONECTA CON EL ARCHIVO datos.json DEL MISMO PROYECTO.
+  El GitHub Action/Python que actualiza tu dashboard debe generar datos.json.
+  No se intenta hacer scraping directo desde el navegador porque DP World
+  puede bloquear la petición por CORS.
+*/
+let NAVES=[];
+let NAVES_FALLBACK=[
+ {nave:'CMA CGM GREENLAND',viaje:'CMA2026103',linea:'CMA',etb:'2026-09-18 17:00:00',etd:'2026-09-20 21:00:00',ata:'2026-09-18 16:36:00',atd:'2026-09-20 20:58:00',status:'DEPARTED',origen:'PECLL',destino:'PECLL',servicio:'ACSA'},
+ {nave:'AS PALINA',viaje:'MAE2026113',linea:'MAE',etb:'2026-09-20 22:00:00',etd:'2026-09-22 02:00:00',ata:'2026-09-20 21:52:00',atd:'',status:'IN OPERATION',origen:'PABLB',destino:'PABLB',servicio:'WCSA-SHTL'},
+ {nave:'HLC2026090 - ODYSSEUS',viaje:'639N',linea:'HLC',etb:'2026-09-22 09:00:00',etd:'2026-09-22 17:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'PEPAI',destino:'PEPAI',servicio:'MSW'},
+ {nave:'HLC2026085 - VALPARAISO EXPRESS',viaje:'6234S',linea:'HLC',etb:'2026-09-21 15:00:00',etd:'2026-09-22 06:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'COBUN',destino:'COBUN',servicio:'SWX_SB'},
+ {nave:'MAERSK NOKWANDA',viaje:'634W',linea:'MAE',etb:'2026-09-26 23:00:00',etd:'2026-09-28 05:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'ECPBO',destino:'ECPBO',servicio:'ECUMED'},
+ {nave:'CMA CGM HELIUM',viaje:'1MHTPW1MA',linea:'CMA',etb:'2026-09-25 22:00:00',etd:'2026-09-27 09:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'PECLL',destino:'PECLL',servicio:'ACSA'}
+];
+const COLORES=['#2563eb','#16a34a','#dc2626','#9333ea','#ea580c','#0891b2','#db2777','#475569','#65a30d','#7c3aed','#a16207','#0f766e'];
+let PX_HORA=42;
+let ultimoInicio=null,ultimoFin=null,ultimoFiltrado=[];
+
+function fecha(valor){
+ if(!valor)return null;
+ let s=String(valor).trim().replace(' ','T');
+ if(!s)return null;
+ if(!/[zZ]|[+-]\d\d:?\d\d$/.test(s))s+='-05:00';
+ const d=new Date(s);return isNaN(d.getTime())?null:d;
+}
+function normalizar(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim()}
+function limpiarNombre(n){return String(n||'').replace(/^\s*[^-]+\s+-\s+/,'').trim()}
+function normalizarNave(x){
+ x=x||{};
+ return {
+  nave:x.nave??x.Nave??x.nombre??x.nombre_nave??'',
+  viaje:x.viaje??x.Viaje??'',
+  linea:x.linea??x.Linea??x.LINEA??'',
+  etb:x.etb??x.ETB??'',etd:x.etd??x.ETD??'',ata:x.ata??x.ATA??'',atd:x.atd??x.ATD??'',
+  status:x.status??x.STATUS??'',
+  origen:x.origen??x['PTO.ORIGEN']??x.ptoOrigen??'',
+  destino:x.destino??x['PTO.DESTINO']??x.ptoDestino??'',
+  servicio:x.servicio??x.SERVICIO??''
+ };
+}
+function estado(n){
+ const s=normalizar(n.status),now=new Date(),etb=fecha(n.etb),ata=fecha(n.ata),atd=fecha(n.atd);
+ if(atd)return 'ZARPÓ';
+ if(s==='DEPARTED'||s.includes('SAILED'))return 'ZARPÓ';
+ if(s.includes('IN OPERATION')||s.includes('OPERATING')||s==='WORKING')return 'TRABAJANDO';
+ if(ata&&!atd)return 'TRABAJANDO';
+ if(s.includes('TO ARRIVE')){if(etb&&now<etb)return 'POR ARRIBAR';if(etb&&now>=etb)return 'ATRASADA';return 'POR ARRIBAR'}
+ if(etb&&now<etb)return 'POR ARRIBAR';
+ if(etb&&now>=etb&&!atd)return 'TRABAJANDO';
+ return 'POR ARRIBAR';
+}
+function fechaLocalInput(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function hoy(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(a);consultar()}
+function rango7(){const a=new Date(),b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(b);consultar()}
+function cambiarZoom(dir){const z=document.getElementById('zoom');z.value=Math.max(+z.min,Math.min(+z.max,+z.value+dir*6));aplicarZoom(z.value)}
+function aplicarZoom(v){PX_HORA=+v;document.getElementById('zoom').value=v;document.getElementById('zoomNum').textContent=v+' px/h';if(ultimoInicio&&ultimoFin)dibujarTimeline(ultimoFiltrado,ultimoInicio,ultimoFin)}
+async function cargarDatos(){
+ const fuente=document.getElementById('fuente');
+ try{
+  const r=await fetch('datos.json?ts='+Date.now(),{cache:'no-store'});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  const arr=Array.isArray(j)?j:(j.naves||j.NAVES||j.data||j.datos||[]);
+  if(!Array.isArray(arr)||!arr.length)throw new Error('datos.json no contiene naves');
+  NAVES=arr.map(normalizarNave);
+  fuente.className='fuente ok';fuente.textContent='Fuente: datos.json · '+NAVES.length+' naves · actualización '+new Date().toLocaleString('es-EC');
+  consultar();
+ }catch(e){
+  NAVES=NAVES_FALLBACK.map(normalizarNave);
+  fuente.className='fuente error';fuente.textContent='No se pudo leer datos.json. Se muestran datos de respaldo. '+e.message;
+  consultar();
+ }
+}
+function consultar(){
+ const ds=document.getElementById('fechaDesde').value,hs=document.getElementById('fechaHasta').value;
+ if(!ds||!hs){hoy();return}
+ let inicio=new Date(ds+'T00:00:00-05:00'),fin=new Date(hs+'T23:59:59-05:00');
+ if(fin<inicio){alert('La fecha Hasta no puede ser menor que Desde.');return}
+ const filtradas=NAVES.filter(n=>{
+  const puntos=[fecha(n.etb),fecha(n.ata),fecha(n.etd),fecha(n.atd)].filter(Boolean);
+  if(!puntos.length)return false;
+  const inicioN=puntos[0],finN=puntos[puntos.length-1];
+  return puntos.some(x=>x>=inicio&&x<=fin)||(inicioN<=fin&&finN>=inicio);
+ }).sort((a,b)=>(fecha(a.etb)||fecha(a.ata)||0)-(fecha(b.etb)||fecha(b.ata)||0));
+ ultimoInicio=inicio;ultimoFin=fin;ultimoFiltrado=filtradas;dibujarTimeline(filtradas,inicio,fin)
+}
+function colorLinea(linea,mapa){const k=normalizar(linea)||'SIN LINEA';if(!mapa[k])mapa[k]=COLORES[Object.keys(mapa).length%COLORES.length];return mapa[k]}
+function fechaLlegada(n){return fecha(n.ata)||fecha(n.etb)||fecha(n.etd)||fecha(n.atd)}
+function asignarNorteSur(naves){
+ // Primero orden cronológico; se intenta alternar NORTE/SUR para fechas cercanas.
+ const orden=[...naves].sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
+ const asignados=new Map(),ultimoPorDia={};
+ orden.forEach((n,i)=>{
+  const d=fechaLlegada(n);const clave=d?d.toISOString().slice(0,10):'SINFECHA';
+  const anterior=ultimoPorDia[clave];
+  let lane=anterior==='NORTE'?'SUR':anterior==='SUR'?'NORTE':(i%2===0?'NORTE':'SUR');
+  asignados.set(n,lane);ultimoPorDia[clave]=lane;
+ });
+ return asignados;
+}
+function dibujarTimeline(naves,inicio,fin){
+ const timeline=document.getElementById('timeline');timeline.innerHTML='';
+ const totalHoras=Math.max(24,(fin-inicio)/3600000),ancho=Math.max(900,totalHoras*PX_HORA+72);timeline.style.width=ancho+'px';
+ const eje=document.createElement('div');eje.className='axis';const ei=document.createElement('div');ei.className='axis-inner';ei.style.width=ancho+'px';
+ let c=new Date(inicio);while(c<=fin){const x=(c-inicio)/3600000*PX_HORA,d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);c.setDate(c.getDate()+1)}
+ c=new Date(inicio);c.setMinutes(0,0,0);while(c<=fin){const x=(c-inicio)/3600000*PX_HORA,h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=c.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit',hour12:false});ei.appendChild(h);c.setHours(c.getHours()+3)}
+ eje.appendChild(ei);timeline.appendChild(eje);
+ const rows=document.createElement('div');rows.className='rows';rows.style.width=ancho+'px';
+ const asignados=asignarNorteSur(naves),colores={};
+ ['NORTE','SUR'].forEach(laneName=>{
+  const lane=document.createElement('div');lane.className='lane';lane.style.width=ancho+'px';
+  const title=document.createElement('div');title.className='lane-title';title.textContent=laneName;lane.appendChild(title);
+  const content=document.createElement('div');content.className='lane-content';content.style.width=(ancho-72)+'px';
+  let g=new Date(inicio);g.setMinutes(0,0,0);while(g<=fin){const x=(g-inicio)/3600000*PX_HORA+72,l=document.createElement('div');l.className='row-line';l.style.left=x+'px';content.appendChild(l);g.setHours(g.getHours()+3)}
+  naves.filter(n=>asignados.get(n)===laneName).forEach(n=>{
+   const inicioN=fecha(n.ata)||fecha(n.etb)||fecha(n.etd)||fecha(n.atd);if(!inicioN)return;
+   let finN=fecha(n.atd)||fecha(n.etd)||new Date(inicioN.getTime()+2*3600000);
+   if(finN<=inicioN)finN=new Date(inicioN.getTime()+2*3600000);
+   const x1=Math.max(0,(inicioN-inicio)/3600000*PX_HORA),x2=Math.min(ancho-72,(finN-inicio)/3600000*PX_HORA),w=Math.max(44,x2-x1);
+   const bar=document.createElement('div');bar.className='vessel';bar.style.left=x1+'px';bar.style.width=w+'px';bar.style.background=colorLinea(n.linea,colores);bar.title='Click para ver información';
+   bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;bar.onclick=()=>abrirModal(n);content.appendChild(bar);
+  });
+  lane.appendChild(content);rows.appendChild(lane);
+ });
+ const ahora=new Date();if(ahora>=inicio&&ahora<=fin){const x=(ahora-inicio)/3600000*PX_HORA+72,a=document.createElement('div');a.className='ahora';a.style.left=x+'px';a.innerHTML='<div class="ahora-label">AHORA</div>';rows.appendChild(a)}
+ if(!naves.length){const s=document.createElement('div');s.className='sin-datos';s.textContent='No hay naves dentro del rango seleccionado.';rows.appendChild(s)}
+ timeline.appendChild(rows);actualizarResumen(naves);dibujarLeyenda(colores)
+}
+function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function actualizarResumen(naves){document.getElementById('cantidad').textContent=naves.length;document.getElementById('porArribar').textContent=naves.filter(n=>estado(n)==='POR ARRIBAR').length;document.getElementById('trabajando').textContent=naves.filter(n=>estado(n)==='TRABAJANDO').length;document.getElementById('atrasadas').textContent=naves.filter(n=>estado(n)==='ATRASADA').length;document.getElementById('zarparon').textContent=naves.filter(n=>estado(n)==='ZARPÓ').length}
+function dibujarLeyenda(colores){const cont=document.getElementById('leyenda');cont.innerHTML='';Object.keys(colores).forEach(k=>{const i=document.createElement('div');i.className='leyenda-item';i.innerHTML=`<span class="color" style="background:${colores[k]}"></span><span>${escapeHtml(k)}</span>`;cont.appendChild(i)});if(!Object.keys(colores).length)cont.textContent='No hay líneas navieras en el rango seleccionado.'}
+function abrirModal(n){document.getElementById('modalTitulo').textContent=limpiarNombre(n.nave)||'Nave';const datos=[['Nave',n.nave],['Viaje',n.viaje],['Línea naviera',n.linea],['ETB',n.etb],['ATA',n.ata],['ETD',n.etd],['ATD',n.atd],['STATUS DP World',n.status],['Origen',n.origen],['Destino',n.destino],['Servicio',n.servicio]];document.getElementById('modalDatos').innerHTML=datos.map(x=>`<div class="detalle-item"><strong>${escapeHtml(x[0])}</strong>${escapeHtml(x[1]||'—')}</div>`).join('');document.getElementById('modalEstado').innerHTML=`<div class="estado-grande">Estado actual: ${estado(n)}</div>`;document.getElementById('modalFondo').style.display='flex'}
+function cerrarModal(e){if(!e||e.target===document.getElementById('modalFondo'))document.getElementById('modalFondo').style.display='none'}
+(async function(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);const b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaHasta').value=fechaLocalInput(b);await cargarDatos()})();
+setInterval(()=>{if(ultimoInicio&&ultimoFin)consultar()},60000);
+setInterval(()=>cargarDatos(),15*60*1000);
+</script>
+</body>
+</html>
