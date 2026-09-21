@@ -155,7 +155,9 @@ async function cargarDatos(){
 function consultar(){
  const ds=document.getElementById('fechaDesde').value,hs=document.getElementById('fechaHasta').value;
  if(!ds||!hs){hoy();return}
- let inicio=new Date(ds+'T00:00:00-05:00'),fin=new Date(hs+'T23:59:59-05:00');
+ let inicio=new Date(ds+'T00:00:00-05:00');
+ inicio.setHours(0,0,0,0);
+ let fin=new Date(hs+'T23:59:59-05:00');
  if(fin<inicio){alert('La fecha Hasta no puede ser menor que Desde.');return}
  const filtradas=NAVES.filter(n=>{
   const puntos=[fecha(n.etb),fecha(n.ata),fecha(n.etd),fecha(n.atd)].filter(Boolean);
@@ -192,13 +194,13 @@ function dibujarTimeline(naves,inicio,fin){
  // exactamente a 15 * PX_HORA desde las 00:00, sin desplazamientos.
  let c=new Date(inicio);
  while(c<=fin){
-   const x=(c-inicio)/3600000*PX_HORA;
-   if(c.getHours()===0){
-     const d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';
-     d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);
-   }
-   const h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=String(c.getHours()).padStart(2,'0')+':00';ei.appendChild(h);
-   c.setHours(c.getHours()+1);
+    const x=(c-inicio)/3600000*PX_HORA;
+    if(c.getHours()===0){
+      const d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';
+      d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);
+    }
+    const h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=String(c.getHours()).padStart(2,'0')+':00';ei.appendChild(h);
+    c.setHours(c.getHours()+1);
  }
  eje.appendChild(ei);timeline.appendChild(eje);
  const rows=document.createElement('div');rows.className='rows';rows.style.width=ancho+'px';
@@ -209,64 +211,65 @@ function dibujarTimeline(naves,inicio,fin){
   const content=document.createElement('div');content.className='lane-content';content.style.width=(ancho-72)+'px';
   let g=new Date(inicio);g.setMinutes(0,0,0);while(g<=fin){const x=(g-inicio)/3600000*PX_HORA+72,l=document.createElement('div');l.className='row-line';l.style.left=x+'px';content.appendChild(l);g.setHours(g.getHours()+3)}
   naves.filter(n=>asignados.get(n)===laneName).forEach(n=>{
-   // REGLA FUNDAMENTAL DEL VESSEL LINE-UP:
-   // 1) La barra COMIENZA exactamente en ETB.
-   // 2) La barra TERMINA exactamente en ETD (o ATD si ya zarpó).
-   // 3) ATA NO mueve la barra; solamente marca la llegada real.
-   // La conversión a píxeles usa una única función, de modo que la posición
-   // de la barra y las marcas de la escala usan exactamente la misma referencia.
-   const etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
-   const inicioN=etb||ata||etd||atd;
-   if(!inicioN)return;
-   const finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
-   if(finN<=inicioN)return;
+    // REGLA FUNDAMENTAL DEL VESSEL LINE-UP:
+    // 1) La barra COMIENZA exactamente en ETB.
+    // 2) La barra TERMINA exactamente en ETD (o ATD si ya zarpó).
+    // 3) ATA NO mueve la barra; solamente marca la llegada real.
+    // La conversión a píxeles usa una única función, de modo que la posición
+    // de la barra y las marcas de la escala usan exactamente la misma referencia.
+    const etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
+    const inicioN=etb||ata||etd||atd;
+    if(!inicioN)return;
+    const finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
+    if(finN<=inicioN)return;
 
-   // content comienza en x=0 dentro de su propia zona, cuya posición absoluta es 72px; así coincide con la escala.
-   // 20/09 00:00 = 0 px; 20/09 22:00 = 22*PX_HORA;
-   // 22/09 02:00 = 50*PX_HORA.
-   const pxDesdeInicio=d=>(d-inicio)/3600000*PX_HORA;
-   const x1=pxDesdeInicio(inicioN);
-   const x2=pxDesdeInicio(finN);
-   const rangoPx=ancho-72;
+    // content comienza en x=0 dentro de su propia zona, cuya posición absoluta es 72px; así coincide con la escala.
+    // 20/09 00:00 = 0 px; 20/09 22:00 = 22*PX_HORA;
+    // 22/09 02:00 = 50*PX_HORA.
+    const pxDesdeInicio=d=>(d-inicio)/3600000*PX_HORA;
+    const x1=pxDesdeInicio(inicioN);
+    const x2=pxDesdeInicio(finN);
+    const rangoPx=ancho-72;
 
-   // Si el intervalo de operación no toca el rango seleccionado, no se dibuja.
-   if(x2<=0 || x1>=rangoPx)return;
+    // Si el intervalo de operación no toca el rango seleccionado, no se dibuja.
+    if(x2<=0 || x1>=rangoPx)return;
 
-   // Recorte visual del rango, sin cambiar las coordenadas reales.
-   const left=Math.max(0,x1);
-   const right=Math.min(rangoPx,x2);
-   const w=right-left;
-   if(w<=0)return;
+    // Recorte visual del rango, sin cambiar las coordenadas reales.
+    const left=Math.max(0,x1);
+    const right=Math.min(rangoPx,x2);
+    const w=right-left;
+    if(w<=0)return;
 
-   const bar=document.createElement('div');
-   bar.className='vessel';
-   bar.style.left=left+'px';
-   bar.style.width=Math.max(2,w)+'px';
-   bar.style.background=colorLinea(n.linea,colores);
-   bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
-   bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
+    const bar=document.createElement('div');
+    bar.className='vessel';
+    bar.style.left=left+'px';
+    bar.style.width=Math.max(2,w)+'px';
+    bar.style.background=colorLinea(n.linea,colores);
+    bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
+    bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
 
-   // Marca negra = ETB. Como usa pxDesdeInicio(), cae exactamente sobre la hora ETB.
-   if(etb && etb>=inicio && etb<=fin){
-     const marca=document.createElement('span');
-     marca.className='marca-etb';
-     marca.style.left=(pxDesdeInicio(etb)-left)+'px';
-     marca.title='ETB: '+n.etb;
-     bar.appendChild(marca);
-   }
+    // Marca negra = ETB. Se ubica en posición porcentual sobre el total de la barra.
+    if(etb && etb>=inicio && etb<=fin){
+      const posRelativa = (etb - inicioN) / (finN - inicioN);
+      const marca=document.createElement('span');
+      marca.className='marca-etb';
+      marca.style.left=(posRelativa*100)+'%';
+      marca.title='ETB: '+n.etb;
+      bar.appendChild(marca);
+    }
 
-   // Marca blanca = ATA real. No altera ni el inicio ni el final de la barra.
-   if(ata && ata>=inicioN && ata<=finN){
-     const rel=(ata-inicioN)/(finN-inicioN);
-     const marca=document.createElement('span');
-     marca.className='marca-ata';
-     marca.style.left=(rel*100)+'%';
-     marca.title='ATA: '+n.ata;
-     bar.appendChild(marca);
-   }
+    // Marca blanca = ATA real. No altera ni el inicio ni el final de la barra.
+    if(ata && ata>=inicioN && ata<=finN){
+      const rel=(ata-inicioN)/(finN-inicioN);
+      const marca=document.createElement('span');
+      marca.className='marca-ata';
+      marca.style.left=(rel*100)+'%';
+      marca.title='ATA: '+n.ata;
+      bar.appendChild(marca);
+    }
 
-   bar.onclick=()=>abrirModal(n);
-   content.appendChild(bar);
+    bar.onclick=()=>abrirModal(n);
+    content.appendChild(bar);
   });
   lane.appendChild(content);rows.appendChild(lane);
  });
