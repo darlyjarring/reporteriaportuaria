@@ -18,7 +18,8 @@ button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--az
 .fuente{margin-top:8px;font-size:12px;color:#64748b}.fuente.ok{color:#166534}.fuente.error{color:#b91c1c}
 .resumen{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}.resumen span{background:#fff;padding:8px 12px;border-radius:7px;box-shadow:0 2px 6px rgba(0,0,0,.06);font-size:13px}
 .timeline-box{margin-top:12px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
-.timeline-scroll{overflow:auto;position:relative;max-height:72vh}
+.timeline-scroll{overflow:auto;position:relative;max-height:72vh;cursor:grab;user-select:none;-webkit-user-select:none}
+.timeline-scroll.active{cursor:grabbing}
 .timeline{position:relative;min-width:900px}
 .axis{position:sticky;top:0;z-index:30;height:66px;background:#f8fafc;border-bottom:2px solid #cbd5e1}
 .axis-inner{position:relative;height:100%}.day{position:absolute;top:0;height:66px;border-left:1px solid #cbd5e1;padding:8px 5px;font-weight:bold;color:#334155;white-space:nowrap;font-size:12px}.hour{position:absolute;bottom:6px;font-size:10px;color:#64748b;transform:translateX(-50%);white-space:nowrap}
@@ -60,10 +61,11 @@ button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--az
 <span>Naves: <b id="cantidad">0</b></span><span>Por arribar: <b id="porArribar">0</b></span><span>Trabajando: <b id="trabajando">0</b></span><span>Atrasadas: <b id="atrasadas">0</b></span><span>Zarparon: <b id="zarparon">0</b></span>
 </div>
 <div class="timeline-box"><div class="timeline-scroll" id="scroll"><div class="timeline" id="timeline"></div></div></div>
-<div class="nota">La barra comienza exactamente en ETB y termina exactamente en ETD (o ATD si ya zarpó). Ejemplo: ETB 20/09 22:00 → inicio el domingo 20 a las 22:00; ETD 22/09 02:00 → final el martes 22 a las 02:00. ATA solo marca la llegada real. La escala comienza a las 00:00 y cada hora ocupa el mismo ancho.</div>
+<div class="nota">Arrastre con el mouse o con el dedo para desplazarse en el tiempo. Use la rueda del mouse para cambiar la escala de zoom.</div>
 <div class="leyenda"><h3>Líneas navieras</h3><div id="leyenda"></div></div>
 </div>
 <div class="modal-fondo" id="modalFondo" onclick="cerrarModal(event)"><div class="modal"><div class="modal-header"><h2 id="modalTitulo">Nave</h2><button class="cerrar" onclick="cerrarModal()">×</button></div><div class="detalle"><div class="detalle-grid" id="modalDatos"></div><div id="modalEstado"></div></div></div></div>
+
 <script>
 let NAVES=[];
 let NAVES_FALLBACK=[
@@ -127,6 +129,7 @@ function hoy(){const a=new Date();document.getElementById('fechaDesde').value=fe
 function rango7(){const a=new Date(),b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(b);consultar()}
 function cambiarZoom(dir){const z=document.getElementById('zoom');z.value=Math.max(+z.min,Math.min(+z.max,+z.value+dir*6));aplicarZoom(z.value)}
 function aplicarZoom(v){PX_HORA=+v;document.getElementById('zoom').value=v;document.getElementById('zoomNum').textContent=v+' px/h';if(ultimoInicio&&ultimoFin)dibujarTimeline(ultimoFiltrado,ultimoInicio,ultimoFin)}
+
 async function cargarDatos(){
  const fuente=document.getElementById('fuente');
  try{
@@ -144,6 +147,7 @@ async function cargarDatos(){
   consultar();
  }
 }
+
 function consultar(){
  const ds=document.getElementById('fechaDesde').value,hs=document.getElementById('fechaHasta').value;
  if(!ds||!hs){hoy();return}
@@ -157,10 +161,10 @@ function consultar(){
  }).sort((a,b)=>(fecha(a.etb)||fecha(a.ata)||0)-(fecha(b.etb)||fecha(b.ata)||0));
  ultimoInicio=inicio;ultimoFin=fin;ultimoFiltrado=filtradas;dibujarTimeline(filtradas,inicio,fin)
 }
+
 function colorLinea(linea,mapa){const k=normalizar(linea)||'SIN LINEA';if(!mapa[k])mapa[k]=COLORES[Object.keys(mapa).length%COLORES.length];return mapa[k]}
-function fechaLlegada(n){
- return fecha(n.etb)||fecha(n.ata)||fecha(n.etd)||fecha(n.atd);
-}
+function fechaLlegada(n){return fecha(n.etb)||fecha(n.ata)||fecha(n.etd)||fecha(n.atd);}
+
 function asignarNorteSur(naves){
  const orden=[...naves].sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
  const asignados=new Map(),ultimoPorDia={};
@@ -172,6 +176,7 @@ function asignarNorteSur(naves){
  });
  return asignados;
 }
+
 function dibujarTimeline(naves,inicio,fin){
  const timeline=document.getElementById('timeline');timeline.innerHTML='';
  const totalHoras=Math.max(24,(fin-inicio)/3600000),ancho=Math.max(900,totalHoras*PX_HORA+72);timeline.style.width=ancho+'px';
@@ -206,10 +211,8 @@ function dibujarTimeline(naves,inicio,fin){
     const x1=pxDesdeInicio(inicioN);
     const x2=pxDesdeInicio(finN);
 
-    // Si está fuera del rango visible, no dibuja
     if(x2<=0 || x1>=(ancho-72))return;
 
-    // Posición y ancho exacto en píxeles correspondiente a las horas reales
     const left=x1;
     const w=x2-x1;
 
@@ -221,7 +224,6 @@ function dibujarTimeline(naves,inicio,fin){
     bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
     bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
 
-    // Marca negra = ETB (Posicionamiento porcentual dinámico exacto sobre la barra)
     if(etb && etb>=inicioN && etb<=finN){
       const posRelativa = (etb - inicioN) / (finN - inicioN);
       const marca=document.createElement('span');
@@ -231,7 +233,6 @@ function dibujarTimeline(naves,inicio,fin){
       bar.appendChild(marca);
     }
 
-    // Marca blanca = ATA
     if(ata && ata>=inicioN && ata<=finN){
       const rel=(ata-inicioN)/(finN-inicioN);
       const marca=document.createElement('span');
@@ -241,7 +242,10 @@ function dibujarTimeline(naves,inicio,fin){
       bar.appendChild(marca);
     }
 
-    bar.onclick=()=>abrirModal(n);
+    bar.onclick=(e)=>{
+      e.stopPropagation();
+      abrirModal(n);
+    };
     content.appendChild(bar);
   });
   lane.appendChild(content);rows.appendChild(lane);
@@ -250,12 +254,72 @@ function dibujarTimeline(naves,inicio,fin){
  if(!naves.length){const s=document.createElement('div');s.className='sin-datos';s.textContent='No hay naves dentro del rango seleccionado.';rows.appendChild(s)}
  timeline.appendChild(rows);actualizarResumen(naves);dibujarLeyenda(colores)
 }
+
 function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
 function actualizarResumen(naves){document.getElementById('cantidad').textContent=naves.length;document.getElementById('porArribar').textContent=naves.filter(n=>estado(n)==='POR ARRIBAR').length;document.getElementById('trabajando').textContent=naves.filter(n=>estado(n)==='TRABAJANDO').length;document.getElementById('atrasadas').textContent=naves.filter(n=>estado(n)==='ATRASADA').length;document.getElementById('zarparon').textContent=naves.filter(n=>estado(n)==='ZARPÓ').length}
 function dibujarLeyenda(colores){const cont=document.getElementById('leyenda');cont.innerHTML='';Object.keys(colores).forEach(k=>{const i=document.createElement('div');i.className='leyenda-item';i.innerHTML=`<span class="color" style="background:${colores[k]}"></span><span>${escapeHtml(k)}</span>`;cont.appendChild(i)});if(!Object.keys(colores).length)cont.textContent='No hay líneas navieras en el rango seleccionado.'}
 function abrirModal(n){document.getElementById('modalTitulo').textContent=limpiarNombre(n.nave)||'Nave';const datos=[['Nave',n.nave],['Viaje',n.viaje],['Línea naviera',n.linea],['ETB',n.etb],['ATA',n.ata],['ETD',n.etd],['ATD',n.atd],['STATUS DP World',n.status],['Origen',n.origen],['Destino',n.destino],['Servicio',n.servicio]];document.getElementById('modalDatos').innerHTML=datos.map(x=>`<div class="detalle-item"><strong>${escapeHtml(x[0])}</strong>${escapeHtml(x[1]||'—')}</div>`).join('');document.getElementById('modalEstado').innerHTML=`<div class="estado-grande">Estado actual: ${estado(n)}</div>`;document.getElementById('modalFondo').style.display='flex'}
 function cerrarModal(e){if(!e||e.target===document.getElementById('modalFondo'))document.getElementById('modalFondo').style.display='none'}
-(async function(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);const b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaHasta').value=fechaLocalInput(b);await cargarDatos()})();
+
+// --- LÓGICA DE ARRASTRE CON MOUSE / DEDO Y ZOOM CON SCROLL ---
+(function inicializarInteracciones(){
+  const slider = document.getElementById('scroll');
+  let isDown = false;
+  let startX, startY, scrollLeft, scrollTop;
+
+  // ARRASTRE MOUSE
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('active');
+    startX = e.pageX - slider.offsetLeft;
+    startY = e.pageY - slider.offsetTop;
+    scrollLeft = slider.scrollLeft;
+    scrollTop = slider.scrollTop;
+  });
+
+  slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.classList.remove('active');
+  });
+
+  slider.addEventListener('mousemove', (e) => {
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const y = e.pageY - slider.offsetTop;
+    const walkX = (x - startX) * 1.5;
+    const walkY = (y - startY) * 1.5;
+    slider.scrollLeft = scrollLeft - walkX;
+    slider.scrollTop = scrollTop - walkY;
+  });
+
+  // ZOOM CON RUEDA DEL MOUSE
+  slider.addEventListener('wheel', (e) => {
+    if (e.ctrlKey || e.deltaY !== 0) {
+      e.preventDefault();
+      const direccion = e.deltaY < 0 ? 1 : -1;
+      const zoomInput = document.getElementById('zoom');
+      const valActual = parseInt(zoomInput.value);
+      const nuevoVal = Math.max(+zoomInput.min, Math.min(+zoomInput.max, valActual + direccion * 4));
+      
+      if(nuevoVal !== valActual){
+        cambiarZoom(direccion > 0 ? 0.6 : -0.6);
+      }
+    }
+  }, { passive: false });
+})();
+
+(async function(){
+  const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);
+  const b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaHasta').value=fechaLocalInput(b);
+  await cargarDatos();
+})();
+
 setInterval(()=>{if(ultimoInicio&&ultimoFin)consultar()},60000);
 setInterval(()=>cargarDatos(),15*60*1000);
 </script>
