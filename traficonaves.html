@@ -27,7 +27,7 @@ button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--az
 .vessel{position:absolute;top:14px;height:52px;min-width:42px;border-radius:6px;color:#fff;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.22);overflow:hidden;transition:transform .12s,box-shadow .12s;border:1px solid rgba(0,0,0,.12)}
 .vessel:hover{transform:translateY(-2px);box-shadow:0 5px 10px rgba(0,0,0,.25)}
 .vessel .nombre{padding:5px 7px 0;font-weight:bold;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vessel .linea{padding:1px 7px;font-size:9px;white-space:nowrap}.estado{position:absolute;right:4px;bottom:3px;font-size:8px;background:rgba(0,0,0,.28);padding:2px 4px;border-radius:3px;white-space:nowrap}
-.ahora{position:absolute;top:0;bottom:0;width:2px;background:#dc2626;z-index:20;pointer-events:none}.ahora-label{position:absolute;top:2px;left:4px;color:#dc2626;font-size:9px;font-weight:bold;white-space:nowrap;background:#fff;padding:1px 2px}
+.ahora{position:absolute;top:0;bottom:0;width:2px;background:#dc2626;z-index:20;pointer-events:none}.marca-etb{position:absolute;top:-5px;bottom:-5px;width:2px;background:#111;box-shadow:0 0 0 1px rgba(255,255,255,.7);transform:translateX(-50%);border-radius:2px;z-index:4}.marca-ata{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);transform:translateX(-50%);border-radius:2px}.ahora-label{position:absolute;top:2px;left:4px;color:#dc2626;font-size:9px;font-weight:bold;white-space:nowrap;background:#fff;padding:1px 2px}
 .sin-datos{padding:40px;text-align:center;color:#64748b}
 .leyenda{background:#fff;margin-top:12px;padding:12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.leyenda h3{margin:0 0 8px}.leyenda-item{display:inline-flex;align-items:center;margin:4px 14px 4px 0;font-size:12px}.color{width:15px;height:15px;border-radius:4px;margin-right:5px}
 .modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:15px}.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3)}.modal-header{background:var(--azul);color:#fff;padding:14px;display:flex;justify-content:space-between;align-items:center}.modal-header h2{margin:0;font-size:19px}.cerrar{background:transparent;font-size:25px;padding:0 5px}.detalle{padding:14px}.detalle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detalle-item{background:#f8fafc;padding:9px;border-radius:6px}.detalle-item strong{display:block;color:#64748b;font-size:10px;margin-bottom:3px}.estado-grande{display:inline-block;margin-top:10px;padding:7px 10px;border-radius:6px;font-weight:bold;background:#e2e8f0}
@@ -60,7 +60,7 @@ button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--az
 <span>Naves: <b id="cantidad">0</b></span><span>Por arribar: <b id="porArribar">0</b></span><span>Trabajando: <b id="trabajando">0</b></span><span>Atrasadas: <b id="atrasadas">0</b></span><span>Zarparon: <b id="zarparon">0</b></span>
 </div>
 <div class="timeline-box"><div class="timeline-scroll" id="scroll"><div class="timeline" id="timeline"></div></div></div>
-<div class="nota">NORTE/SUR se distribuye automáticamente según el orden cronológico de llegada. Si dos naves llegan en fechas/horas cercanas, se reparten entre ambas líneas para evitar que se tapen.</div>
+<div class="nota">La barra comienza exactamente en ETB y termina exactamente en ETD (o ATD si ya zarpó). Ejemplo: ETB 20/09 22:00 → inicio el domingo 20 a las 22:00; ETD 22/09 02:00 → final el martes 22 a las 02:00. ATA solo marca la llegada real. La escala comienza a las 00:00 y cada hora ocupa el mismo ancho.</div>
 <div class="leyenda"><h3>Líneas navieras</h3><div id="leyenda"></div></div>
 </div>
 <div class="modal-fondo" id="modalFondo" onclick="cerrarModal(event)"><div class="modal"><div class="modal-header"><h2 id="modalTitulo">Nave</h2><button class="cerrar" onclick="cerrarModal()">×</button></div><div class="detalle"><div class="detalle-grid" id="modalDatos"></div><div id="modalEstado"></div></div></div></div>
@@ -86,10 +86,23 @@ let ultimoInicio=null,ultimoFin=null,ultimoFiltrado=[];
 
 function fecha(valor){
  if(!valor)return null;
- let s=String(valor).trim().replace(' ','T');
+ let s=String(valor).trim();
  if(!s)return null;
- if(!/[zZ]|[+-]\d\d:?\d\d$/.test(s))s+='-05:00';
- const d=new Date(s);return isNaN(d.getTime())?null:d;
+ // Acepta: YYYY-MM-DD HH:mm:ss, YYYY-MM-DDTHH:mm:ss,
+ // DD/MM/YYYY HH:mm:ss y DD-MM-YYYY HH:mm:ss.
+ let m=s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
+ if(m){
+   const iso=`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]||'00'}-05:00`;
+   const d=new Date(iso); return isNaN(d.getTime())?null:d;
+ }
+ m=s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
+ if(m){
+   const iso=`${m[3]}-${m[2]}-${m[1]}T${m[4]}:${m[5]}:${m[6]||'00'}-05:00`;
+   const d=new Date(iso); return isNaN(d.getTime())?null:d;
+ }
+ let iso=s.replace(' ','T');
+ if(!/[zZ]|[+-]\d\d:?\d\d$/.test(iso))iso+='-05:00';
+ const d=new Date(iso); return isNaN(d.getTime())?null:d;
 }
 function normalizar(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim()}
 function limpiarNombre(n){return String(n||'').replace(/^\s*[^-]+\s+-\s+/,'').trim()}
@@ -153,7 +166,11 @@ function consultar(){
  ultimoInicio=inicio;ultimoFin=fin;ultimoFiltrado=filtradas;dibujarTimeline(filtradas,inicio,fin)
 }
 function colorLinea(linea,mapa){const k=normalizar(linea)||'SIN LINEA';if(!mapa[k])mapa[k]=COLORES[Object.keys(mapa).length%COLORES.length];return mapa[k]}
-function fechaLlegada(n){return fecha(n.ata)||fecha(n.etb)||fecha(n.etd)||fecha(n.atd)}
+function fechaLlegada(n){
+ // La posición del buque en el Line-Up se determina por la fecha/hora programada de llegada (ETB).
+ // ATA solo se usa como respaldo cuando ETB no existe.
+ return fecha(n.etb)||fecha(n.ata)||fecha(n.etd)||fecha(n.atd);
+}
 function asignarNorteSur(naves){
  // Primero orden cronológico; se intenta alternar NORTE/SUR para fechas cercanas.
  const orden=[...naves].sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
@@ -170,8 +187,19 @@ function dibujarTimeline(naves,inicio,fin){
  const timeline=document.getElementById('timeline');timeline.innerHTML='';
  const totalHoras=Math.max(24,(fin-inicio)/3600000),ancho=Math.max(900,totalHoras*PX_HORA+72);timeline.style.width=ancho+'px';
  const eje=document.createElement('div');eje.className='axis';const ei=document.createElement('div');ei.className='axis-inner';ei.style.width=ancho+'px';
- let c=new Date(inicio);while(c<=fin){const x=(c-inicio)/3600000*PX_HORA,d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);c.setDate(c.getDate()+1)}
- c=new Date(inicio);c.setMinutes(0,0,0);while(c<=fin){const x=(c-inicio)/3600000*PX_HORA,h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=c.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit',hour12:false});ei.appendChild(h);c.setHours(c.getHours()+3)}
+ // La escala SIEMPRE empieza exactamente a las 00:00 del día Desde.
+ // Cada hora ocupa exactamente PX_HORA píxeles. Así ETB=15:00 queda
+ // exactamente a 15 * PX_HORA desde las 00:00, sin desplazamientos.
+ let c=new Date(inicio);
+ while(c<=fin){
+   const x=(c-inicio)/3600000*PX_HORA;
+   if(c.getHours()===0){
+     const d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';
+     d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);
+   }
+   const h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=String(c.getHours()).padStart(2,'0')+':00';ei.appendChild(h);
+   c.setHours(c.getHours()+1);
+ }
  eje.appendChild(ei);timeline.appendChild(eje);
  const rows=document.createElement('div');rows.className='rows';rows.style.width=ancho+'px';
  const asignados=asignarNorteSur(naves),colores={};
@@ -181,12 +209,64 @@ function dibujarTimeline(naves,inicio,fin){
   const content=document.createElement('div');content.className='lane-content';content.style.width=(ancho-72)+'px';
   let g=new Date(inicio);g.setMinutes(0,0,0);while(g<=fin){const x=(g-inicio)/3600000*PX_HORA+72,l=document.createElement('div');l.className='row-line';l.style.left=x+'px';content.appendChild(l);g.setHours(g.getHours()+3)}
   naves.filter(n=>asignados.get(n)===laneName).forEach(n=>{
-   const inicioN=fecha(n.ata)||fecha(n.etb)||fecha(n.etd)||fecha(n.atd);if(!inicioN)return;
-   let finN=fecha(n.atd)||fecha(n.etd)||new Date(inicioN.getTime()+2*3600000);
-   if(finN<=inicioN)finN=new Date(inicioN.getTime()+2*3600000);
-   const x1=Math.max(0,(inicioN-inicio)/3600000*PX_HORA),x2=Math.min(ancho-72,(finN-inicio)/3600000*PX_HORA),w=Math.max(44,x2-x1);
-   const bar=document.createElement('div');bar.className='vessel';bar.style.left=x1+'px';bar.style.width=w+'px';bar.style.background=colorLinea(n.linea,colores);bar.title='Click para ver información';
-   bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;bar.onclick=()=>abrirModal(n);content.appendChild(bar);
+   // REGLA FUNDAMENTAL DEL VESSEL LINE-UP:
+   // 1) La barra COMIENZA exactamente en ETB.
+   // 2) La barra TERMINA exactamente en ETD (o ATD si ya zarpó).
+   // 3) ATA NO mueve la barra; solamente marca la llegada real.
+   // La conversión a píxeles usa una única función, de modo que la posición
+   // de la barra y las marcas de la escala usan exactamente la misma referencia.
+   const etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
+   const inicioN=etb||ata||etd||atd;
+   if(!inicioN)return;
+   const finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
+   if(finN<=inicioN)return;
+
+   // content comienza en x=0 después de la columna NORTE/SUR.
+   // 20/09 00:00 = 0 px; 20/09 22:00 = 22*PX_HORA;
+   // 22/09 02:00 = 50*PX_HORA.
+   const pxDesdeInicio=d=>(d-inicio)/3600000*PX_HORA;
+   const x1=pxDesdeInicio(inicioN);
+   const x2=pxDesdeInicio(finN);
+   const rangoPx=ancho-72;
+
+   // Si el intervalo de operación no toca el rango seleccionado, no se dibuja.
+   if(x2<=0 || x1>=rangoPx)return;
+
+   // Recorte visual del rango, sin cambiar las coordenadas reales.
+   const left=Math.max(0,x1);
+   const right=Math.min(rangoPx,x2);
+   const w=right-left;
+   if(w<=0)return;
+
+   const bar=document.createElement('div');
+   bar.className='vessel';
+   bar.style.left=left+'px';
+   bar.style.width=Math.max(2,w)+'px';
+   bar.style.background=colorLinea(n.linea,colores);
+   bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
+   bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
+
+   // Marca negra = ETB. Como usa pxDesdeInicio(), cae exactamente sobre la hora ETB.
+   if(etb && etb>=inicio && etb<=fin){
+     const marca=document.createElement('span');
+     marca.className='marca-etb';
+     marca.style.left=(pxDesdeInicio(etb)-left)+'px';
+     marca.title='ETB: '+n.etb;
+     bar.appendChild(marca);
+   }
+
+   // Marca blanca = ATA real. No altera ni el inicio ni el final de la barra.
+   if(ata && ata>=inicioN && ata<=finN){
+     const rel=(ata-inicioN)/(finN-inicioN);
+     const marca=document.createElement('span');
+     marca.className='marca-ata';
+     marca.style.left=(rel*100)+'%';
+     marca.title='ATA: '+n.ata;
+     bar.appendChild(marca);
+   }
+
+   bar.onclick=()=>abrirModal(n);
+   content.appendChild(bar);
   });
   lane.appendChild(content);rows.appendChild(lane);
  });
