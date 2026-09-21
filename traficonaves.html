@@ -3,288 +3,220 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tráfico de Naves - Línea de Tiempo</title>
+<title>Timeline de Naves - DP World</title>
 <style>
-*{box-sizing:border-box}
-:root{--azul:#123b5d;--borde:#dbe2ea;--fondo:#eef1f5}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:#1f2937}
-header{background:#a51f35;color:#fff;padding:16px 20px}
-header h1{margin:0 0 4px;font-size:25px} header p{margin:0;opacity:.92}
-.panel{max-width:1700px;margin:16px auto;padding:0 12px}
-.controles{background:#fff;padding:13px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;align-items:end;gap:9px}
-.campo{display:flex;flex-direction:column;gap:4px}.campo label{font-size:12px;font-weight:bold}.campo input{height:38px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px}
-button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--azul);color:#fff;font-weight:bold;cursor:pointer}button:hover{opacity:.9}button.secundario{background:#64748b}
-.zoom-box{display:flex;align-items:center;gap:7px;background:#f8fafc;border:1px solid var(--borde);padding:4px 7px;border-radius:7px;height:38px}.zoom-box label{font-size:12px;font-weight:bold}.zoom-box input{width:120px}.zoom-num{min-width:46px;text-align:center;font-size:12px;font-weight:bold}
-.fuente{margin-top:8px;font-size:12px;color:#64748b}.fuente.ok{color:#166534}.fuente.error{color:#b91c1c}
-.resumen{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}.resumen span{background:#fff;padding:8px 12px;border-radius:7px;box-shadow:0 2px 6px rgba(0,0,0,.06);font-size:13px}
-.timeline-box{margin-top:12px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
-.timeline-scroll{overflow:auto;position:relative;max-height:72vh}
-.timeline{position:relative;min-width:900px}
-.axis{position:sticky;top:0;z-index:30;height:66px;background:#f8fafc;border-bottom:2px solid #cbd5e1}
-.axis-inner{position:relative;height:100%}.day{position:absolute;top:0;height:66px;border-left:1px solid #cbd5e1;padding:8px 5px;font-weight:bold;color:#334155;white-space:nowrap;font-size:12px}.hour{position:absolute;bottom:6px;font-size:10px;color:#64748b;transform:translateX(-50%);white-space:nowrap}
-.lane-title{position:sticky;left:0;z-index:22;width:72px;min-width:72px;height:42px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;color:#475569;box-shadow:2px 0 3px rgba(0,0,0,.05)}
-.rows{position:relative}.lane{position:relative;min-height:82px;border-bottom:1px solid #cbd5e1;display:flex;align-items:stretch}.lane-bg{position:absolute;inset:0;pointer-events:none}.row-line{position:absolute;top:0;bottom:0;width:1px;background:#eef2f7}.lane-content{position:absolute;left:72px;top:0;height:82px;margin-left:0}
-.vessel{position:absolute;top:14px;height:52px;min-width:42px;border-radius:6px;color:#fff;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.22);overflow:hidden;transition:transform .12s,box-shadow .12s;border:1px solid rgba(0,0,0,.12)}
-.vessel:hover{transform:translateY(-2px);box-shadow:0 5px 10px rgba(0,0,0,.25)}
-.vessel .nombre{padding:5px 7px 0;font-weight:bold;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vessel .linea{padding:1px 7px;font-size:9px;white-space:nowrap}.estado{position:absolute;right:4px;bottom:3px;font-size:8px;background:rgba(0,0,0,.28);padding:2px 4px;border-radius:3px;white-space:nowrap}
-.ahora{position:absolute;top:0;bottom:0;width:2px;background:#dc2626;z-index:20;pointer-events:none}.marca-etb{position:absolute;top:-5px;bottom:-5px;width:2px;background:#111;box-shadow:0 0 0 1px rgba(255,255,255,.7);transform:translateX(-50%);border-radius:2px;z-index:4}.marca-ata{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);transform:translateX(-50%);border-radius:2px}.ahora-label{position:absolute;top:2px;left:4px;color:#dc2626;font-size:9px;font-weight:bold;white-space:nowrap;background:#fff;padding:1px 2px}
-.sin-datos{padding:40px;text-align:center;color:#64748b}
-.leyenda{background:#fff;margin-top:12px;padding:12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.leyenda h3{margin:0 0 8px}.leyenda-item{display:inline-flex;align-items:center;margin:4px 14px 4px 0;font-size:12px}.color{width:15px;height:15px;border-radius:4px;margin-right:5px}
-.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:15px}.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3)}.modal-header{background:var(--azul);color:#fff;padding:14px;display:flex;justify-content:space-between;align-items:center}.modal-header h2{margin:0;font-size:19px}.cerrar{background:transparent;font-size:25px;padding:0 5px}.detalle{padding:14px}.detalle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detalle-item{background:#f8fafc;padding:9px;border-radius:6px}.detalle-item strong{display:block;color:#64748b;font-size:10px;margin-bottom:3px}.estado-grande{display:inline-block;margin-top:10px;padding:7px 10px;border-radius:6px;font-weight:bold;background:#e2e8f0}
-.nota{font-size:11px;color:#64748b;margin-top:7px}
-@media(max-width:700px){header h1{font-size:20px}.panel{padding:0 7px}.controles{align-items:stretch}.campo{flex:1 1 130px}.zoom-box{flex:1 1 100%}.zoom-box input{flex:1}.detalle-grid{grid-template-columns:1fr}.timeline-scroll{max-height:75vh}.timeline{min-width:700px}.day{font-size:10px}.vessel .nombre{font-size:10px}.vessel .linea{font-size:8px}}
+:root {
+  --bg: #f4f7f6;
+  --border: #cbd5e1;
+  --header-bg: #073b73;
+  --grid-line: #e2e8f0;
+  --bar-arribo: #16a34a; /* Verde */
+  --bar-trabajo: #2563eb; /* Azul */
+  --bar-zarpo: #64748b; /* Gris */
+  --px-por-hora: 80px; /* Ancho de cada columna de hora */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  margin: 20px;
+  color: #1e293b;
+}
+
+.timeline-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+
+.timeline-header {
+  display: flex;
+  background: var(--header-bg);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.timeline-label-col {
+  min-width: 180px;
+  width: 180px;
+  padding: 12px;
+  font-weight: bold;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  background: var(--header-bg);
+  position: sticky;
+  left: 0;
+  z-index: 11;
+}
+
+.timeline-hours {
+  display: flex;
+}
+
+.hour-cell {
+  min-width: var(--px-por-hora);
+  width: var(--px-por-hora);
+  text-align: center;
+  padding: 10px 0;
+  font-size: 12px;
+  font-weight: bold;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+
+.timeline-row {
+  display: flex;
+  border-bottom: 1px solid var(--grid-line);
+  position: relative;
+  align-items: center;
+  height: 52px;
+}
+
+.nave-info {
+  min-width: 180px;
+  width: 180px;
+  padding: 8px 12px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  border-right: 1px solid var(--border);
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeline-track {
+  display: flex;
+  position: relative;
+  height: 100%;
+  flex-grow: 1;
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--px-por-hora) 100%;
+}
+
+.gantt-bar {
+  position: absolute;
+  top: 8px;
+  height: 34px;
+  border-radius: 6px;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.gantt-bar.POR\ ARRIBAR { background-color: var(--bar-arribo); }
+.gantt-bar.TRABAJANDO { background-color: var(--bar-trabajo); }
+.gantt-bar.ZARPÓ { background-color: var(--bar-zarpo); }
+
+.gantt-bar .subtext {
+  font-size: 9px;
+  opacity: 0.85;
+  font-weight: normal;
+}
 </style>
 </head>
 <body>
-<header>
-<h1>TRÁFICO DE NAVES - POSORJA</h1>
-<p>Línea de tiempo de arribos, operaciones y zarpes</p>
-</header>
-<div class="panel">
-<div class="controles">
-<div class="campo"><label>Desde</label><input type="date" id="fechaDesde"></div>
-<div class="campo"><label>Hasta</label><input type="date" id="fechaHasta"></div>
-<button onclick="consultar()">CONSULTAR</button>
-<button class="secundario" onclick="hoy()">HOY</button>
-<button class="secundario" onclick="rango7()">7 DÍAS</button>
-<div class="zoom-box">
-<label>ESCALA</label>
-<button type="button" class="secundario" onclick="cambiarZoom(-1)">−</button>
-<input type="range" id="zoom" min="12" max="120" value="42" step="2" oninput="aplicarZoom(this.value)">
-<button type="button" class="secundario" onclick="cambiarZoom(1)">+</button>
-<span class="zoom-num" id="zoomNum">42 px/h</span>
+
+<h2>Timeline de Operación Naval</h2>
+<div class="timeline-container" id="timelineContainer">
+  <!-- El contenido se generará dinámicamente -->
 </div>
-</div>
-<div class="fuente" id="fuente">Cargando datos...</div>
-<div class="resumen">
-<span>Naves: <b id="cantidad">0</b></span><span>Por arribar: <b id="porArribar">0</b></span><span>Trabajando: <b id="trabajando">0</b></span><span>Atrasadas: <b id="atrasadas">0</b></span><span>Zarparon: <b id="zarparon">0</b></span>
-</div>
-<div class="timeline-box"><div class="timeline-scroll" id="scroll"><div class="timeline" id="timeline"></div></div></div>
-<div class="nota">La barra comienza exactamente en ETB y termina exactamente en ETD (o ATD si ya zarpó). Ejemplo: ETB 20/09 22:00 → inicio el domingo 20 a las 22:00; ETD 22/09 02:00 → final el martes 22 a las 02:00. ATA solo marca la llegada real. La escala comienza a las 00:00 y cada hora ocupa el mismo ancho.</div>
-<div class="leyenda"><h3>Líneas navieras</h3><div id="leyenda"></div></div>
-</div>
-<div class="modal-fondo" id="modalFondo" onclick="cerrarModal(event)"><div class="modal"><div class="modal-header"><h2 id="modalTitulo">Nave</h2><button class="cerrar" onclick="cerrarModal()">×</button></div><div class="detalle"><div class="detalle-grid" id="modalDatos"></div><div id="modalEstado"></div></div></div></div>
+
 <script>
-/*
-  ESTA PÁGINA SE CONECTA CON EL ARCHIVO datos.json DEL MISMO PROYECTO.
-  El GitHub Action/Python que actualiza tu dashboard debe generar datos.json.
-  No se intenta hacer scraping directo desde el navegador porque DP World
-  puede bloquear la petición por CORS.
-*/
-let NAVES=[];
-let NAVES_FALLBACK=[
- {nave:'CMA CGM GREENLAND',viaje:'CMA2026103',linea:'CMA',etb:'2026-09-18 17:00:00',etd:'2026-09-20 21:00:00',ata:'2026-09-18 16:36:00',atd:'2026-09-20 20:58:00',status:'DEPARTED',origen:'PECLL',destino:'PECLL',servicio:'ACSA'},
- {nave:'AS PALINA',viaje:'MAE2026113',linea:'MAE',etb:'2026-09-20 22:00:00',etd:'2026-09-22 02:00:00',ata:'2026-09-20 21:52:00',atd:'',status:'IN OPERATION',origen:'PABLB',destino:'PABLB',servicio:'WCSA-SHTL'},
- {nave:'HLC2026090 - ODYSSEUS',viaje:'639N',linea:'HLC',etb:'2026-09-22 09:00:00',etd:'2026-09-22 17:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'PEPAI',destino:'PEPAI',servicio:'MSW'},
- {nave:'HLC2026085 - VALPARAISO EXPRESS',viaje:'6234S',linea:'HLC',etb:'2026-09-21 15:00:00',etd:'2026-09-22 06:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'COBUN',destino:'COBUN',servicio:'SWX_SB'},
- {nave:'MAERSK NOKWANDA',viaje:'634W',linea:'MAE',etb:'2026-09-26 23:00:00',etd:'2026-09-28 05:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'ECPBO',destino:'ECPBO',servicio:'ECUMED'},
- {nave:'CMA CGM HELIUM',viaje:'1MHTPW1MA',linea:'CMA',etb:'2026-09-25 22:00:00',etd:'2026-09-27 09:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'PECLL',destino:'PECLL',servicio:'ACSA'}
+// 1. Parser estricto en hora local sin desfase UTC
+function parseFechaLocal(strFecha) {
+  if (!strFecha || String(strFecha).trim() === "" || String(strFecha).toLowerCase() === "null") return null;
+  
+  // Limpia el .0 final de DP World y normaliza separadores
+  const limpia = String(strFecha).trim().replace(/\.0+$/, "").replace(" ", "T");
+  const partes = limpia.split(/[-T:]/);
+  
+  if (partes.length >= 5) {
+    return new Date(
+      parseInt(partes[0], 10),      // Año
+      parseInt(partes[1], 10) - 1,  // Mes (0-indexado)
+      parseInt(partes[2], 10),      // Día
+      parseInt(partes[3], 10),      // Hora (ej: 15)
+      parseInt(partes[4], 10)       // Minutos
+    );
+  }
+  return new Date(limpia);
+}
+
+// Datos de ejemplo basándonos en tu captura[cite: 10]
+const NAVES = [
+  {
+    nave: "VALPARAISO EXPRESS",[cite: 10]
+    linea: "HLC",[cite: 10]
+    etb: "2026-09-21 15:00:00",[cite: 10]
+    etd: "2026-09-22 06:00:00",[cite: 10]
+    estado: "POR ARRIBAR"[cite: 10]
+  }
 ];
-const COLORES=['#2563eb','#16a34a','#dc2626','#9333ea','#ea580c','#0891b2','#db2777','#475569','#65a30d','#7c3aed','#a16207','#0f766e'];
-let PX_HORA=42;
-let ultimoInicio=null,ultimoFin=null,ultimoFiltrado=[];
 
-function fecha(valor){
- if(!valor)return null;
- let s=String(valor).trim();
- if(!s)return null;
- // Acepta: YYYY-MM-DD HH:mm:ss, YYYY-MM-DDTHH:mm:ss,
- // DD/MM/YYYY HH:mm:ss y DD-MM-YYYY HH:mm:ss.
- let m=s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
- if(m){
-   const iso=`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]||'00'}-05:00`;
-   const d=new Date(iso); return isNaN(d.getTime())?null:d;
- }
- m=s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
- if(m){
-   const iso=`${m[3]}-${m[2]}-${m[1]}T${m[4]}:${m[5]}:${m[6]||'00'}-05:00`;
-   const d=new Date(iso); return isNaN(d.getTime())?null:d;
- }
- let iso=s.replace(' ','T');
- if(!/[zZ]|[+-]\d\d:?\d\d$/.test(iso))iso+='-05:00';
- const d=new Date(iso); return isNaN(d.getTime())?null:d;
-}
-function normalizar(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim()}
-function limpiarNombre(n){return String(n||'').replace(/^\s*[^-]+\s+-\s+/,'').trim()}
-function normalizarNave(x){
- x=x||{};
- return {
-  nave:x.nave??x.Nave??x.nombre??x.nombre_nave??'',
-  viaje:x.viaje??x.Viaje??'',
-  linea:x.linea??x.Linea??x.LINEA??'',
-  etb:x.etb??x.ETB??'',etd:x.etd??x.ETD??'',ata:x.ata??x.ATA??'',atd:x.atd??x.ATD??'',
-  status:x.status??x.STATUS??'',
-  origen:x.origen??x['PTO.ORIGEN']??x.ptoOrigen??'',
-  destino:x.destino??x['PTO.DESTINO']??x.ptoDestino??'',
-  servicio:x.servicio??x.SERVICIO??''
- };
-}
-function estado(n){
- const s=normalizar(n.status),now=new Date(),etb=fecha(n.etb),ata=fecha(n.ata),atd=fecha(n.atd);
- if(atd)return 'ZARPÓ';
- if(s==='DEPARTED'||s.includes('SAILED'))return 'ZARPÓ';
- if(s.includes('IN OPERATION')||s.includes('OPERATING')||s==='WORKING')return 'TRABAJANDO';
- if(ata&&!atd)return 'TRABAJANDO';
- if(s.includes('TO ARRIVE')){if(etb&&now<etb)return 'POR ARRIBAR';if(etb&&now>=etb)return 'ATRASADA';return 'POR ARRIBAR'}
- if(etb&&now<etb)return 'POR ARRIBAR';
- if(etb&&now>=etb&&!atd)return 'TRABAJANDO';
- return 'POR ARRIBAR';
-}
-function fechaLocalInput(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function hoy(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(a);consultar()}
-function rango7(){const a=new Date(),b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(b);consultar()}
-function cambiarZoom(dir){const z=document.getElementById('zoom');z.value=Math.max(+z.min,Math.min(+z.max,+z.value+dir*6));aplicarZoom(z.value)}
-function aplicarZoom(v){PX_HORA=+v;document.getElementById('zoom').value=v;document.getElementById('zoomNum').textContent=v+' px/h';if(ultimoInicio&&ultimoFin)dibujarTimeline(ultimoFiltrado,ultimoInicio,ultimoFin)}
-async function cargarDatos(){
- const fuente=document.getElementById('fuente');
- try{
-  const r=await fetch('datos.json?ts='+Date.now(),{cache:'no-store'});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  const j=await r.json();
-  const arr=Array.isArray(j)?j:(j.naves||j.NAVES||j.data||j.datos||[]);
-  if(!Array.isArray(arr)||!arr.length)throw new Error('datos.json no contiene naves');
-  NAVES=arr.map(normalizarNave);
-  fuente.className='fuente ok';fuente.textContent='Fuente: datos.json · '+NAVES.length+' naves · actualización '+new Date().toLocaleString('es-EC');
-  consultar();
- }catch(e){
-  NAVES=NAVES_FALLBACK.map(normalizarNave);
-  fuente.className='fuente error';fuente.textContent='No se pudo leer datos.json. Se muestran datos de respaldo. '+e.message;
-  consultar();
- }
-}
-function consultar(){
- const ds=document.getElementById('fechaDesde').value,hs=document.getElementById('fechaHasta').value;
- if(!ds||!hs){hoy();return}
- let inicio=new Date(ds+'T00:00:00-05:00');
- inicio.setHours(0,0,0,0);
- let fin=new Date(hs+'T23:59:59-05:00');
- if(fin<inicio){alert('La fecha Hasta no puede ser menor que Desde.');return}
- const filtradas=NAVES.filter(n=>{
-  const puntos=[fecha(n.etb),fecha(n.ata),fecha(n.etd),fecha(n.atd)].filter(Boolean);
-  if(!puntos.length)return false;
-  const inicioN=puntos[0],finN=puntos[puntos.length-1];
-  return puntos.some(x=>x>=inicio&&x<=fin)||(inicioN<=fin&&finN>=inicio);
- }).sort((a,b)=>(fecha(a.etb)||fecha(a.ata)||0)-(fecha(b.etb)||fecha(b.ata)||0));
- ultimoInicio=inicio;ultimoFin=fin;ultimoFiltrado=filtradas;dibujarTimeline(filtradas,inicio,fin)
-}
-function colorLinea(linea,mapa){const k=normalizar(linea)||'SIN LINEA';if(!mapa[k])mapa[k]=COLORES[Object.keys(mapa).length%COLORES.length];return mapa[k]}
-function fechaLlegada(n){
- // La posición del buque en el Line-Up se determina por la fecha/hora programada de llegada (ETB).
- // ATA solo se usa como respaldo cuando ETB no existe.
- return fecha(n.etb)||fecha(n.ata)||fecha(n.etd)||fecha(n.atd);
-}
-function asignarNorteSur(naves){
- // Primero orden cronológico; se intenta alternar NORTE/SUR para fechas cercanas.
- const orden=[...naves].sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
- const asignados=new Map(),ultimoPorDia={};
- orden.forEach((n,i)=>{
-  const d=fechaLlegada(n);const clave=d?d.toISOString().slice(0,10):'SINFECHA';
-  const anterior=ultimoPorDia[clave];
-  let lane=anterior==='NORTE'?'SUR':anterior==='SUR'?'NORTE':(i%2===0?'NORTE':'SUR');
-  asignados.set(n,lane);ultimoPorDia[clave]=lane;
- });
- return asignados;
-}
-function dibujarTimeline(naves,inicio,fin){
- const timeline=document.getElementById('timeline');timeline.innerHTML='';
- const totalHoras=Math.max(24,(fin-inicio)/3600000),ancho=Math.max(900,totalHoras*PX_HORA+72);timeline.style.width=ancho+'px';
- const eje=document.createElement('div');eje.className='axis';const ei=document.createElement('div');ei.className='axis-inner';ei.style.width=ancho+'px';
- // La escala SIEMPRE empieza exactamente a las 00:00 del día Desde.
- // Cada hora ocupa exactamente PX_HORA píxeles. Así ETB=15:00 queda
- // exactamente a 15 * PX_HORA desde las 00:00, sin desplazamientos.
- let c=new Date(inicio);
- while(c<=fin){
-    const x=(c-inicio)/3600000*PX_HORA;
-    if(c.getHours()===0){
-      const d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';
-      d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);
+function renderTimeline() {
+  const container = document.getElementById("timelineContainer");
+  const pxPorHora = 80; // Debe coincidir con --px-por-hora en CSS
+  
+  // Definimos la ventana de tiempo dinámica basada en el día actual o en el ETB
+  // Para este caso tomamos desde las 00:00 del 2026-09-21 hasta las 23:00 del 2026-09-22 (48 horas)
+  const inicioVista = new Date(2026, 8, 21, 0, 0, 0); // 21 de Septiembre 00:00
+  const totalHorasVista = 48; // Muestra 2 días en el eje horizontal
+
+  // Generar Encabezado de Horas
+  let htmlHeader = `<div class="timeline-header"><div class="timeline-label-col">Nave / Línea</div><div class="timeline-hours">`;
+  for (let h = 0; h < totalHorasVista; h++) {
+    const horaActual = new Date(inicioVista.getTime() + h * 3600000);
+    const label = `${String(horaActual.getDate()).padStart(2,'0')}/${String(horaActual.getMonth()+1).padStart(2,'0')} ${String(horaActual.getHours()).padStart(2, '0')}:00`;
+    htmlHeader += `<div class="hour-cell">${label}</div>`;
+  }
+  htmlHeader += `</div></div>`;
+
+  // Generar Filas y Barras Gantt
+  let htmlRows = "";
+  NAVES.forEach(item => {
+    const fechaETB = parseFechaLocal(item.etb);
+    const fechaETD = parseFechaLocal(item.etd);
+
+    if (fechaETB && fechaETD) {
+      // 2. Cálculo preciso de inicio (left) y ancho (width) en píxeles
+      const diffHorasInicio = (fechaETB.getTime() - inicioVista.getTime()) / (1000 * 60 * 60);
+      const duracionHoras = (fechaETD.getTime() - fechaETB.getTime()) / (1000 * 60 * 60);
+
+      const leftPx = diffHorasInicio * pxPorHora;
+      const widthPx = duracionHoras * pxPorHora;
+
+      htmlRows += `
+        <div class="timeline-row">
+          <div class="nave-info">${item.nave}<br><span style="font-weight:normal;font-size:11px;color:#64748b;">${item.linea}</span></div>
+          <div class="timeline-track" style="width: ${totalHorasVista * pxPorHora}px;">
+            <div class="gantt-bar ${item.estado}" style="left: ${leftPx}px; width: ${widthPx}px;">
+              <span>${item.nave}</span>
+              <span class="subtext">${fechaETB.getHours()}:00 - ${fechaETD.getHours()}:00</span>
+            </div>
+          </div>
+        </div>
+      `;
     }
-    const h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=String(c.getHours()).padStart(2,'0')+':00';ei.appendChild(h);
-    c.setHours(c.getHours()+1);
- }
- eje.appendChild(ei);timeline.appendChild(eje);
- const rows=document.createElement('div');rows.className='rows';rows.style.width=ancho+'px';
- const asignados=asignarNorteSur(naves),colores={};
- ['NORTE','SUR'].forEach(laneName=>{
-  const lane=document.createElement('div');lane.className='lane';lane.style.width=ancho+'px';
-  const title=document.createElement('div');title.className='lane-title';title.textContent=laneName;lane.appendChild(title);
-  const content=document.createElement('div');content.className='lane-content';content.style.width=(ancho-72)+'px';
-  let g=new Date(inicio);g.setMinutes(0,0,0);while(g<=fin){const x=(g-inicio)/3600000*PX_HORA+72,l=document.createElement('div');l.className='row-line';l.style.left=x+'px';content.appendChild(l);g.setHours(g.getHours()+3)}
-  naves.filter(n=>asignados.get(n)===laneName).forEach(n=>{
-    // REGLA FUNDAMENTAL DEL VESSEL LINE-UP:
-    // 1) La barra COMIENZA exactamente en ETB.
-    // 2) La barra TERMINA exactamente en ETD (o ATD si ya zarpó).
-    // 3) ATA NO mueve la barra; solamente marca la llegada real.
-    // La conversión a píxeles usa una única función, de modo que la posición
-    // de la barra y las marcas de la escala usan exactamente la misma referencia.
-    const etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
-    const inicioN=etb||ata||etd||atd;
-    if(!inicioN)return;
-    const finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
-    if(finN<=inicioN)return;
-
-    // content comienza en x=0 dentro de su propia zona, cuya posición absoluta es 72px; así coincide con la escala.
-    // 20/09 00:00 = 0 px; 20/09 22:00 = 22*PX_HORA;
-    // 22/09 02:00 = 50*PX_HORA.
-    const pxDesdeInicio=d=>(d-inicio)/3600000*PX_HORA;
-    const x1=pxDesdeInicio(inicioN);
-    const x2=pxDesdeInicio(finN);
-    const rangoPx=ancho-72;
-
-    // Si el intervalo de operación no toca el rango seleccionado, no se dibuja.
-    if(x2<=0 || x1>=rangoPx)return;
-
-    // Recorte visual del rango, sin cambiar las coordenadas reales.
-    const left=Math.max(0,x1);
-    const right=Math.min(rangoPx,x2);
-    const w=right-left;
-    if(w<=0)return;
-
-    const bar=document.createElement('div');
-    bar.className='vessel';
-    bar.style.left=left+'px';
-    bar.style.width=Math.max(2,w)+'px';
-    bar.style.background=colorLinea(n.linea,colores);
-    bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
-    bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
-
-    // Marca negra = ETB. Se ubica en posición porcentual sobre el total de la barra.
-    if(etb && etb>=inicio && etb<=fin){
-      const posRelativa = (etb - inicioN) / (finN - inicioN);
-      const marca=document.createElement('span');
-      marca.className='marca-etb';
-      marca.style.left=(posRelativa*100)+'%';
-      marca.title='ETB: '+n.etb;
-      bar.appendChild(marca);
-    }
-
-    // Marca blanca = ATA real. No altera ni el inicio ni el final de la barra.
-    if(ata && ata>=inicioN && ata<=finN){
-      const rel=(ata-inicioN)/(finN-inicioN);
-      const marca=document.createElement('span');
-      marca.className='marca-ata';
-      marca.style.left=(rel*100)+'%';
-      marca.title='ATA: '+n.ata;
-      bar.appendChild(marca);
-    }
-
-    bar.onclick=()=>abrirModal(n);
-    content.appendChild(bar);
   });
-  lane.appendChild(content);rows.appendChild(lane);
- });
- const ahora=new Date();if(ahora>=inicio&&ahora<=fin){const x=(ahora-inicio)/3600000*PX_HORA+72,a=document.createElement('div');a.className='ahora';a.style.left=x+'px';a.innerHTML='<div class="ahora-label">AHORA</div>';rows.appendChild(a)}
- if(!naves.length){const s=document.createElement('div');s.className='sin-datos';s.textContent='No hay naves dentro del rango seleccionado.';rows.appendChild(s)}
- timeline.appendChild(rows);actualizarResumen(naves);dibujarLeyenda(colores)
+
+  container.innerHTML = htmlHeader + htmlRows;
 }
-function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
-function actualizarResumen(naves){document.getElementById('cantidad').textContent=naves.length;document.getElementById('porArribar').textContent=naves.filter(n=>estado(n)==='POR ARRIBAR').length;document.getElementById('trabajando').textContent=naves.filter(n=>estado(n)==='TRABAJANDO').length;document.getElementById('atrasadas').textContent=naves.filter(n=>estado(n)==='ATRASADA').length;document.getElementById('zarparon').textContent=naves.filter(n=>estado(n)==='ZARPÓ').length}
-function dibujarLeyenda(colores){const cont=document.getElementById('leyenda');cont.innerHTML='';Object.keys(colores).forEach(k=>{const i=document.createElement('div');i.className='leyenda-item';i.innerHTML=`<span class="color" style="background:${colores[k]}"></span><span>${escapeHtml(k)}</span>`;cont.appendChild(i)});if(!Object.keys(colores).length)cont.textContent='No hay líneas navieras en el rango seleccionado.'}
-function abrirModal(n){document.getElementById('modalTitulo').textContent=limpiarNombre(n.nave)||'Nave';const datos=[['Nave',n.nave],['Viaje',n.viaje],['Línea naviera',n.linea],['ETB',n.etb],['ATA',n.ata],['ETD',n.etd],['ATD',n.atd],['STATUS DP World',n.status],['Origen',n.origen],['Destino',n.destino],['Servicio',n.servicio]];document.getElementById('modalDatos').innerHTML=datos.map(x=>`<div class="detalle-item"><strong>${escapeHtml(x[0])}</strong>${escapeHtml(x[1]||'—')}</div>`).join('');document.getElementById('modalEstado').innerHTML=`<div class="estado-grande">Estado actual: ${estado(n)}</div>`;document.getElementById('modalFondo').style.display='flex'}
-function cerrarModal(e){if(!e||e.target===document.getElementById('modalFondo'))document.getElementById('modalFondo').style.display='none'}
-(async function(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);const b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaHasta').value=fechaLocalInput(b);await cargarDatos()})();
-setInterval(()=>{if(ultimoInicio&&ultimoFin)consultar()},60000);
-setInterval(()=>cargarDatos(),15*60*1000);
+
+renderTimeline();
 </script>
 </body>
 </html>
