@@ -3,342 +3,261 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Control de Naves y Cronograma - DP World Posorja</title>
+<title>Tráfico de Naves - Línea de Tiempo</title>
 <style>
-:root {
-  --bg: #f3f6f9;
-  --card: #fff;
-  --text: #1f2937;
-  --muted: #64748b;
-  --border: #dbe2ea;
-  --blue: #0b5ed7;
-  --green: #198754;
-  --yellow: #f0ad00;
-  --shadow: 0 4px 15px rgba(0,0,0,.07);
-  --header-bg: #073b73;
-  --px-por-hora: 70px;
-}
-
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); font-family: Arial, Helvetica, sans-serif; color: var(--text); }
-
-header { background: var(--header-bg); color: #fff; padding: 18px 24px; box-shadow: var(--shadow); }
-header h1 { margin: 0; font-size: 24px; }
-header p { margin: 5px 0 0; opacity: .85; font-size: 13px; }
-
-.container { max-width: 1600px; margin: 20px auto; padding: 0 15px; }
-
-.toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-button, select, input { border: 1px solid var(--border); background: #fff; border-radius: 7px; padding: 10px 12px; font-size: 14px; }
-button { cursor: pointer; background: var(--header-bg); color: #fff; border-color: var(--header-bg); }
-button.secondary { background: #fff; color: var(--header-bg); }
-input { min-width: 260px; flex: 1; }
-
-.info { background: #eaf4ff; border: 1px solid #b6d7ff; color: #174a7c; padding: 10px 12px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; }
-.error { display: none; background: #ffe0e3; color: #842029; border: 1px solid #f5c2c7; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
-
-.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
-.card { background: var(--card); padding: 16px; border-radius: 10px; box-shadow: var(--shadow); border-left: 5px solid #64748b; }
-.card.arribo { border-color: var(--yellow); }
-.card.trabajo { border-color: var(--blue); }
-.card.zarpo { border-color: var(--green); }
-.card.total { border-color: #334155; }
-.num { font-size: 28px; font-weight: bold; }
-.label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-/* Estilos de Secciones y Tablas */
-.section { background: #fff; border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden; }
-.section-title { padding: 13px 16px; font-size: 17px; font-weight: bold; border-bottom: 1px solid var(--border); background: #fafbfc; }
-.section-title span { float: right; font-size: 12px; color: var(--muted); font-weight: normal; }
-.table-wrap { overflow: auto; }
-
-table { width: 100%; border-collapse: collapse; min-width: 1250px; }
-th, td { padding: 10px 9px; border-bottom: 1px solid #edf1f5; text-align: left; font-size: 13px; white-space: nowrap; }
-th { background: #f7f9fb; color: #475569; position: sticky; top: 0; z-index: 1; }
-.nave { font-weight: bold; }
-
-.status { display: inline-block; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
-.status-arribo { background: #fff3cd; color: #8a6500; }
-.status-trabajo { background: #dbeafe; color: #0756a6; }
-.status-zarpo { background: #d1e7dd; color: #146c43; }
-.status-desconocido { background: #e2e3e5; color: #41464b; }
-
-/* Estilos del Gantt / Timeline */
-.gantt-wrapper { overflow-x: auto; background: #fff; position: relative; }
-.gantt-header { display: flex; background: var(--header-bg); color: #fff; position: sticky; top: 0; z-index: 10; }
-.gantt-col-fixed { min-width: 200px; width: 200px; padding: 12px; font-weight: bold; font-size: 13px; border-right: 1px solid rgba(255,255,255,0.2); background: var(--header-bg); position: sticky; left: 0; z-index: 11; }
-.gantt-hours { display: flex; }
-.gantt-hour-cell { min-width: var(--px-por-hora); width: var(--px-por-hora); text-align: center; padding: 10px 0; font-size: 11px; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; }
-
-.gantt-row { display: flex; border-bottom: 1px solid var(--border); height: 50px; position: relative; align-items: center; }
-.gantt-label { min-width: 200px; width: 200px; padding: 6px 12px; background: #fff; font-size: 12px; font-weight: bold; border-right: 1px solid var(--border); position: sticky; left: 0; z-index: 5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gantt-track { position: relative; height: 100%; flex-grow: 1; background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px); background-size: var(--px-por-hora) 100%; }
-
-.gantt-bar { position: absolute; top: 7px; height: 36px; border-radius: 6px; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.gantt-bar.POR\ ARRIBAR { background-color: var(--green); }
-.gantt-bar.TRABAJANDO { background-color: var(--blue); }
-.gantt-bar.ZARPÓ { background-color: #64748b; }
-.gantt-bar .sub { font-size: 9px; opacity: 0.9; font-weight: normal; }
-
-.empty { text-align: center; padding: 25px; color: var(--muted); }
-footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
-
-@media(max-width:900px){ .cards { grid-template-columns: repeat(2,1fr); } }
-@media(max-width:550px){ .cards { grid-template-columns: 1fr; } .toolbar > * { width: 100%; } input { min-width: 0; } }
+*{box-sizing:border-box}
+:root{--azul:#123b5d;--borde:#dbe2ea;--fondo:#eef1f5}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:#1f2937}
+header{background:#a51f35;color:#fff;padding:16px 20px}
+header h1{margin:0 0 4px;font-size:25px} header p{margin:0;opacity:.92}
+.panel{max-width:1700px;margin:16px auto;padding:0 12px}
+.controles{background:#fff;padding:13px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;align-items:end;gap:9px}
+.campo{display:flex;flex-direction:column;gap:4px}.campo label{font-size:12px;font-weight:bold}.campo input{height:38px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px}
+button{height:38px;padding:0 14px;border:0;border-radius:6px;background:var(--azul);color:#fff;font-weight:bold;cursor:pointer}button:hover{opacity:.9}button.secundario{background:#64748b}
+.zoom-box{display:flex;align-items:center;gap:7px;background:#f8fafc;border:1px solid var(--borde);padding:4px 7px;border-radius:7px;height:38px}.zoom-box label{font-size:12px;font-weight:bold}.zoom-box input{width:120px}.zoom-num{min-width:46px;text-align:center;font-size:12px;font-weight:bold}
+.fuente{margin-top:8px;font-size:12px;color:#64748b}.fuente.ok{color:#166534}.fuente.error{color:#b91c1c}
+.resumen{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}.resumen span{background:#fff;padding:8px 12px;border-radius:7px;box-shadow:0 2px 6px rgba(0,0,0,.06);font-size:13px}
+.timeline-box{margin-top:12px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
+.timeline-scroll{overflow:auto;position:relative;max-height:72vh}
+.timeline{position:relative;min-width:900px}
+.axis{position:sticky;top:0;z-index:30;height:66px;background:#f8fafc;border-bottom:2px solid #cbd5e1}
+.axis-inner{position:relative;height:100%}.day{position:absolute;top:0;height:66px;border-left:1px solid #cbd5e1;padding:8px 5px;font-weight:bold;color:#334155;white-space:nowrap;font-size:12px}.hour{position:absolute;bottom:6px;font-size:10px;color:#64748b;transform:translateX(-50%);white-space:nowrap}
+.lane-title{position:sticky;left:0;z-index:22;width:72px;min-width:72px;height:42px;background:#fff;border-right:1px solid #cbd5e1;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;color:#475569;box-shadow:2px 0 3px rgba(0,0,0,.05)}
+.rows{position:relative}.lane{position:relative;min-height:82px;border-bottom:1px solid #cbd5e1;display:flex;align-items:stretch}.lane-bg{position:absolute;inset:0;pointer-events:none}.row-line{position:absolute;top:0;bottom:0;width:1px;background:#eef2f7}.lane-content{position:absolute;left:72px;top:0;height:82px;margin-left:0}
+.vessel{position:absolute;top:14px;height:52px;min-width:42px;border-radius:6px;color:#fff;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.22);overflow:hidden;transition:transform .12s,box-shadow .12s;border:1px solid rgba(0,0,0,.12)}
+.vessel:hover{transform:translateY(-2px);box-shadow:0 5px 10px rgba(0,0,0,.25)}
+.vessel .nombre{padding:5px 7px 0;font-weight:bold;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vessel .linea{padding:1px 7px;font-size:9px;white-space:nowrap}.estado{position:absolute;right:4px;bottom:3px;font-size:8px;background:rgba(0,0,0,.28);padding:2px 4px;border-radius:3px;white-space:nowrap}
+.ahora{position:absolute;top:0;bottom:0;width:2px;background:#dc2626;z-index:20;pointer-events:none}.marca-etb{position:absolute;top:-5px;bottom:-5px;width:2px;background:#111;box-shadow:0 0 0 1px rgba(255,255,255,.7);transform:translateX(-50%);border-radius:2px;z-index:4}.marca-ata{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);transform:translateX(-50%);border-radius:2px}.ahora-label{position:absolute;top:2px;left:4px;color:#dc2626;font-size:9px;font-weight:bold;white-space:nowrap;background:#fff;padding:1px 2px}
+.sin-datos{padding:40px;text-align:center;color:#64748b}
+.leyenda{background:#fff;margin-top:12px;padding:12px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.leyenda h3{margin:0 0 8px}.leyenda-item{display:inline-flex;align-items:center;margin:4px 14px 4px 0;font-size:12px}.color{width:15px;height:15px;border-radius:4px;margin-right:5px}
+.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:15px}.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3)}.modal-header{background:var(--azul);color:#fff;padding:14px;display:flex;justify-content:space-between;align-items:center}.modal-header h2{margin:0;font-size:19px}.cerrar{background:transparent;font-size:25px;padding:0 5px}.detalle{padding:14px}.detalle-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detalle-item{background:#f8fafc;padding:9px;border-radius:6px}.detalle-item strong{display:block;color:#64748b;font-size:10px;margin-bottom:3px}.estado-grande{display:inline-block;margin-top:10px;padding:7px 10px;border-radius:6px;font-weight:bold;background:#e2e8f0}
+.nota{font-size:11px;color:#64748b;margin-top:7px}
+@media(max-width:700px){header h1{font-size:20px}.panel{padding:0 7px}.controles{align-items:stretch}.campo{flex:1 1 130px}.zoom-box{flex:1 1 100%}.zoom-box input{flex:1}.detalle-grid{grid-template-columns:1fr}.timeline-scroll{max-height:75vh}.timeline{min-width:700px}.day{font-size:10px}.vessel .nombre{font-size:10px}.vessel .linea{font-size:8px}}
 </style>
 </head>
 <body>
-
 <header>
-  <h1>⚓ Control de Naves y Cronograma - DP World Posorja</h1>
-  <p>Monitoreo de itinerario de naves, estados operativos y línea de tiempo (Gantt)</p>
+<h1>TRÁFICO DE NAVES - POSORJA</h1>
+<p>Línea de tiempo de arribos, operaciones y zarpes</p>
 </header>
-
-<div class="container">
-  <div class="toolbar">
-    <input id="buscar" type="search" placeholder="Buscar nave, viaje, línea, servicio..." oninput="renderAll()">
-    <select id="filtro" onchange="renderAll()">
-      <option value="TODOS">Todos los estados</option>
-      <option value="POR ARRIBAR">Por arribar</option>
-      <option value="TRABAJANDO">Trabajando / En operación</option>
-      <option value="ZARPÓ">Zarpó</option>
-    </select>
-    <button onclick="cargarDatos()">↻ Actualizar datos</button>
-    <button class="secondary" onclick="window.print()">🖨 Imprimir</button>
-  </div>
-
-  <div id="errorBox" class="error"></div>
-  <div class="info"><b>Fuente:</b> DP World Posorja · <span id="actualizado">Cargando...</span></div>
-
-  <div class="cards">
-    <div class="card total"><div class="num" id="total">0</div><div class="label">TOTAL REGISTROS</div></div>
-    <div class="card arribo"><div class="num" id="porArribar">0</div><div class="label">🟡 POR ARRIBAR</div></div>
-    <div class="card trabajo"><div class="num" id="trabajando">0</div><div class="label">🔵 TRABAJANDO / EN PUERTO</div></div>
-    <div class="card zarpo"><div class="num" id="zarparon">0</div><div class="label">🟢 ZARPES</div></div>
-  </div>
-
-  <!-- VISTA DE CRONOGRAMA / TIMELINE -->
-  <div class="section">
-    <div class="section-title">📊 CRONOGRAMA DE OPERACIONES (GANTT) <span>Alineación estricta por ETB y ETD</span></div>
-    <div class="gantt-wrapper" id="ganttContainer"></div>
-  </div>
-
-  <!-- TABLA POR ARRIBAR -->
-  <div class="section">
-    <div class="section-title">🟡 PRÓXIMAS NAVES A ARRIBAR <span>Ordenadas por ETB</span></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>STATUS WEB</th><th>Estado</th><th>Origen</th><th>Destino</th><th>Servicio</th></tr>
-        </thead>
-        <tbody id="tablaArribos"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- TABLA TRABAJANDO -->
-  <div class="section">
-    <div class="section-title">🔵 NAVES TRABAJANDO / EN PUERTO <span>Desde ATA hasta ATD</span></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ATA</th><th>ETD</th><th>ATD</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr>
-        </thead>
-        <tbody id="tablaTrabajo"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- TABLA ZARPES -->
-  <div class="section">
-    <div class="section-title">🟢 ZARPES REALIZADOS <span>Ordenados por ATD / ETD</span></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>ATA</th><th>ATD</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr>
-        </thead>
-        <tbody id="tablaZarpes"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer>Visualizador web de itinerario operativo · DP World Posorja</footer>
+<div class="panel">
+<div class="controles">
+<div class="campo"><label>Desde</label><input type="date" id="fechaDesde"></div>
+<div class="campo"><label>Hasta</label><input type="date" id="fechaHasta"></div>
+<button onclick="consultar()">CONSULTAR</button>
+<button class="secundario" onclick="hoy()">HOY</button>
+<button class="secundario" onclick="rango7()">7 DÍAS</button>
+<div class="zoom-box">
+<label>ESCALA</label>
+<button type="button" class="secundario" onclick="cambiarZoom(-1)">−</button>
+<input type="range" id="zoom" min="12" max="120" value="42" step="2" oninput="aplicarZoom(this.value)">
+<button type="button" class="secundario" onclick="cambiarZoom(1)">+</button>
+<span class="zoom-num" id="zoomNum">42 px/h</span>
 </div>
-
+</div>
+<div class="fuente" id="fuente">Cargando datos...</div>
+<div class="resumen">
+<span>Naves: <b id="cantidad">0</b></span><span>Por arribar: <b id="porArribar">0</b></span><span>Trabajando: <b id="trabajando">0</b></span><span>Atrasadas: <b id="atrasadas">0</b></span><span>Zarparon: <b id="zarparon">0</b></span>
+</div>
+<div class="timeline-box"><div class="timeline-scroll" id="scroll"><div class="timeline" id="timeline"></div></div></div>
+<div class="nota">La barra comienza exactamente en ETB y termina exactamente en ETD (o ATD si ya zarpó). Ejemplo: ETB 20/09 22:00 → inicio el domingo 20 a las 22:00; ETD 22/09 02:00 → final el martes 22 a las 02:00. ATA solo marca la llegada real. La escala comienza a las 00:00 y cada hora ocupa el mismo ancho.</div>
+<div class="leyenda"><h3>Líneas navieras</h3><div id="leyenda"></div></div>
+</div>
+<div class="modal-fondo" id="modalFondo" onclick="cerrarModal(event)"><div class="modal"><div class="modal-header"><h2 id="modalTitulo">Nave</h2><button class="cerrar" onclick="cerrarModal()">×</button></div><div class="detalle"><div class="detalle-grid" id="modalDatos"></div><div id="modalEstado"></div></div></div></div>
 <script>
-let NAVES = [];
+let NAVES=[];
+let NAVES_FALLBACK=[
+ {nave:'CMA CGM GREENLAND',viaje:'CMA2026103',linea:'CMA',etb:'2026-09-18 17:00:00',etd:'2026-09-20 21:00:00',ata:'2026-09-18 16:36:00',atd:'2026-09-20 20:58:00',status:'DEPARTED',origen:'PECLL',destino:'PECLL',servicio:'ACSA'},
+ {nave:'AS PALINA',viaje:'MAE2026113',linea:'MAE',etb:'2026-09-20 22:00:00',etd:'2026-09-22 02:00:00',ata:'2026-09-20 21:52:00',atd:'',status:'IN OPERATION',origen:'PABLB',destino:'PABLB',servicio:'WCSA-SHTL'},
+ {nave:'HLC2026090 - ODYSSEUS',viaje:'639N',linea:'HLC',etb:'2026-09-22 09:00:00',etd:'2026-09-22 17:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'PEPAI',destino:'PEPAI',servicio:'MSW'},
+ {nave:'HLC2026085 - VALPARAISO EXPRESS',viaje:'6234S',linea:'HLC',etb:'2026-09-21 15:00:00',etd:'2026-09-22 06:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'COBUN',destino:'COBUN',servicio:'SWX_SB'},
+ {nave:'MAERSK NOKWANDA',viaje:'634W',linea:'MAE',etb:'2026-09-26 23:00:00',etd:'2026-09-28 05:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'ECPBO',destino:'ECPBO',servicio:'ECUMED'},
+ {nave:'CMA CGM HELIUM',viaje:'1MHTPW1MA',linea:'CMA',etb:'2026-09-25 22:00:00',etd:'2026-09-27 09:00:00',ata:'',atd:'',status:'TO ARRIVE',origen:'PECLL',destino:'PECLL',servicio:'ACSA'}
+];
+const COLORES=['#2563eb','#16a34a','#dc2626','#9333ea','#ea580c','#0891b2','#db2777','#475569','#65a30d','#7c3aed','#a16207','#0f766e'];
+let PX_HORA=42;
+let ultimoInicio=null,ultimoFin=null,ultimoFiltrado=[];
 
-// 1. Parser estricto en hora local (Evita el desfase UTC de 5 horas de JavaScript)
-function parseFechaLocal(s) {
-  if (!s || String(s).trim() === "" || String(s).toLowerCase() === "null") return null;
-  const limpia = String(s).trim().replace(/\.0+$/, "").replace(" ", "T");
-  const partes = limpia.split(/[-T:]/);
-  if (partes.length >= 5) {
-    return new Date(
-      parseInt(partes[0], 10),
-      parseInt(partes[1], 10) - 1,
-      parseInt(partes[2], 10),
-      parseInt(partes[3], 10),
-      parseInt(partes[4], 10)
-    );
-  }
-  return new Date(limpia);
+function fecha(valor){
+ if(!valor)return null;
+ let s=String(valor).trim();
+ if(!s)return null;
+ let m=s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
+ if(m){
+   const iso=`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]||'00'}-05:00`;
+   const d=new Date(iso); return isNaN(d.getTime())?null:d;
+ }
+ m=s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
+ if(m){
+   const iso=`${m[3]}-${m[2]}-${m[1]}T${m[4]}:${m[5]}:${m[6]||'00'}-05:00`;
+   const d=new Date(iso); return isNaN(d.getTime())?null:d;
+ }
+ let iso=s.replace(' ','T');
+ if(!/[zZ]|[+-]\d\d:?\d\d$/.test(iso))iso+='-05:00';
+ const d=new Date(iso); return isNaN(d.getTime())?null:d;
 }
-
-function fmt(s) {
-  const d = parseFechaLocal(s);
-  return d ? d.toLocaleString("es-EC", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }) : "—";
+function normalizar(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim()}
+function limpiarNombre(n){return String(n||'').replace(/^\s*[^-]+\s+-\s+/,'').trim()}
+function normalizarNave(x){
+ x=x||{};
+ return {
+  nave:x.nave??x.Nave??x.nombre??x.nombre_nave??'',
+  viaje:x.viaje??x.Viaje??'',
+  linea:x.linea??x.Linea??x.LINEA??'',
+  etb:x.etb??x.ETB??'',etd:x.etd??x.ETD??'',ata:x.ata??x.ATA??'',atd:x.atd??x.ATD??'',
+  status:x.status??x.STATUS??'',
+  origen:x.origen??x['PTO.ORIGEN']??x.ptoOrigen??'',
+  destino:x.destino??x['PTO.DESTINO']??x.ptoDestino??'',
+  servicio:x.servicio??x.SERVICIO??''
+ };
 }
-
-function normStatus(s) { return String(s || "").trim().toUpperCase().replace(/\s+/g, " "); }
-
-function obtenerEstado(n) {
-  const s = normStatus(n.status), now = new Date();
-  const etb = parseFechaLocal(n.etb), ata = parseFechaLocal(n.ata), etd = parseFechaLocal(n.etd), atd = parseFechaLocal(n.atd);
-
-  if (atd || s === "DEPARTED" || s.includes("SAILED")) return "ZARPÓ";
-  if ((ata && !atd) || s.includes("IN OPERATION") || s.includes("OPERATING") || s === "WORKING" || (etb && etd && now >= etb && now <= etd)) return "TRABAJANDO";
-  return "POR ARRIBAR";
+function estado(n){
+ const s=normalizar(n.status),now=new Date(),etb=fecha(n.etb),ata=fecha(n.ata),atd=fecha(n.atd);
+ if(atd)return 'ZARPÓ';
+ if(s==='DEPARTED'||s.includes('SAILED'))return 'ZARPÓ';
+ if(s.includes('IN OPERATION')||s.includes('OPERATING')||s==='WORKING')return 'TRABAJANDO';
+ if(ata&&!atd)return 'TRABAJANDO';
+ if(s.includes('TO ARRIVE')){if(etb&&now<etb)return 'POR ARRIBAR';if(etb&&now>=etb)return 'ATRASADA';return 'POR ARRIBAR'}
+ if(etb&&now<etb)return 'POR ARRIBAR';
+ if(etb&&now>=etb&&!atd)return 'TRABAJANDO';
+ return 'POR ARRIBAR';
 }
-
-function badgeWeb(s, n) {
-  const now = new Date();
-  const etb = parseFechaLocal(n.etb), etd = parseFechaLocal(n.etd);
-  let v = String(s || "SIN STATUS");
-
-  if ((etb && etd && now >= etb && now <= etd && !n.atd) || (n.ata && !n.atd)) v = "IN OPERATION";
-
-  const u = normStatus(v);
-  let c = "status-desconocido";
-  if (u.includes("IN OPERATION") || u.includes("OPERATING")) c = "status-trabajo";
-  else if (u === "DEPARTED" || u.includes("SAILED")) c = "status-zarpo";
-  else if (u.includes("TO ARRIVE")) c = "status-arribo";
-
-  return `<span class="status ${c}">${v}</span>`;
+function fechaLocalInput(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function hoy(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(a);consultar()}
+function rango7(){const a=new Date(),b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(b);consultar()}
+function cambiarZoom(dir){const z=document.getElementById('zoom');z.value=Math.max(+z.min,Math.min(+z.max,+z.value+dir*6));aplicarZoom(z.value)}
+function aplicarZoom(v){PX_HORA=+v;document.getElementById('zoom').value=v;document.getElementById('zoomNum').textContent=v+' px/h';if(ultimoInicio&&ultimoFin)dibujarTimeline(ultimoFiltrado,ultimoInicio,ultimoFin)}
+async function cargarDatos(){
+ const fuente=document.getElementById('fuente');
+ try{
+  const r=await fetch('datos.json?ts='+Date.now(),{cache:'no-store'});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  const arr=Array.isArray(j)?j:(j.naves||j.NAVES||j.data||j.datos||[]);
+  if(!Array.isArray(arr)||!arr.length)throw new Error('datos.json no contiene naves');
+  NAVES=arr.map(normalizarNave);
+  fuente.className='fuente ok';fuente.textContent='Fuente: datos.json · '+NAVES.length+' naves · actualización '+new Date().toLocaleString('es-EC');
+  consultar();
+ }catch(e){
+  NAVES=NAVES_FALLBACK.map(normalizarNave);
+  fuente.className='fuente error';fuente.textContent='No se pudo leer datos.json. Se muestran datos de respaldo. '+e.message;
+  consultar();
+ }
 }
-
-function badge(e) {
-  const c = e === "ZARPÓ" ? "status-zarpo" : e === "TRABAJANDO" ? "status-trabajo" : "status-arribo";
-  return `<span class="status ${c}">${e}</span>`;
+function consultar(){
+ const ds=document.getElementById('fechaDesde').value,hs=document.getElementById('fechaHasta').value;
+ if(!ds||!hs){hoy();return}
+ let inicio=new Date(ds+'T00:00:00-05:00'),fin=new Date(hs+'T23:59:59-05:00');
+ if(fin<inicio){alert('La fecha Hasta no puede ser menor que Desde.');return}
+ const filtradas=NAVES.filter(n=>{
+  const puntos=[fecha(n.etb),fecha(n.ata),fecha(n.etd),fecha(n.atd)].filter(Boolean);
+  if(!puntos.length)return false;
+  const inicioN=puntos[0],finN=puntos[puntos.length-1];
+  return puntos.some(x=>x>=inicio&&x<=fin)||(inicioN<=fin&&finN>=inicio);
+ }).sort((a,b)=>(fecha(a.etb)||fecha(a.ata)||0)-(fecha(b.etb)||fecha(b.ata)||0));
+ ultimoInicio=inicio;ultimoFin=fin;ultimoFiltrado=filtradas;dibujarTimeline(filtradas,inicio,fin)
 }
+function colorLinea(linea,mapa){const k=normalizar(linea)||'SIN LINEA';if(!mapa[k])mapa[k]=COLORES[Object.keys(mapa).length%COLORES.length];return mapa[k]}
+function fechaLlegada(n){
+ return fecha(n.etb)||fecha(n.ata)||fecha(n.etd)||fecha(n.atd);
+}
+function asignarNorteSur(naves){
+ const orden=[...naves].sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
+ const asignados=new Map(),ultimoPorDia={};
+ orden.forEach((n,i)=>{
+  const d=fechaLlegada(n);const clave=d?d.toISOString().slice(0,10):'SINFECHA';
+  const anterior=ultimoPorDia[clave];
+  let lane=anterior==='NORTE'?'SUR':anterior==='SUR'?'NORTE':(i%2===0?'NORTE':'SUR');
+  asignados.set(n,lane);ultimoPorDia[clave]=lane;
+ });
+ return asignados;
+}
+function dibujarTimeline(naves,inicio,fin){
+ const timeline=document.getElementById('timeline');timeline.innerHTML='';
+ const totalHoras=Math.max(24,(fin-inicio)/3600000),ancho=Math.max(900,totalHoras*PX_HORA+72);timeline.style.width=ancho+'px';
+ const eje=document.createElement('div');eje.className='axis';const ei=document.createElement('div');ei.className='axis-inner';ei.style.width=ancho+'px';
 
-/* RENDERING DEL GANTT / TIMELINE CON POSICIONAMIENTO EXACTO */
-function renderGantt(items) {
-  const container = document.getElementById("ganttContainer");
-  if (!items || items.length === 0) {
-    container.innerHTML = '<div class="empty">No hay naves para mostrar en el cronograma.</div>';
-    return;
-  }
+ let c=new Date(inicio);
+ while(c<=fin){
+    const x=(c-inicio)/3600000*PX_HORA;
+    if(c.getHours()===0){
+      const d=document.createElement('div');d.className='day';d.style.left=(x+72)+'px';d.style.width=24*PX_HORA+'px';
+      d.textContent=c.toLocaleDateString('es-EC',{weekday:'short',day:'2-digit',month:'short'});ei.appendChild(d);
+    }
+    const h=document.createElement('div');h.className='hour';h.style.left=(x+72)+'px';h.textContent=String(c.getHours()).padStart(2,'0')+':00';ei.appendChild(h);
+    c.setHours(c.getHours()+1);
+ }
+ eje.appendChild(ei);timeline.appendChild(eje);
+ const rows=document.createElement('div');rows.className='rows';rows.style.width=ancho+'px';
+ const asignados=asignarNorteSur(naves),colores={};
+ ['NORTE','SUR'].forEach(laneName=>{
+  const lane=document.createElement('div');lane.className='lane';lane.style.width=ancho+'px';
+  const title=document.createElement('div');title.className='lane-title';title.textContent=laneName;lane.appendChild(title);
+  const content=document.createElement('div');content.className='lane-content';content.style.width=(ancho-72)+'px';
+  let g=new Date(inicio);g.setMinutes(0,0,0);while(g<=fin){const x=(g-inicio)/3600000*PX_HORA+72,l=document.createElement('div');l.className='row-line';l.style.left=x+'px';content.appendChild(l);g.setHours(g.getHours()+3)}
+  naves.filter(n=>asignados.get(n)===laneName).forEach(n=>{
+    const etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
+    const inicioN=etb||ata||etd||atd;
+    if(!inicioN)return;
+    const finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
+    if(finN<=inicioN)return;
 
-  // Filtrar naves que tengan ETB y ETD válidos
-  const conFechas = items.filter(x => parseFechaLocal(x.nave.etb) && parseFechaLocal(x.nave.etd));
-  if (conFechas.length === 0) {
-    container.innerHTML = '<div class="empty">No hay fechas suficientes para proyectar la línea de tiempo.</div>';
-    return;
-  }
+    const pxDesdeInicio=d=>(d-inicio)/3600000*PX_HORA;
+    const x1=pxDesdeInicio(inicioN);
+    const x2=pxDesdeInicio(finN);
 
-  // Determinar la fecha de inicio de la vista (inicio del día del primer ETB)
-  let minETB = new Date(Math.min(...conFechas.map(x => parseFechaLocal(x.nave.etb).getTime())));
-  let maxETD = new Date(Math.max(...conFechas.map(x => parseFechaLocal(x.nave.etd).getTime())));
+    // Si está fuera del rango visible, no dibuja
+    if(x2<=0 || x1>=(ancho-72))return;
 
-  const inicioVista = new Date(minETB.getFullYear(), minETB.getMonth(), minETB.getDate(), 0, 0, 0);
-  const finVista = new Date(maxETD.getFullYear(), maxETD.getMonth(), maxETD.getDate() + 1, 0, 0, 0);
+    // Posición y ancho exacto en píxeles correspondiente a las horas reales
+    const left=x1;
+    const w=x2-x1;
 
-  const totalHoras = Math.ceil((finVista - inicioVista) / (1000 * 60 * 60));
-  const pxPorHora = 70; // Coincide con --px-por-hora
+    const bar=document.createElement('div');
+    bar.className='vessel';
+    bar.style.left=left+'px';
+    bar.style.width=Math.max(2,w)+'px';
+    bar.style.background=colorLinea(n.linea,colores);
+    bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
+    bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
 
-  // Generar cabecera de horas
-  let htmlHeader = `<div class="gantt-header"><div class="gantt-col-fixed">Nave / Línea</div><div class="gantt-hours">`;
-  for (let h = 0; h < totalHoras; h++) {
-    const horaCell = new Date(inicioVista.getTime() + h * 3600000);
-    const text = `${String(horaCell.getDate()).padStart(2,'0')}/${String(horaCell.getMonth()+1).padStart(2,'0')} ${String(horaCell.getHours()).padStart(2,'0')}:00`;
-    htmlHeader += `<div class="gantt-hour-cell">${text}</div>`;
-  }
-  htmlHeader += `</div></div>`;
+    // Marca negra = ETB (Posicionamiento porcentual dinámico exacto sobre la barra)
+    if(etb && etb>=inicioN && etb<=finN){
+      const posRelativa = (etb - inicioN) / (finN - inicioN);
+      const marca=document.createElement('span');
+      marca.className='marca-etb';
+      marca.style.left=(posRelativa*100)+'%';
+      marca.title='ETB: '+n.etb;
+      bar.appendChild(marca);
+    }
 
-  // Generar filas
-  let htmlRows = "";
-  conFechas.forEach(x => {
-    const n = x.nave;
-    const etb = parseFechaLocal(n.etb);
-    const etd = parseFechaLocal(n.etd);
+    // Marca blanca = ATA
+    if(ata && ata>=inicioN && ata<=finN){
+      const rel=(ata-inicioN)/(finN-inicioN);
+      const marca=document.createElement('span');
+      marca.className='marca-ata';
+      marca.style.left=(rel*100)+'%';
+      marca.title='ATA: '+n.ata;
+      bar.appendChild(marca);
+    }
 
-    const diffHorasInicio = (etb.getTime() - inicioVista.getTime()) / (1000 * 60 * 60);
-    const duracionHoras = (etd.getTime() - etb.getTime()) / (1000 * 60 * 60);
-
-    const leftPx = diffHorasInicio * pxPorHora;
-    const widthPx = Math.max(duracionHoras * pxPorHora, 20); // Ancho mínimo visual
-
-    htmlRows += `
-      <div class="gantt-row">
-        <div class="gantt-label">${n.nave}<br><span style="font-weight:normal;color:#64748b;font-size:10px;">${n.linea || ''}</span></div>
-        <div class="gantt-track" style="width: ${totalHoras * pxPorHora}px;">
-          <div class="gantt-bar ${x.est}" style="left: ${leftPx}px; width: ${widthPx}px;" title="${n.nave} (${fmt(n.etb)} -> ${fmt(n.etd)})">
-            <span>${n.nave}</span>
-            <span class="sub">${String(etb.getHours()).padStart(2,'0')}:${String(etb.getMinutes()).padStart(2,'0')} - ${String(etd.getHours()).padStart(2,'0')}:${String(etd.getMinutes()).padStart(2,'0')}</span>
-          </div>
-        </div>
-      </div>
-    `;
+    bar.onclick=()=>abrirModal(n);
+    content.appendChild(bar);
   });
-
-  container.innerHTML = htmlHeader + htmlRows;
+  lane.appendChild(content);rows.appendChild(lane);
+ });
+ const ahora=new Date();if(ahora>=inicio&&ahora<=fin){const x=(ahora-inicio)/3600000*PX_HORA+72,a=document.createElement('div');a.className='ahora';a.style.left=x+'px';a.innerHTML='<div class="ahora-label">AHORA</div>';rows.appendChild(a)}
+ if(!naves.length){const s=document.createElement('div');s.className='sin-datos';s.textContent='No hay naves dentro del rango seleccionado.';rows.appendChild(s)}
+ timeline.appendChild(rows);actualizarResumen(naves);dibujarLeyenda(colores)
 }
-
-function renderAll() {
-  const q = document.getElementById("buscar").value.toLowerCase().trim();
-  const f = document.getElementById("filtro").value;
-
-  const mapped = NAVES.map(n => ({ nave: n, est: obtenerEstado(n) })).filter(x => {
-    const t = Object.values(x.nave).join(" ").toLowerCase();
-    return (!q || t.includes(q)) && (f === "TODOS" || x.est === f);
-  });
-
-  const arr = mapped.filter(x => x.est === "POR ARRIBAR").sort((a, b) => (parseFechaLocal(a.nave.etb) || 0) - (parseFechaLocal(b.nave.etb) || 0));
-  const tra = mapped.filter(x => x.est === "TRABAJANDO").sort((a, b) => (parseFechaLocal(a.nave.etd) || 0) - (parseFechaLocal(b.nave.etd) || 0));
-  const zar = mapped.filter(x => x.est === "ZARPÓ").sort((a, b) => (parseFechaLocal(b.nave.atd) || parseFechaLocal(b.nave.etd) || 0) - (parseFechaLocal(a.nave.atd) || parseFechaLocal(a.nave.etd) || 0));
-
-  document.getElementById("total").textContent = mapped.length;
-  document.getElementById("porArribar").textContent = arr.length;
-  document.getElementById("trabajando").textContent = tra.length;
-  document.getElementById("zarparon").textContent = zar.length;
-
-  // Dibujar Timeline
-  renderGantt(mapped);
-
-  // Dibujar Tablas
-  document.getElementById("tablaArribos").innerHTML = arr.length ? arr.map((x, i) => `
-    <tr><td>${i+1}</td><td class="nave">${x.nave.nave}</td><td>${x.nave.viaje||"—"}</td><td>${x.nave.linea||"—"}</td><td>${fmt(x.nave.etb)}</td><td>${fmt(x.nave.etd)}</td><td>${badgeWeb(x.nave.status, x.nave)}</td><td>${badge(x.est)}</td><td>${x.nave.origen||"—"}</td><td>${x.nave.destino||"—"}</td><td>${x.nave.servicio||"—"}</td></tr>
-  `).join("") : '<tr><td colspan="11" class="empty">No hay naves por arribar.</td></tr>';
-
-  document.getElementById("tablaTrabajo").innerHTML = tra.length ? tra.map((x, i) => `
-    <tr><td>${i+1}</td><td class="nave">${x.nave.nave}</td><td>${x.nave.viaje||"—"}</td><td>${x.nave.linea||"—"}</td><td>${fmt(x.nave.etb)}</td><td>${fmt(x.nave.ata)}</td><td>${fmt(x.nave.etd)}</td><td>${fmt(x.nave.atd)}</td><td>${badgeWeb(x.nave.status, x.nave)}</td><td>${badge(x.est)}</td><td>${x.nave.servicio||"—"}</td></tr>
-  `).join("") : '<tr><td colspan="11" class="empty">No hay naves trabajando / en puerto.</td></tr>';
-
-  document.getElementById("tablaZarpes").innerHTML = zar.length ? zar.map((x, i) => `
-    <tr><td>${i+1}</td><td class="nave">${x.nave.nave}</td><td>${x.nave.viaje||"—"}</td><td>${x.nave.linea||"—"}</td><td>${fmt(x.nave.etb)}</td><td>${fmt(x.nave.etd)}</td><td>${fmt(x.nave.ata)}</td><td>${fmt(x.nave.atd)}</td><td>${badgeWeb(x.nave.status, x.nave)}</td><td>${badge(x.est)}</td><td>${x.nave.servicio||"—"}</td></tr>
-  `).join("") : '<tr><td colspan="11" class="empty">No hay zarpes registrados.</td></tr>';
-}
-
-async function cargarDatos() {
-  try {
-    const r = await fetch("datos.json?ts=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const d = await r.json();
-    if (!Array.isArray(d.naves)) throw new Error("datos.json no contiene el arreglo naves");
-    NAVES = d.naves;
-    document.getElementById("errorBox").style.display = "none";
-    document.getElementById("actualizado").textContent = "Última actualización: " + (d.actualizado_ec || d.actualizado_utc || "—");
-    renderAll();
-  } catch (e) {
-    const box = document.getElementById("errorBox");
-    box.textContent = "No se pudo cargar datos.json: " + e.message;
-    box.style.display = "block";
-  }
-}
-
-cargarDatos();
-setInterval(cargarDatos, 60000);
+function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function actualizarResumen(naves){document.getElementById('cantidad').textContent=naves.length;document.getElementById('porArribar').textContent=naves.filter(n=>estado(n)==='POR ARRIBAR').length;document.getElementById('trabajando').textContent=naves.filter(n=>estado(n)==='TRABAJANDO').length;document.getElementById('atrasadas').textContent=naves.filter(n=>estado(n)==='ATRASADA').length;document.getElementById('zarparon').textContent=naves.filter(n=>estado(n)==='ZARPÓ').length}
+function dibujarLeyenda(colores){const cont=document.getElementById('leyenda');cont.innerHTML='';Object.keys(colores).forEach(k=>{const i=document.createElement('div');i.className='leyenda-item';i.innerHTML=`<span class="color" style="background:${colores[k]}"></span><span>${escapeHtml(k)}</span>`;cont.appendChild(i)});if(!Object.keys(colores).length)cont.textContent='No hay líneas navieras en el rango seleccionado.'}
+function abrirModal(n){document.getElementById('modalTitulo').textContent=limpiarNombre(n.nave)||'Nave';const datos=[['Nave',n.nave],['Viaje',n.viaje],['Línea naviera',n.linea],['ETB',n.etb],['ATA',n.ata],['ETD',n.etd],['ATD',n.atd],['STATUS DP World',n.status],['Origen',n.origen],['Destino',n.destino],['Servicio',n.servicio]];document.getElementById('modalDatos').innerHTML=datos.map(x=>`<div class="detalle-item"><strong>${escapeHtml(x[0])}</strong>${escapeHtml(x[1]||'—')}</div>`).join('');document.getElementById('modalEstado').innerHTML=`<div class="estado-grande">Estado actual: ${estado(n)}</div>`;document.getElementById('modalFondo').style.display='flex'}
+function cerrarModal(e){if(!e||e.target===document.getElementById('modalFondo'))document.getElementById('modalFondo').style.display='none'}
+(async function(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);const b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaHasta').value=fechaLocalInput(b);await cargarDatos()})();
+setInterval(()=>{if(ultimoInicio&&ultimoFin)consultar()},60000);
+setInterval(()=>cargarDatos(),15*60*1000);
 </script>
 </body>
 </html>
