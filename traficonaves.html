@@ -3,220 +3,342 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timeline de Naves - DP World</title>
+<title>Control de Naves y Cronograma - DP World Posorja</title>
 <style>
 :root {
-  --bg: #f4f7f6;
-  --border: #cbd5e1;
+  --bg: #f3f6f9;
+  --card: #fff;
+  --text: #1f2937;
+  --muted: #64748b;
+  --border: #dbe2ea;
+  --blue: #0b5ed7;
+  --green: #198754;
+  --yellow: #f0ad00;
+  --shadow: 0 4px 15px rgba(0,0,0,.07);
   --header-bg: #073b73;
-  --grid-line: #e2e8f0;
-  --bar-arribo: #16a34a; /* Verde */
-  --bar-trabajo: #2563eb; /* Azul */
-  --bar-zarpo: #64748b; /* Gris */
-  --px-por-hora: 80px; /* Ancho de cada columna de hora */
+  --px-por-hora: 70px;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  margin: 20px;
-  color: #1e293b;
-}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); font-family: Arial, Helvetica, sans-serif; color: var(--text); }
 
-.timeline-container {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  overflow-x: auto;
-  border: 1px solid var(--border);
-}
+header { background: var(--header-bg); color: #fff; padding: 18px 24px; box-shadow: var(--shadow); }
+header h1 { margin: 0; font-size: 24px; }
+header p { margin: 5px 0 0; opacity: .85; font-size: 13px; }
 
-.timeline-header {
-  display: flex;
-  background: var(--header-bg);
-  color: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+.container { max-width: 1600px; margin: 20px auto; padding: 0 15px; }
 
-.timeline-label-col {
-  min-width: 180px;
-  width: 180px;
-  padding: 12px;
-  font-weight: bold;
-  border-right: 1px solid rgba(255,255,255,0.2);
-  background: var(--header-bg);
-  position: sticky;
-  left: 0;
-  z-index: 11;
-}
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+button, select, input { border: 1px solid var(--border); background: #fff; border-radius: 7px; padding: 10px 12px; font-size: 14px; }
+button { cursor: pointer; background: var(--header-bg); color: #fff; border-color: var(--header-bg); }
+button.secondary { background: #fff; color: var(--header-bg); }
+input { min-width: 260px; flex: 1; }
 
-.timeline-hours {
-  display: flex;
-}
+.info { background: #eaf4ff; border: 1px solid #b6d7ff; color: #174a7c; padding: 10px 12px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; }
+.error { display: none; background: #ffe0e3; color: #842029; border: 1px solid #f5c2c7; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
 
-.hour-cell {
-  min-width: var(--px-por-hora);
-  width: var(--px-por-hora);
-  text-align: center;
-  padding: 10px 0;
-  font-size: 12px;
-  font-weight: bold;
-  border-right: 1px solid rgba(255,255,255,0.15);
-}
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.card { background: var(--card); padding: 16px; border-radius: 10px; box-shadow: var(--shadow); border-left: 5px solid #64748b; }
+.card.arribo { border-color: var(--yellow); }
+.card.trabajo { border-color: var(--blue); }
+.card.zarpo { border-color: var(--green); }
+.card.total { border-color: #334155; }
+.num { font-size: 28px; font-weight: bold; }
+.label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-.timeline-row {
-  display: flex;
-  border-bottom: 1px solid var(--grid-line);
-  position: relative;
-  align-items: center;
-  height: 52px;
-}
+/* Estilos de Secciones y Tablas */
+.section { background: #fff; border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden; }
+.section-title { padding: 13px 16px; font-size: 17px; font-weight: bold; border-bottom: 1px solid var(--border); background: #fafbfc; }
+.section-title span { float: right; font-size: 12px; color: var(--muted); font-weight: normal; }
+.table-wrap { overflow: auto; }
 
-.nave-info {
-  min-width: 180px;
-  width: 180px;
-  padding: 8px 12px;
-  background: #fff;
-  font-size: 13px;
-  font-weight: bold;
-  border-right: 1px solid var(--border);
-  position: sticky;
-  left: 0;
-  z-index: 5;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+table { width: 100%; border-collapse: collapse; min-width: 1250px; }
+th, td { padding: 10px 9px; border-bottom: 1px solid #edf1f5; text-align: left; font-size: 13px; white-space: nowrap; }
+th { background: #f7f9fb; color: #475569; position: sticky; top: 0; z-index: 1; }
+.nave { font-weight: bold; }
 
-.timeline-track {
-  display: flex;
-  position: relative;
-  height: 100%;
-  flex-grow: 1;
-  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px);
-  background-size: var(--px-por-hora) 100%;
-}
+.status { display: inline-block; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+.status-arribo { background: #fff3cd; color: #8a6500; }
+.status-trabajo { background: #dbeafe; color: #0756a6; }
+.status-zarpo { background: #d1e7dd; color: #146c43; }
+.status-desconocido { background: #e2e3e5; color: #41464b; }
 
-.gantt-bar {
-  position: absolute;
-  top: 8px;
-  height: 34px;
-  border-radius: 6px;
-  color: #fff;
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  white-space: nowrap;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  transition: all 0.2s ease;
-}
+/* Estilos del Gantt / Timeline */
+.gantt-wrapper { overflow-x: auto; background: #fff; position: relative; }
+.gantt-header { display: flex; background: var(--header-bg); color: #fff; position: sticky; top: 0; z-index: 10; }
+.gantt-col-fixed { min-width: 200px; width: 200px; padding: 12px; font-weight: bold; font-size: 13px; border-right: 1px solid rgba(255,255,255,0.2); background: var(--header-bg); position: sticky; left: 0; z-index: 11; }
+.gantt-hours { display: flex; }
+.gantt-hour-cell { min-width: var(--px-por-hora); width: var(--px-por-hora); text-align: center; padding: 10px 0; font-size: 11px; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; }
 
-.gantt-bar.POR\ ARRIBAR { background-color: var(--bar-arribo); }
-.gantt-bar.TRABAJANDO { background-color: var(--bar-trabajo); }
-.gantt-bar.ZARPÓ { background-color: var(--bar-zarpo); }
+.gantt-row { display: flex; border-bottom: 1px solid var(--border); height: 50px; position: relative; align-items: center; }
+.gantt-label { min-width: 200px; width: 200px; padding: 6px 12px; background: #fff; font-size: 12px; font-weight: bold; border-right: 1px solid var(--border); position: sticky; left: 0; z-index: 5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gantt-track { position: relative; height: 100%; flex-grow: 1; background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px); background-size: var(--px-por-hora) 100%; }
 
-.gantt-bar .subtext {
-  font-size: 9px;
-  opacity: 0.85;
-  font-weight: normal;
-}
+.gantt-bar { position: absolute; top: 7px; height: 36px; border-radius: 6px; color: #fff; padding: 4px 8px; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.gantt-bar.POR\ ARRIBAR { background-color: var(--green); }
+.gantt-bar.TRABAJANDO { background-color: var(--blue); }
+.gantt-bar.ZARPÓ { background-color: #64748b; }
+.gantt-bar .sub { font-size: 9px; opacity: 0.9; font-weight: normal; }
+
+.empty { text-align: center; padding: 25px; color: var(--muted); }
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
+
+@media(max-width:900px){ .cards { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:550px){ .cards { grid-template-columns: 1fr; } .toolbar > * { width: 100%; } input { min-width: 0; } }
 </style>
 </head>
 <body>
 
-<h2>Timeline de Operación Naval</h2>
-<div class="timeline-container" id="timelineContainer">
-  <!-- El contenido se generará dinámicamente -->
+<header>
+  <h1>⚓ Control de Naves y Cronograma - DP World Posorja</h1>
+  <p>Monitoreo de itinerario de naves, estados operativos y línea de tiempo (Gantt)</p>
+</header>
+
+<div class="container">
+  <div class="toolbar">
+    <input id="buscar" type="search" placeholder="Buscar nave, viaje, línea, servicio..." oninput="renderAll()">
+    <select id="filtro" onchange="renderAll()">
+      <option value="TODOS">Todos los estados</option>
+      <option value="POR ARRIBAR">Por arribar</option>
+      <option value="TRABAJANDO">Trabajando / En operación</option>
+      <option value="ZARPÓ">Zarpó</option>
+    </select>
+    <button onclick="cargarDatos()">↻ Actualizar datos</button>
+    <button class="secondary" onclick="window.print()">🖨 Imprimir</button>
+  </div>
+
+  <div id="errorBox" class="error"></div>
+  <div class="info"><b>Fuente:</b> DP World Posorja · <span id="actualizado">Cargando...</span></div>
+
+  <div class="cards">
+    <div class="card total"><div class="num" id="total">0</div><div class="label">TOTAL REGISTROS</div></div>
+    <div class="card arribo"><div class="num" id="porArribar">0</div><div class="label">🟡 POR ARRIBAR</div></div>
+    <div class="card trabajo"><div class="num" id="trabajando">0</div><div class="label">🔵 TRABAJANDO / EN PUERTO</div></div>
+    <div class="card zarpo"><div class="num" id="zarparon">0</div><div class="label">🟢 ZARPES</div></div>
+  </div>
+
+  <!-- VISTA DE CRONOGRAMA / TIMELINE -->
+  <div class="section">
+    <div class="section-title">📊 CRONOGRAMA DE OPERACIONES (GANTT) <span>Alineación estricta por ETB y ETD</span></div>
+    <div class="gantt-wrapper" id="ganttContainer"></div>
+  </div>
+
+  <!-- TABLA POR ARRIBAR -->
+  <div class="section">
+    <div class="section-title">🟡 PRÓXIMAS NAVES A ARRIBAR <span>Ordenadas por ETB</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>STATUS WEB</th><th>Estado</th><th>Origen</th><th>Destino</th><th>Servicio</th></tr>
+        </thead>
+        <tbody id="tablaArribos"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TABLA TRABAJANDO -->
+  <div class="section">
+    <div class="section-title">🔵 NAVES TRABAJANDO / EN PUERTO <span>Desde ATA hasta ATD</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ATA</th><th>ETD</th><th>ATD</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr>
+        </thead>
+        <tbody id="tablaTrabajo"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TABLA ZARPES -->
+  <div class="section">
+    <div class="section-title">🟢 ZARPES REALIZADOS <span>Ordenados por ATD / ETD</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Nave</th><th>Viaje</th><th>Línea</th><th>ETB</th><th>ETD</th><th>ATA</th><th>ATD</th><th>STATUS WEB</th><th>Estado</th><th>Servicio</th></tr>
+        </thead>
+        <tbody id="tablaZarpes"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>Visualizador web de itinerario operativo · DP World Posorja</footer>
 </div>
 
 <script>
-// 1. Parser estricto en hora local sin desfase UTC
-function parseFechaLocal(strFecha) {
-  if (!strFecha || String(strFecha).trim() === "" || String(strFecha).toLowerCase() === "null") return null;
-  
-  // Limpia el .0 final de DP World y normaliza separadores
-  const limpia = String(strFecha).trim().replace(/\.0+$/, "").replace(" ", "T");
+let NAVES = [];
+
+// 1. Parser estricto en hora local (Evita el desfase UTC de 5 horas de JavaScript)
+function parseFechaLocal(s) {
+  if (!s || String(s).trim() === "" || String(s).toLowerCase() === "null") return null;
+  const limpia = String(s).trim().replace(/\.0+$/, "").replace(" ", "T");
   const partes = limpia.split(/[-T:]/);
-  
   if (partes.length >= 5) {
     return new Date(
-      parseInt(partes[0], 10),      // Año
-      parseInt(partes[1], 10) - 1,  // Mes (0-indexado)
-      parseInt(partes[2], 10),      // Día
-      parseInt(partes[3], 10),      // Hora (ej: 15)
-      parseInt(partes[4], 10)       // Minutos
+      parseInt(partes[0], 10),
+      parseInt(partes[1], 10) - 1,
+      parseInt(partes[2], 10),
+      parseInt(partes[3], 10),
+      parseInt(partes[4], 10)
     );
   }
   return new Date(limpia);
 }
 
-// Datos de ejemplo basándonos en tu captura[cite: 10]
-const NAVES = [
-  {
-    nave: "VALPARAISO EXPRESS",[cite: 10]
-    linea: "HLC",[cite: 10]
-    etb: "2026-09-21 15:00:00",[cite: 10]
-    etd: "2026-09-22 06:00:00",[cite: 10]
-    estado: "POR ARRIBAR"[cite: 10]
+function fmt(s) {
+  const d = parseFechaLocal(s);
+  return d ? d.toLocaleString("es-EC", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }) : "—";
+}
+
+function normStatus(s) { return String(s || "").trim().toUpperCase().replace(/\s+/g, " "); }
+
+function obtenerEstado(n) {
+  const s = normStatus(n.status), now = new Date();
+  const etb = parseFechaLocal(n.etb), ata = parseFechaLocal(n.ata), etd = parseFechaLocal(n.etd), atd = parseFechaLocal(n.atd);
+
+  if (atd || s === "DEPARTED" || s.includes("SAILED")) return "ZARPÓ";
+  if ((ata && !atd) || s.includes("IN OPERATION") || s.includes("OPERATING") || s === "WORKING" || (etb && etd && now >= etb && now <= etd)) return "TRABAJANDO";
+  return "POR ARRIBAR";
+}
+
+function badgeWeb(s, n) {
+  const now = new Date();
+  const etb = parseFechaLocal(n.etb), etd = parseFechaLocal(n.etd);
+  let v = String(s || "SIN STATUS");
+
+  if ((etb && etd && now >= etb && now <= etd && !n.atd) || (n.ata && !n.atd)) v = "IN OPERATION";
+
+  const u = normStatus(v);
+  let c = "status-desconocido";
+  if (u.includes("IN OPERATION") || u.includes("OPERATING")) c = "status-trabajo";
+  else if (u === "DEPARTED" || u.includes("SAILED")) c = "status-zarpo";
+  else if (u.includes("TO ARRIVE")) c = "status-arribo";
+
+  return `<span class="status ${c}">${v}</span>`;
+}
+
+function badge(e) {
+  const c = e === "ZARPÓ" ? "status-zarpo" : e === "TRABAJANDO" ? "status-trabajo" : "status-arribo";
+  return `<span class="status ${c}">${e}</span>`;
+}
+
+/* RENDERING DEL GANTT / TIMELINE CON POSICIONAMIENTO EXACTO */
+function renderGantt(items) {
+  const container = document.getElementById("ganttContainer");
+  if (!items || items.length === 0) {
+    container.innerHTML = '<div class="empty">No hay naves para mostrar en el cronograma.</div>';
+    return;
   }
-];
 
-function renderTimeline() {
-  const container = document.getElementById("timelineContainer");
-  const pxPorHora = 80; // Debe coincidir con --px-por-hora en CSS
-  
-  // Definimos la ventana de tiempo dinámica basada en el día actual o en el ETB
-  // Para este caso tomamos desde las 00:00 del 2026-09-21 hasta las 23:00 del 2026-09-22 (48 horas)
-  const inicioVista = new Date(2026, 8, 21, 0, 0, 0); // 21 de Septiembre 00:00
-  const totalHorasVista = 48; // Muestra 2 días en el eje horizontal
+  // Filtrar naves que tengan ETB y ETD válidos
+  const conFechas = items.filter(x => parseFechaLocal(x.nave.etb) && parseFechaLocal(x.nave.etd));
+  if (conFechas.length === 0) {
+    container.innerHTML = '<div class="empty">No hay fechas suficientes para proyectar la línea de tiempo.</div>';
+    return;
+  }
 
-  // Generar Encabezado de Horas
-  let htmlHeader = `<div class="timeline-header"><div class="timeline-label-col">Nave / Línea</div><div class="timeline-hours">`;
-  for (let h = 0; h < totalHorasVista; h++) {
-    const horaActual = new Date(inicioVista.getTime() + h * 3600000);
-    const label = `${String(horaActual.getDate()).padStart(2,'0')}/${String(horaActual.getMonth()+1).padStart(2,'0')} ${String(horaActual.getHours()).padStart(2, '0')}:00`;
-    htmlHeader += `<div class="hour-cell">${label}</div>`;
+  // Determinar la fecha de inicio de la vista (inicio del día del primer ETB)
+  let minETB = new Date(Math.min(...conFechas.map(x => parseFechaLocal(x.nave.etb).getTime())));
+  let maxETD = new Date(Math.max(...conFechas.map(x => parseFechaLocal(x.nave.etd).getTime())));
+
+  const inicioVista = new Date(minETB.getFullYear(), minETB.getMonth(), minETB.getDate(), 0, 0, 0);
+  const finVista = new Date(maxETD.getFullYear(), maxETD.getMonth(), maxETD.getDate() + 1, 0, 0, 0);
+
+  const totalHoras = Math.ceil((finVista - inicioVista) / (1000 * 60 * 60));
+  const pxPorHora = 70; // Coincide con --px-por-hora
+
+  // Generar cabecera de horas
+  let htmlHeader = `<div class="gantt-header"><div class="gantt-col-fixed">Nave / Línea</div><div class="gantt-hours">`;
+  for (let h = 0; h < totalHoras; h++) {
+    const horaCell = new Date(inicioVista.getTime() + h * 3600000);
+    const text = `${String(horaCell.getDate()).padStart(2,'0')}/${String(horaCell.getMonth()+1).padStart(2,'0')} ${String(horaCell.getHours()).padStart(2,'0')}:00`;
+    htmlHeader += `<div class="gantt-hour-cell">${text}</div>`;
   }
   htmlHeader += `</div></div>`;
 
-  // Generar Filas y Barras Gantt
+  // Generar filas
   let htmlRows = "";
-  NAVES.forEach(item => {
-    const fechaETB = parseFechaLocal(item.etb);
-    const fechaETD = parseFechaLocal(item.etd);
+  conFechas.forEach(x => {
+    const n = x.nave;
+    const etb = parseFechaLocal(n.etb);
+    const etd = parseFechaLocal(n.etd);
 
-    if (fechaETB && fechaETD) {
-      // 2. Cálculo preciso de inicio (left) y ancho (width) en píxeles
-      const diffHorasInicio = (fechaETB.getTime() - inicioVista.getTime()) / (1000 * 60 * 60);
-      const duracionHoras = (fechaETD.getTime() - fechaETB.getTime()) / (1000 * 60 * 60);
+    const diffHorasInicio = (etb.getTime() - inicioVista.getTime()) / (1000 * 60 * 60);
+    const duracionHoras = (etd.getTime() - etb.getTime()) / (1000 * 60 * 60);
 
-      const leftPx = diffHorasInicio * pxPorHora;
-      const widthPx = duracionHoras * pxPorHora;
+    const leftPx = diffHorasInicio * pxPorHora;
+    const widthPx = Math.max(duracionHoras * pxPorHora, 20); // Ancho mínimo visual
 
-      htmlRows += `
-        <div class="timeline-row">
-          <div class="nave-info">${item.nave}<br><span style="font-weight:normal;font-size:11px;color:#64748b;">${item.linea}</span></div>
-          <div class="timeline-track" style="width: ${totalHorasVista * pxPorHora}px;">
-            <div class="gantt-bar ${item.estado}" style="left: ${leftPx}px; width: ${widthPx}px;">
-              <span>${item.nave}</span>
-              <span class="subtext">${fechaETB.getHours()}:00 - ${fechaETD.getHours()}:00</span>
-            </div>
+    htmlRows += `
+      <div class="gantt-row">
+        <div class="gantt-label">${n.nave}<br><span style="font-weight:normal;color:#64748b;font-size:10px;">${n.linea || ''}</span></div>
+        <div class="gantt-track" style="width: ${totalHoras * pxPorHora}px;">
+          <div class="gantt-bar ${x.est}" style="left: ${leftPx}px; width: ${widthPx}px;" title="${n.nave} (${fmt(n.etb)} -> ${fmt(n.etd)})">
+            <span>${n.nave}</span>
+            <span class="sub">${String(etb.getHours()).padStart(2,'0')}:${String(etb.getMinutes()).padStart(2,'0')} - ${String(etd.getHours()).padStart(2,'0')}:${String(etd.getMinutes()).padStart(2,'0')}</span>
           </div>
         </div>
-      `;
-    }
+      </div>
+    `;
   });
 
   container.innerHTML = htmlHeader + htmlRows;
 }
 
-renderTimeline();
+function renderAll() {
+  const q = document.getElementById("buscar").value.toLowerCase().trim();
+  const f = document.getElementById("filtro").value;
+
+  const mapped = NAVES.map(n => ({ nave: n, est: obtenerEstado(n) })).filter(x => {
+    const t = Object.values(x.nave).join(" ").toLowerCase();
+    return (!q || t.includes(q)) && (f === "TODOS" || x.est === f);
+  });
+
+  const arr = mapped.filter(x => x.est === "POR ARRIBAR").sort((a, b) => (parseFechaLocal(a.nave.etb) || 0) - (parseFechaLocal(b.nave.etb) || 0));
+  const tra = mapped.filter(x => x.est === "TRABAJANDO").sort((a, b) => (parseFechaLocal(a.nave.etd) || 0) - (parseFechaLocal(b.nave.etd) || 0));
+  const zar = mapped.filter(x => x.est === "ZARPÓ").sort((a, b) => (parseFechaLocal(b.nave.atd) || parseFechaLocal(b.nave.etd) || 0) - (parseFechaLocal(a.nave.atd) || parseFechaLocal(a.nave.etd) || 0));
+
+  document.getElementById("total").textContent = mapped.length;
+  document.getElementById("porArribar").textContent = arr.length;
+  document.getElementById("trabajando").textContent = tra.length;
+  document.getElementById("zarparon").textContent = zar.length;
+
+  // Dibujar Timeline
+  renderGantt(mapped);
+
+  // Dibujar Tablas
+  document.getElementById("tablaArribos").innerHTML = arr.length ? arr.map((x, i) => `
+    <tr><td>${i+1}</td><td class="nave">${x.nave.nave}</td><td>${x.nave.viaje||"—"}</td><td>${x.nave.linea||"—"}</td><td>${fmt(x.nave.etb)}</td><td>${fmt(x.nave.etd)}</td><td>${badgeWeb(x.nave.status, x.nave)}</td><td>${badge(x.est)}</td><td>${x.nave.origen||"—"}</td><td>${x.nave.destino||"—"}</td><td>${x.nave.servicio||"—"}</td></tr>
+  `).join("") : '<tr><td colspan="11" class="empty">No hay naves por arribar.</td></tr>';
+
+  document.getElementById("tablaTrabajo").innerHTML = tra.length ? tra.map((x, i) => `
+    <tr><td>${i+1}</td><td class="nave">${x.nave.nave}</td><td>${x.nave.viaje||"—"}</td><td>${x.nave.linea||"—"}</td><td>${fmt(x.nave.etb)}</td><td>${fmt(x.nave.ata)}</td><td>${fmt(x.nave.etd)}</td><td>${fmt(x.nave.atd)}</td><td>${badgeWeb(x.nave.status, x.nave)}</td><td>${badge(x.est)}</td><td>${x.nave.servicio||"—"}</td></tr>
+  `).join("") : '<tr><td colspan="11" class="empty">No hay naves trabajando / en puerto.</td></tr>';
+
+  document.getElementById("tablaZarpes").innerHTML = zar.length ? zar.map((x, i) => `
+    <tr><td>${i+1}</td><td class="nave">${x.nave.nave}</td><td>${x.nave.viaje||"—"}</td><td>${x.nave.linea||"—"}</td><td>${fmt(x.nave.etb)}</td><td>${fmt(x.nave.etd)}</td><td>${fmt(x.nave.ata)}</td><td>${fmt(x.nave.atd)}</td><td>${badgeWeb(x.nave.status, x.nave)}</td><td>${badge(x.est)}</td><td>${x.nave.servicio||"—"}</td></tr>
+  `).join("") : '<tr><td colspan="11" class="empty">No hay zarpes registrados.</td></tr>';
+}
+
+async function cargarDatos() {
+  try {
+    const r = await fetch("datos.json?ts=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json();
+    if (!Array.isArray(d.naves)) throw new Error("datos.json no contiene el arreglo naves");
+    NAVES = d.naves;
+    document.getElementById("errorBox").style.display = "none";
+    document.getElementById("actualizado").textContent = "Última actualización: " + (d.actualizado_ec || d.actualizado_utc || "—");
+    renderAll();
+  } catch (e) {
+    const box = document.getElementById("errorBox");
+    box.textContent = "No se pudo cargar datos.json: " + e.message;
+    box.style.display = "block";
+  }
+}
+
+cargarDatos();
+setInterval(cargarDatos, 60000);
 </script>
 </body>
 </html>
