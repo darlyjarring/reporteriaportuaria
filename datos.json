@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-22T16:55:43.128403+00:00",
-  "actualizado_ec": "2026-09-22 11:55:43",
-  "total": 53,
+  "actualizado_utc": "2026-09-22T20:05:41.537093+00:00",
+  "actualizado_ec": "2026-09-22 15:05:41",
+  "total": 54,
   "naves": [
     {
       "nave": "ONE2026007 - ONE COMPETENCE",
@@ -185,6 +185,21 @@
       "servicio": "SWX_NB"
     },
     {
+      "nave": "XPF2026013 - ECO SIROCCO",
+      "viaje": "26039S",
+      "reefer": "",
+      "dry": "",
+      "linea": "XPF",
+      "etb": "2026-09-24 14:00:00",
+      "etd": "2026-09-25 02:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WSX"
+    },
+    {
       "nave": "CMA2026105 - CMA CGM POINTE-NOIRE",
       "viaje": "0DVQHN1MA",
       "reefer": "2026-09-23 19:00:00.0",
@@ -223,7 +238,7 @@
       "etb": "2026-09-21 15:00:00",
       "etd": "2026-09-22 13:00:00",
       "ata": "2026-09-21 14:48:00",
-      "atd": "",
+      "atd": "2026-09-22 14:00:00",
       "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
