@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-24T20:41:46.929122+00:00",
-  "actualizado_ec": "2026-09-24 15:41:46",
-  "total": 56,
+  "actualizado_utc": "2026-09-24T23:34:00.940083+00:00",
+  "actualizado_ec": "2026-09-24 18:34:00",
+  "total": 57,
   "naves": [
     {
       "nave": "HLC2026092 - VALPARAISO EXPRESS",
@@ -95,6 +95,21 @@
       "servicio": "WCSA-SHTL"
     },
     {
+      "nave": "MAE2026117 - MAERSK NOMAZWE",
+      "viaje": "635W",
+      "reefer": "2026-10-03 17:00:00.0",
+      "dry": "2026-10-03 17:00:00.0",
+      "linea": "MAE",
+      "etb": "2026-10-03 23:00:00",
+      "etd": "2026-10-05 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
+    },
+    {
       "nave": "CMA2026111 - CMA CGM CHILE",
       "viaje": "1MHTRW1MA",
       "reefer": "2026-10-02 23:00:00.0",
@@ -131,7 +146,7 @@
       "dry": "2026-09-30 19:00:00.0",
       "linea": "CMA",
       "etb": "2026-10-01 06:00:00",
-      "etd": "2026-10-01 17:00:00",
+      "etd": "2026-10-01 16:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -245,6 +260,21 @@
       "servicio": "ACSA"
     },
     {
+      "nave": "XPF2026013 - ECO SIROCCO",
+      "viaje": "26039S",
+      "reefer": "2026-09-24 02:00:00.0",
+      "dry": "2026-09-24 02:00:00.0",
+      "linea": "XPF",
+      "etb": "2026-09-24 20:00:00",
+      "etd": "2026-09-25 02:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WSX"
+    },
+    {
       "nave": "COS2026008 - COSCO SHIPPING SEINE",
       "viaje": "047N",
       "reefer": "2026-09-24 07:00:00.0",
@@ -252,27 +282,12 @@
       "linea": "COS",
       "etb": "2026-09-24 18:30:00",
       "etd": "2026-09-25 16:00:00",
-      "ata": "",
+      "ata": "2026-09-24 18:05:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
-    },
-    {
-      "nave": "XPF2026013 - ECO SIROCCO",
-      "viaje": "26039S",
-      "reefer": "2026-09-24 02:00:00.0",
-      "dry": "2026-09-24 02:00:00.0",
-      "linea": "XPF",
-      "etb": "2026-09-24 18:00:00",
-      "etd": "2026-09-25 00:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "WSX"
     },
     {
       "nave": "CMA2026105 - CMA CGM POINTE-NOIRE",
@@ -283,7 +298,7 @@
       "etb": "2026-09-24 07:00:00",
       "etd": "2026-09-24 17:00:00",
       "ata": "2026-09-24 06:45:00",
-      "atd": "",
+      "atd": "2026-09-24 17:24:00",
       "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
