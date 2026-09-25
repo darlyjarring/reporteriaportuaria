@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-25T12:58:26.824625+00:00",
-  "actualizado_ec": "2026-09-25 07:58:26",
+  "actualizado_utc": "2026-09-25T17:54:11.504946+00:00",
+  "actualizado_ec": "2026-09-25 12:54:11",
   "total": 56,
   "naves": [
     {
@@ -185,6 +185,21 @@
       "servicio": "AC2"
     },
     {
+      "nave": "HMM2026008 - HYUNDAI FORCE",
+      "viaje": "0118W",
+      "reefer": "2026-09-28 21:00:00.0",
+      "dry": "2026-09-28 21:00:00.0",
+      "linea": "HMM",
+      "etb": "2026-09-29 16:00:00",
+      "etd": "2026-09-30 16:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AX4"
+    },
+    {
       "nave": "HLC2026091 - CAPE SPENCER",
       "viaje": "640N",
       "reefer": "2026-09-28 16:00:00.0",
@@ -200,28 +215,13 @@
       "servicio": "MSW"
     },
     {
-      "nave": "HMM2026008 - HYUNDAI FORCE",
-      "viaje": "0118W",
-      "reefer": "2026-09-28 21:00:00.0",
-      "dry": "2026-09-28 21:00:00.0",
-      "linea": "HMM",
-      "etb": "2026-09-29 15:00:00",
-      "etd": "2026-09-30 15:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
-    },
-    {
       "nave": "HLC2026089 - SALVADOR EXPRESS",
       "viaje": "6235S",
       "reefer": "2026-09-28 07:00:00.0",
       "dry": "2026-09-28 07:00:00.0",
       "linea": "HLC",
-      "etb": "2026-09-28 12:00:00",
-      "etd": "2026-09-29 14:00:00",
+      "etb": "2026-09-28 11:00:00",
+      "etd": "2026-09-29 15:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
