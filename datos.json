@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-25T01:54:08.374495+00:00",
-  "actualizado_ec": "2026-09-24 20:54:08",
-  "total": 57,
+  "actualizado_utc": "2026-09-25T07:33:01.872570+00:00",
+  "actualizado_ec": "2026-09-25 02:33:01",
+  "total": 56,
   "naves": [
+    {
+      "nave": "CMA2026113 - CMA CGM IGUACU",
+      "viaje": "0MH2SW1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-10-09 22:00:00",
+      "etd": "2026-10-11 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "nave": "HLC2026092 - VALPARAISO EXPRESS",
       "viaje": "6234N",
@@ -281,7 +296,7 @@
       "dry": "2026-09-24 07:00:00.0",
       "linea": "COS",
       "etb": "2026-09-24 18:30:00",
-      "etd": "2026-09-25 16:00:00",
+      "etd": "2026-09-25 15:00:00",
       "ata": "2026-09-24 18:05:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -828,36 +843,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "nave": "MAE2026103 - MAERSK BRATAN",
-      "viaje": "633S",
-      "reefer": "2026-08-25 07:00:00.0",
-      "dry": "2026-08-25 07:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-08-25 20:30:00",
-      "etd": "2026-08-26 03:00:00",
-      "ata": "2026-08-25 20:05:00",
-      "atd": "2026-08-26 03:18:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "OC1"
-    },
-    {
-      "nave": "HLC2026078 - MERSIN EXPRESS",
-      "viaje": "635N",
-      "reefer": "2026-08-24 16:00:00.0",
-      "dry": "2026-08-24 16:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-08-25 14:30:00",
-      "etd": "2026-08-26 02:00:00",
-      "ata": "2026-08-25 14:54:00",
-      "atd": "2026-08-26 03:00:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MSW"
     }
   ]
 }
