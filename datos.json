@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-25T17:54:11.504946+00:00",
-  "actualizado_ec": "2026-09-25 12:54:11",
-  "total": 56,
+  "actualizado_utc": "2026-09-25T21:25:08.631431+00:00",
+  "actualizado_ec": "2026-09-25 16:25:08",
+  "total": 57,
   "naves": [
     {
       "nave": "CMA2026113 - CMA CGM IGUACU",
@@ -155,6 +155,21 @@
       "servicio": "SWX_NB"
     },
     {
+      "nave": "MAE2026118 - LICA MAERSK",
+      "viaje": "639S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-01 11:00:00",
+      "etd": "2026-10-02 11:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
+    {
       "nave": "CMA2026109 - CMA CGM BETTER WAYS",
       "viaje": "0DVQJN1MA",
       "reefer": "2026-09-30 19:00:00.0",
@@ -298,7 +313,7 @@
       "etb": "2026-09-24 18:30:00",
       "etd": "2026-09-25 15:00:00",
       "ata": "2026-09-24 18:05:00",
-      "atd": "",
+      "atd": "2026-09-25 14:40:00",
       "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
