@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-24T23:34:00.940083+00:00",
-  "actualizado_ec": "2026-09-24 18:34:00",
+  "actualizado_utc": "2026-09-25T01:54:08.374495+00:00",
+  "actualizado_ec": "2026-09-24 20:54:08",
   "total": 57,
   "naves": [
     {
@@ -267,9 +267,9 @@
       "linea": "XPF",
       "etb": "2026-09-24 20:00:00",
       "etd": "2026-09-25 02:00:00",
-      "ata": "",
+      "ata": "2026-09-24 19:18:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WSX"
