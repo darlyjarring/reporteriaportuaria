@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-26T00:05:34.815815+00:00",
-  "actualizado_ec": "2026-09-25 19:05:34",
-  "total": 57,
+  "actualizado_utc": "2026-09-26T04:54:49.838810+00:00",
+  "actualizado_ec": "2026-09-25 23:54:49",
+  "total": 58,
   "naves": [
+    {
+      "nave": "MAE2026119 - POLAR ECUADOR",
+      "viaje": "636W",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-10 23:00:00",
+      "etd": "2026-10-12 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
+    },
     {
       "nave": "CMA2026113 - CMA CGM IGUACU",
       "viaje": "0MH2SW1MA",
@@ -200,21 +215,6 @@
       "servicio": "AC2"
     },
     {
-      "nave": "HMM2026008 - HYUNDAI FORCE",
-      "viaje": "0118W",
-      "reefer": "2026-09-28 21:00:00.0",
-      "dry": "2026-09-28 21:00:00.0",
-      "linea": "HMM",
-      "etb": "2026-09-29 16:00:00",
-      "etd": "2026-09-30 16:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
-    },
-    {
       "nave": "HLC2026091 - CAPE SPENCER",
       "viaje": "640N",
       "reefer": "2026-09-28 16:00:00.0",
@@ -228,6 +228,21 @@
       "origen": "",
       "destino": "",
       "servicio": "MSW"
+    },
+    {
+      "nave": "HMM2026008 - HYUNDAI FORCE",
+      "viaje": "0118W",
+      "reefer": "2026-09-28 21:00:00.0",
+      "dry": "2026-09-28 21:00:00.0",
+      "linea": "HMM",
+      "etb": "2026-09-29 16:00:00",
+      "etd": "2026-09-30 16:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AX4"
     },
     {
       "nave": "HLC2026089 - SALVADOR EXPRESS",
