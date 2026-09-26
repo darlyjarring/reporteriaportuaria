@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-26T20:12:32.161265+00:00",
-  "actualizado_ec": "2026-09-26 15:12:32",
+  "actualizado_utc": "2026-09-26T22:58:33.987799+00:00",
+  "actualizado_ec": "2026-09-26 17:58:33",
   "total": 58,
   "naves": [
     {
@@ -281,10 +281,10 @@
       "dry": "2026-09-26 17:00:00.0",
       "linea": "MAE",
       "etb": "2026-09-26 16:00:00",
-      "etd": "2026-09-28 00:00:00",
-      "ata": "",
+      "etd": "2026-09-27 22:00:00",
+      "ata": "2026-09-26 15:55:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
@@ -329,7 +329,7 @@
       "etd": "2026-09-25 15:00:00",
       "ata": "2026-09-24 18:05:00",
       "atd": "2026-09-25 14:40:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
