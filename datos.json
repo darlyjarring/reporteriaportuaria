@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-27T06:47:02.094379+00:00",
-  "actualizado_ec": "2026-09-27 01:47:02",
+  "actualizado_utc": "2026-09-27T12:31:55.432369+00:00",
+  "actualizado_ec": "2026-09-27 07:31:55",
   "total": 57,
   "naves": [
     {
@@ -313,8 +313,8 @@
       "etb": "2026-09-25 17:00:00",
       "etd": "2026-09-27 02:00:00",
       "ata": "2026-09-25 16:57:00",
-      "atd": "",
-      "status": "IN OPERATION",
+      "atd": "2026-09-27 01:55:00",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
@@ -329,7 +329,7 @@
       "etd": "2026-09-25 02:00:00",
       "ata": "2026-09-24 19:18:00",
       "atd": "2026-09-25 03:15:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WSX"
