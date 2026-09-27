@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-27T01:20:18.515443+00:00",
-  "actualizado_ec": "2026-09-26 20:20:18",
-  "total": 58,
+  "actualizado_utc": "2026-09-27T06:47:02.094379+00:00",
+  "actualizado_ec": "2026-09-27 01:47:02",
+  "total": 57,
   "naves": [
+    {
+      "nave": "MAE2026120 - AS PALINA",
+      "viaje": "640S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-11 18:00:00",
+      "etd": "2026-10-12 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
     {
       "nave": "MAE2026119 - POLAR ECUADOR",
       "viaje": "636W",
@@ -843,36 +858,6 @@
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "AC1"
-    },
-    {
-      "nave": "CMA2026096 - CMA CGM CARL ANTOINE",
-      "viaje": "0WCOGN1MA",
-      "reefer": "2026-08-27 05:00:00.0",
-      "dry": "2026-08-27 05:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-08-27 15:00:00",
-      "etd": "2026-08-28 16:00:00",
-      "ata": "2026-08-27 16:05:00",
-      "atd": "2026-08-28 16:06:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "SWX_NB"
-    },
-    {
-      "nave": "CMA2026095 - CMA CGM EXCELLENCE",
-      "viaje": "0DVPZN1MA",
-      "reefer": "2026-08-26 19:00:00.0",
-      "dry": "2026-08-26 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-08-27 03:00:00",
-      "etd": "2026-08-27 12:00:00",
-      "ata": "2026-08-27 03:35:00",
-      "atd": "2026-08-27 13:00:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
     }
   ]
 }
