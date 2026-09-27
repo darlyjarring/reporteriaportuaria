@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-27T12:31:55.432369+00:00",
-  "actualizado_ec": "2026-09-27 07:31:55",
-  "total": 57,
+  "actualizado_utc": "2026-09-27T17:17:20.148531+00:00",
+  "actualizado_ec": "2026-09-27 12:17:20",
+  "total": 58,
   "naves": [
     {
       "nave": "MAE2026120 - AS PALINA",
@@ -140,6 +140,21 @@
       "servicio": "WCSA-SHTL"
     },
     {
+      "nave": "MAE2026124 - HANSA EUROPE",
+      "viaje": "641N",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-04 16:00:00",
+      "etd": "2026-10-05 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
+    {
       "nave": "MAE2026117 - MAERSK NOMAZWE",
       "viaje": "635W",
       "reefer": "2026-10-03 17:00:00.0",
@@ -230,21 +245,6 @@
       "servicio": "AC2"
     },
     {
-      "nave": "HLC2026091 - CAPE SPENCER",
-      "viaje": "640N",
-      "reefer": "2026-09-28 16:00:00.0",
-      "dry": "2026-09-28 16:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-29 16:00:00",
-      "etd": "2026-09-30 00:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "",
-      "destino": "",
-      "servicio": "MSW"
-    },
-    {
       "nave": "HMM2026008 - HYUNDAI FORCE",
       "viaje": "0118W",
       "reefer": "2026-09-28 21:00:00.0",
@@ -258,6 +258,21 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "AX4"
+    },
+    {
+      "nave": "HLC2026091 - CAPE SPENCER",
+      "viaje": "640N",
+      "reefer": "2026-09-28 16:00:00.0",
+      "dry": "2026-09-28 16:00:00.0",
+      "linea": "HLC",
+      "etb": "2026-09-29 16:00:00",
+      "etd": "2026-09-30 00:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "",
+      "destino": "",
+      "servicio": "MSW"
     },
     {
       "nave": "HLC2026089 - SALVADOR EXPRESS",
