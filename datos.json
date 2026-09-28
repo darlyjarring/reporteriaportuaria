@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-28T01:41:03.471587+00:00",
-  "actualizado_ec": "2026-09-27 20:41:03",
-  "total": 58,
+  "actualizado_utc": "2026-09-28T07:45:44.758602+00:00",
+  "actualizado_ec": "2026-09-28 02:45:44",
+  "total": 57,
   "naves": [
+    {
+      "nave": "HLC2026095 - SANTOS EXPRESS",
+      "viaje": "6237S",
+      "reefer": "",
+      "dry": "",
+      "linea": "HLC",
+      "etb": "2026-10-12 17:00:00",
+      "etd": "2026-10-13 08:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "COBUN",
+      "destino": "COBUN",
+      "servicio": "SWX_SB"
+    },
     {
       "nave": "MAE2026120 - AS PALINA",
       "viaje": "640S",
@@ -125,10 +140,10 @@
       "servicio": "SWX_SB"
     },
     {
-      "nave": "MAE2026112 - MAERSK NEWCASTLE",
-      "viaje": "638S",
-      "reefer": "",
-      "dry": "",
+      "nave": "MAE2026124 - HANSA EUROPE",
+      "viaje": "641N",
+      "reefer": "2026-10-04 12:00:00.0",
+      "dry": "2026-10-04 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-04 18:00:00",
       "etd": "2026-10-05 22:00:00",
@@ -140,8 +155,8 @@
       "servicio": "WCSA-SHTL"
     },
     {
-      "nave": "MAE2026124 - HANSA EUROPE",
-      "viaje": "641N",
+      "nave": "MAE2026112 - MAERSK NEWCASTLE",
+      "viaje": "638S",
       "reefer": "",
       "dry": "",
       "linea": "MAE",
@@ -185,6 +200,21 @@
       "servicio": "ACSA"
     },
     {
+      "nave": "MAE2026118 - LICA MAERSK",
+      "viaje": "639S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-01 20:00:00",
+      "etd": "2026-10-02 20:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
+    {
       "nave": "CMA2026110 - CMA CGM ESTELLE",
       "viaje": "0WCOQN1MA",
       "reefer": "2026-10-01 07:00:00.0",
@@ -198,21 +228,6 @@
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_NB"
-    },
-    {
-      "nave": "MAE2026118 - LICA MAERSK",
-      "viaje": "639S",
-      "reefer": "",
-      "dry": "",
-      "linea": "MAE",
-      "etb": "2026-10-01 11:00:00",
-      "etd": "2026-10-02 11:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "WCSA-SHTL"
     },
     {
       "nave": "CMA2026109 - CMA CGM BETTER WAYS",
@@ -313,7 +328,7 @@
       "etb": "2026-09-26 16:00:00",
       "etd": "2026-09-28 00:00:00",
       "ata": "2026-09-26 15:55:00",
-      "atd": "",
+      "atd": "2026-09-27 23:35:00",
       "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
@@ -843,36 +858,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
-    },
-    {
-      "nave": "ONE2026006 - EMERALD TOWER",
-      "viaje": "004E",
-      "reefer": "2026-08-28 05:00:00.0",
-      "dry": "2026-08-28 05:00:00.0",
-      "linea": "ONE",
-      "etb": "2026-08-28 17:30:00",
-      "etd": "2026-08-29 15:00:00",
-      "ata": "2026-08-28 17:45:00",
-      "atd": "2026-08-29 15:09:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
-    },
-    {
-      "nave": "MAE2026098 - ALBERT P",
-      "viaje": "630E",
-      "reefer": "2026-08-25 07:00:00.0",
-      "dry": "2026-08-25 07:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-08-28 07:30:00",
-      "etd": "2026-08-29 11:30:00",
-      "ata": "2026-08-28 07:10:00",
-      "atd": "2026-08-29 11:30:00",
-      "status": "DEPARTED",
-      "origen": "COBUN",
-      "destino": "COBUN",
-      "servicio": "AC1"
     }
   ]
 }
