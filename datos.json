@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-09-29T23:11:58.293315+00:00",
-  "actualizado_ec": "2026-09-29 18:11:58",
+  "actualizado_utc": "2026-09-30T02:11:45.200882+00:00",
+  "actualizado_ec": "2026-09-29 21:11:45",
   "total": 55,
   "naves": [
     {
@@ -252,9 +252,9 @@
       "linea": "HLC",
       "etb": "2026-09-29 17:30:00",
       "etd": "2026-09-30 01:30:00",
-      "ata": "",
+      "ata": "2026-09-29 18:18:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "",
       "destino": "",
       "servicio": "MSW"
