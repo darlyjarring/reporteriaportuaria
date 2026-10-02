@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-02T14:08:37.066519+00:00",
-  "actualizado_ec": "2026-10-02 09:08:37",
+  "actualizado_utc": "2026-10-02T19:20:02.497679+00:00",
+  "actualizado_ec": "2026-10-02 14:20:02",
   "total": 54,
   "naves": [
     {
@@ -37,8 +37,8 @@
     {
       "nave": "HLC2026101 - PUERTO LIMON EXPRESS",
       "viaje": "642N",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-12 16:00:00.0",
+      "dry": "2026-10-12 16:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-13 16:00:00",
       "etd": "2026-10-14 00:00:00",
@@ -52,8 +52,8 @@
     {
       "nave": "HLC2026095 - SANTOS EXPRESS",
       "viaje": "6237S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-12 07:00:00.0",
+      "dry": "2026-10-12 07:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-12 17:00:00",
       "etd": "2026-10-13 08:00:00",
@@ -67,8 +67,8 @@
     {
       "nave": "MAE2026120 - AS PALINA",
       "viaje": "640S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-11 12:00:00.0",
+      "dry": "2026-10-11 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-11 18:00:00",
       "etd": "2026-10-12 22:00:00",
