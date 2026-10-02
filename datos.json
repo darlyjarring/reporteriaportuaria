@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-01T22:04:04.718203+00:00",
-  "actualizado_ec": "2026-10-01 17:04:04",
+  "actualizado_utc": "2026-10-02T01:41:03.408289+00:00",
+  "actualizado_ec": "2026-10-01 20:41:03",
   "total": 55,
   "naves": [
     {
@@ -252,9 +252,9 @@
       "linea": "CMA",
       "etb": "2026-10-01 17:30:00",
       "etd": "2026-10-02 17:30:00",
-      "ata": "",
+      "ata": "2026-10-01 18:00:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_NB"
@@ -268,7 +268,7 @@
       "etb": "2026-10-01 08:30:00",
       "etd": "2026-10-01 19:30:00",
       "ata": "2026-10-01 08:20:00",
-      "atd": "",
+      "atd": "2026-10-01 19:06:00",
       "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
