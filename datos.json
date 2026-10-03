@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-03T01:56:24.094562+00:00",
-  "actualizado_ec": "2026-10-02 20:56:24",
+  "actualizado_utc": "2026-10-03T07:57:21.903573+00:00",
+  "actualizado_ec": "2026-10-03 02:57:21",
   "total": 55,
   "naves": [
+    {
+      "nave": "MAE2026121 - LICA MAERSK",
+      "viaje": "637W",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-17 23:00:00",
+      "etd": "2026-10-19 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
+    },
     {
       "nave": "CMA2026114 - CMA CGM MERCURY",
       "viaje": "0MH2UW1MA",
@@ -813,21 +828,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "nave": "HMM2026006 - HYUNDAI BRAVE",
-      "viaje": "0119W",
-      "reefer": "2026-08-31 19:00:00.0",
-      "dry": "2026-08-31 19:00:00.0",
-      "linea": "HMM",
-      "etb": "2026-09-02 00:00:00",
-      "etd": "2026-09-02 16:00:00",
-      "ata": "2026-09-01 23:30:00",
-      "atd": "2026-09-02 16:42:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     }
   ]
 }
