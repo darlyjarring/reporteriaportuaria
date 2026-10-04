@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-04T02:36:24.416912+00:00",
-  "actualizado_ec": "2026-10-03 21:36:24",
-  "total": 55,
+  "actualizado_utc": "2026-10-04T08:47:41.417415+00:00",
+  "actualizado_ec": "2026-10-04 03:47:41",
+  "total": 54,
   "naves": [
+    {
+      "nave": "MAE2026122 - SEALAND PHILADELPHIA",
+      "viaje": "641S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-18 18:00:00",
+      "etd": "2026-10-19 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
     {
       "nave": "MAE2026121 - LICA MAERSK",
       "viaje": "637W",
@@ -266,7 +281,7 @@
       "dry": "2026-10-02 23:00:00.0",
       "linea": "CMA",
       "etb": "2026-10-02 21:00:00",
-      "etd": "2026-10-04 19:00:00",
+      "etd": "2026-10-04 21:00:00",
       "ata": "2026-10-02 20:42:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -798,36 +813,6 @@
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "AC1"
-    },
-    {
-      "nave": "HLC2026081 - GUAYAQUIL EXPRESS",
-      "viaje": "6229N",
-      "reefer": "2026-09-03 05:00:00.0",
-      "dry": "2026-09-03 05:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-03 18:30:00",
-      "etd": "2026-09-04 21:00:00",
-      "ata": "2026-09-03 18:48:00",
-      "atd": "2026-09-04 20:40:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "SWX_NB"
-    },
-    {
-      "nave": "CMA2026100 - CMA CGM EXEMPLARITY",
-      "viaje": "0DVQBN1MA",
-      "reefer": "2026-09-02 19:00:00.0",
-      "dry": "2026-09-02 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-09-03 06:00:00",
-      "etd": "2026-09-03 16:00:00",
-      "ata": "2026-09-03 06:05:00",
-      "atd": "2026-09-03 15:58:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
     }
   ]
 }
