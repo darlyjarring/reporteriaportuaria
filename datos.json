@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-06T01:53:47.604571+00:00",
-  "actualizado_ec": "2026-10-05 20:53:47",
-  "total": 54,
+  "actualizado_utc": "2026-10-06T08:50:28.692680+00:00",
+  "actualizado_ec": "2026-10-06 03:50:28",
+  "total": 53,
   "naves": [
     {
       "nave": "MAE2026122 - SEALAND PHILADELPHIA",
@@ -40,8 +40,8 @@
       "reefer": "",
       "dry": "",
       "linea": "CMA",
-      "etb": "2026-10-16 22:00:00",
-      "etd": "2026-10-18 07:00:00",
+      "etb": "2026-10-16 21:00:00",
+      "etd": "2026-10-18 06:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -80,6 +80,21 @@
       "servicio": "MEDCAR"
     },
     {
+      "nave": "ONE2026008 - CONTI CONTESSA",
+      "viaje": "026E",
+      "reefer": "",
+      "dry": "",
+      "linea": "ONE",
+      "etb": "2026-10-14 07:00:00",
+      "etd": "2026-10-15 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AX4"
+    },
+    {
       "nave": "HLC2026101 - PUERTO LIMON EXPRESS",
       "viaje": "642N",
       "reefer": "2026-10-12 16:00:00.0",
@@ -93,21 +108,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
-    },
-    {
-      "nave": "ONE2026008 - CONTI CONTESSA",
-      "viaje": "026E",
-      "reefer": "",
-      "dry": "",
-      "linea": "ONE",
-      "etb": "2026-10-13 18:00:00",
-      "etd": "2026-10-14 19:30:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     },
     {
       "nave": "HLC2026095 - SANTOS EXPRESS",
@@ -266,7 +266,7 @@
       "dry": "2026-10-05 07:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-05 10:00:00",
-      "etd": "2026-10-06 08:50:00",
+      "etd": "2026-10-06 09:00:00",
       "ata": "2026-10-05 08:42:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -299,7 +299,7 @@
       "etd": "2026-10-05 01:00:00",
       "ata": "2026-10-03 13:25:00",
       "atd": "2026-10-05 00:54:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
@@ -798,21 +798,6 @@
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "FE-MAE"
-    },
-    {
-      "nave": "MAE2026104 - LOUIS MAERSK",
-      "viaje": "631W",
-      "reefer": "2026-09-05 17:00:00.0",
-      "dry": "2026-09-05 17:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-05 20:00:00",
-      "etd": "2026-09-06 21:30:00",
-      "ata": "2026-09-05 19:44:00",
-      "atd": "2026-09-06 21:25:00",
-      "status": "DEPARTED",
-      "origen": "ECPBO",
-      "destino": "ECPBO",
-      "servicio": "ECUMED"
     }
   ]
 }
