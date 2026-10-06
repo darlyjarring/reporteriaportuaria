@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-06T15:48:46.607598+00:00",
-  "actualizado_ec": "2026-10-06 10:48:46",
+  "actualizado_utc": "2026-10-06T20:39:21.738689+00:00",
+  "actualizado_ec": "2026-10-06 15:39:21",
   "total": 54,
   "naves": [
     {
@@ -283,7 +283,7 @@
       "etb": "2026-10-05 10:00:00",
       "etd": "2026-10-06 11:00:00",
       "ata": "2026-10-05 08:42:00",
-      "atd": "",
+      "atd": "2026-10-06 12:55:00",
       "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
