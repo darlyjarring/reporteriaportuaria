@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-05T21:32:31.019117+00:00",
-  "actualizado_ec": "2026-10-05 16:32:31",
-  "total": 53,
+  "actualizado_utc": "2026-10-06T01:53:47.604571+00:00",
+  "actualizado_ec": "2026-10-05 20:53:47",
+  "total": 54,
   "naves": [
     {
       "nave": "MAE2026122 - SEALAND PHILADELPHIA",
@@ -125,6 +125,21 @@
       "servicio": "SWX_SB"
     },
     {
+      "nave": "ZPMC2026001 - LAN HAI HONG YUN",
+      "viaje": "2604",
+      "reefer": "",
+      "dry": "",
+      "linea": "ZPMC",
+      "etb": "2026-10-12 08:00:00",
+      "etd": "2026-10-15 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "CNNTG",
+      "destino": "CNNTG",
+      "servicio": "DPW"
+    },
+    {
       "nave": "MAE2026120 - AS PALINA",
       "viaje": "640S",
       "reefer": "2026-10-11 12:00:00.0",
@@ -235,8 +250,8 @@
       "reefer": "2026-10-05 14:00:00.0",
       "dry": "2026-10-05 14:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-06 06:00:00",
-      "etd": "2026-10-07 11:00:00",
+      "etb": "2026-10-06 07:30:00",
+      "etd": "2026-10-07 12:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -251,7 +266,7 @@
       "dry": "2026-10-05 07:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-05 10:00:00",
-      "etd": "2026-10-06 07:00:00",
+      "etd": "2026-10-06 08:50:00",
       "ata": "2026-10-05 08:42:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -266,7 +281,7 @@
       "dry": "2026-10-04 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-05 01:00:00",
-      "etd": "2026-10-06 01:00:00",
+      "etd": "2026-10-06 03:00:00",
       "ata": "2026-10-05 00:25:00",
       "atd": "",
       "status": "IN OPERATION",
