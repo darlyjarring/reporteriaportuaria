@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-08T17:35:50.252629+00:00",
-  "actualizado_ec": "2026-10-08 12:35:50",
+  "actualizado_utc": "2026-10-08T22:28:17.533729+00:00",
+  "actualizado_ec": "2026-10-08 17:28:17",
   "total": 54,
   "naves": [
     {
@@ -253,7 +253,7 @@
       "etb": "2026-10-08 08:00:00",
       "etd": "2026-10-08 16:00:00",
       "ata": "2026-10-08 07:42:00",
-      "atd": "",
+      "atd": "2026-10-08 16:30:00",
       "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
@@ -266,7 +266,7 @@
       "dry": "2026-10-07 19:00:00.0",
       "linea": "CMA",
       "etb": "2026-10-08 07:00:00",
-      "etd": "2026-10-08 17:00:00",
+      "etd": "2026-10-08 19:00:00",
       "ata": "2026-10-08 06:50:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -284,7 +284,7 @@
       "etd": "2026-10-07 23:00:00",
       "ata": "2026-10-07 02:54:00",
       "atd": "2026-10-07 23:00:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "AX4"
