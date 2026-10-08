@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-08T03:02:16.259248+00:00",
-  "actualizado_ec": "2026-10-07 22:02:16",
-  "total": 55,
+  "actualizado_utc": "2026-10-08T10:30:44.101590+00:00",
+  "actualizado_ec": "2026-10-08 05:30:44",
+  "total": 54,
   "naves": [
+    {
+      "nave": "HLC2026097 - ISTANBUL EXPRESS",
+      "viaje": "6236N",
+      "reefer": "",
+      "dry": "",
+      "linea": "HLC",
+      "etb": "2026-10-23 00:00:00",
+      "etd": "2026-10-23 23:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "SWX_NB"
+    },
     {
       "nave": "ZPMC2026002 - ZHEN HUA 34",
       "viaje": "263405",
@@ -37,8 +52,8 @@
     {
       "nave": "MAE2026122 - SEALAND PHILADELPHIA",
       "viaje": "641S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-18 12:00:00.0",
+      "dry": "2026-10-18 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-18 18:00:00",
       "etd": "2026-10-19 22:00:00",
@@ -52,8 +67,8 @@
     {
       "nave": "MAE2026121 - LICA MAERSK",
       "viaje": "637W",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-17 17:00:00.0",
+      "dry": "2026-10-17 17:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-17 23:00:00",
       "etd": "2026-10-19 05:00:00",
@@ -67,8 +82,8 @@
     {
       "nave": "CMA2026114 - CMA CGM MERCURY",
       "viaje": "0MH2UW1MA",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-16 23:00:00.0",
+      "dry": "2026-10-16 23:00:00.0",
       "linea": "CMA",
       "etb": "2026-10-16 21:00:00",
       "etd": "2026-10-18 06:00:00",
@@ -268,7 +283,7 @@
       "etb": "2026-10-07 03:30:00",
       "etd": "2026-10-07 23:00:00",
       "ata": "2026-10-07 02:54:00",
-      "atd": "",
+      "atd": "2026-10-07 23:00:00",
       "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
@@ -798,36 +813,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "AX4"
-    },
-    {
-      "nave": "COS2026007 - COSCO SHIPPING SEINE",
-      "viaje": "047S",
-      "reefer": "2026-09-07 07:00:00.0",
-      "dry": "2026-09-07 07:00:00.0",
-      "linea": "COS",
-      "etb": "2026-09-07 17:00:00",
-      "etd": "2026-09-08 07:00:00",
-      "ata": "2026-09-07 16:20:00",
-      "atd": "2026-09-08 06:48:00",
-      "status": "DEPARTED",
-      "origen": "COBUN",
-      "destino": "COBUN",
-      "servicio": "SWX_SB"
-    },
-    {
-      "nave": "MAE2026105 - AS STINE",
-      "viaje": "636S",
-      "reefer": "2026-09-06 18:00:00.0",
-      "dry": "2026-09-06 18:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-07 00:00:00",
-      "etd": "2026-09-07 18:00:00",
-      "ata": "2026-09-07 01:47:00",
-      "atd": "2026-09-07 19:36:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "FE-MAE"
     }
   ]
 }
