@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-08T10:30:44.101590+00:00",
-  "actualizado_ec": "2026-10-08 05:30:44",
+  "actualizado_utc": "2026-10-08T17:35:50.252629+00:00",
+  "actualizado_ec": "2026-10-08 12:35:50",
   "total": 54,
   "naves": [
     {
@@ -245,34 +245,34 @@
       "servicio": "SWX_NB"
     },
     {
-      "nave": "CMA2026112 - CMA CGM HARMONY",
-      "viaje": "0DVQLN1MA",
-      "reefer": "2026-10-07 19:00:00.0",
-      "dry": "2026-10-07 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-10-08 07:30:00",
-      "etd": "2026-10-08 17:30:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
-    },
-    {
       "nave": "HLC2026094 - CAPE SABLE",
       "viaje": "641N",
       "reefer": "2026-10-05 16:00:00.0",
       "dry": "2026-10-05 16:00:00.0",
       "linea": "HLC",
-      "etb": "2026-10-08 04:00:00",
-      "etd": "2026-10-08 13:00:00",
-      "ata": "",
+      "etb": "2026-10-08 08:00:00",
+      "etd": "2026-10-08 16:00:00",
+      "ata": "2026-10-08 07:42:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
+    },
+    {
+      "nave": "CMA2026112 - CMA CGM HARMONY",
+      "viaje": "0DVQLN1MA",
+      "reefer": "2026-10-07 19:00:00.0",
+      "dry": "2026-10-07 19:00:00.0",
+      "linea": "CMA",
+      "etb": "2026-10-08 07:00:00",
+      "etd": "2026-10-08 17:00:00",
+      "ata": "2026-10-08 06:50:00",
+      "atd": "",
+      "status": "IN OPERATION",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
     },
     {
       "nave": "ONE2026007 - ONE COMPETENCE",
