@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-08T22:28:17.533729+00:00",
-  "actualizado_ec": "2026-10-08 17:28:17",
-  "total": 54,
+  "actualizado_utc": "2026-10-09T09:37:36.402518+00:00",
+  "actualizado_ec": "2026-10-09 04:37:36",
+  "total": 53,
   "naves": [
     {
       "nave": "HLC2026097 - ISTANBUL EXPRESS",
@@ -237,9 +237,9 @@
       "linea": "HLC",
       "etb": "2026-10-08 17:30:00",
       "etd": "2026-10-09 14:30:00",
-      "ata": "",
+      "ata": "2026-10-08 17:24:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
@@ -268,8 +268,8 @@
       "etb": "2026-10-08 07:00:00",
       "etd": "2026-10-08 19:00:00",
       "ata": "2026-10-08 06:50:00",
-      "atd": "",
-      "status": "IN OPERATION",
+      "atd": "2026-10-08 19:20:00",
+      "status": "DEPARTED",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
@@ -798,21 +798,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "nave": "HMM2026007 - HMM IVY",
-      "viaje": "0005W",
-      "reefer": "2026-09-07 13:00:00.0",
-      "dry": "2026-09-07 13:00:00.0",
-      "linea": "HMM",
-      "etb": "2026-09-08 01:00:00",
-      "etd": "2026-09-08 14:00:00",
-      "ata": "2026-09-08 01:30:00",
-      "atd": "2026-09-08 14:42:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     }
   ]
 }
