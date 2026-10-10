@@ -1,9 +1,39 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-10T01:02:14.912302+00:00",
-  "actualizado_ec": "2026-10-09 20:02:14",
-  "total": 53,
+  "actualizado_utc": "2026-10-10T07:03:36.539029+00:00",
+  "actualizado_ec": "2026-10-10 02:03:36",
+  "total": 55,
   "naves": [
+    {
+      "nave": "MAE2026123 - LEDA MAERSK",
+      "viaje": "638W",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-24 23:00:00",
+      "etd": "2026-10-26 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
+    },
+    {
+      "nave": "CMA2026116 - CMA CGM LIBERTY",
+      "viaje": "0MH2WW1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-10-24 01:00:00",
+      "etd": "2026-10-25 09:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "nave": "HLC2026097 - ISTANBUL EXPRESS",
       "viaje": "6236N",
@@ -239,7 +269,7 @@
       "etd": "2026-10-09 16:30:00",
       "ata": "2026-10-08 17:24:00",
       "atd": "2026-10-09 16:40:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
