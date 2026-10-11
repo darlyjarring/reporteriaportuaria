@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-11T00:32:40.516580+00:00",
-  "actualizado_ec": "2026-10-10 19:32:40",
-  "total": 55,
+  "actualizado_utc": "2026-10-11T06:26:43.227462+00:00",
+  "actualizado_ec": "2026-10-11 01:26:43",
+  "total": 53,
   "naves": [
+    {
+      "nave": "MAE2026125 - SEALAND LOS ANGELES",
+      "viaje": "642S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-10-25 18:00:00",
+      "etd": "2026-10-26 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
     {
       "nave": "MAE2026123 - LEDA MAERSK",
       "viaje": "638W",
@@ -220,7 +235,7 @@
       "reefer": "2026-10-11 12:00:00.0",
       "dry": "2026-10-11 12:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-11 18:00:00",
+      "etb": "2026-10-11 18:30:00",
       "etd": "2026-10-12 22:00:00",
       "ata": "",
       "atd": "",
@@ -236,10 +251,10 @@
       "dry": "2026-10-10 17:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-10 22:00:00",
-      "etd": "2026-10-12 05:00:00",
-      "ata": "",
+      "etd": "2026-10-12 03:00:00",
+      "ata": "2026-10-10 22:08:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
@@ -783,51 +798,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
-    },
-    {
-      "nave": "CMA2026101 - CMA CGM JACQUES JOSEPH",
-      "viaje": "0WCOKN1MA",
-      "reefer": "2026-09-10 07:00:00.0",
-      "dry": "2026-09-10 07:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-09-10 18:00:00",
-      "etd": "2026-09-11 15:00:00",
-      "ata": "2026-09-10 18:50:00",
-      "atd": "2026-09-11 15:00:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "SWX_NB"
-    },
-    {
-      "nave": "HLC2026088 - CAUCEDO EXPRESS",
-      "viaje": "637N",
-      "reefer": "2026-09-07 16:00:00.0",
-      "dry": "2026-09-07 16:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-10 10:30:00",
-      "etd": "2026-09-10 20:33:00",
-      "ata": "2026-09-10 10:48:00",
-      "atd": "2026-09-10 21:48:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MSW"
-    },
-    {
-      "nave": "CMA2026102 - CMA CGM FORT BOURBON",
-      "viaje": "0DVQDN1MA",
-      "reefer": "2026-09-09 19:00:00.0",
-      "dry": "2026-09-09 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-09-10 04:30:00",
-      "etd": "2026-09-10 17:30:00",
-      "ata": "2026-09-10 04:15:00",
-      "atd": "2026-09-10 17:38:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
     }
   ]
 }
