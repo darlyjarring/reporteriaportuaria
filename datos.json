@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-11T18:23:08.850157+00:00",
-  "actualizado_ec": "2026-10-11 13:23:08",
+  "actualizado_utc": "2026-10-11T22:21:39.893528+00:00",
+  "actualizado_ec": "2026-10-11 17:21:39",
   "total": 53,
   "naves": [
     {
@@ -220,8 +220,8 @@
       "reefer": "",
       "dry": "",
       "linea": "ZPMC",
-      "etb": "2026-10-12 07:00:00",
-      "etd": "2026-10-15 07:00:00",
+      "etb": "2026-10-12 06:00:00",
+      "etd": "2026-10-15 06:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -237,9 +237,9 @@
       "linea": "MAE",
       "etb": "2026-10-11 15:30:00",
       "etd": "2026-10-12 21:00:00",
-      "ata": "",
+      "ata": "2026-10-11 15:10:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
