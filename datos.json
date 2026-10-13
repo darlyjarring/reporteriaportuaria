@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-13T00:28:57.064556+00:00",
-  "actualizado_ec": "2026-10-12 19:28:57",
-  "total": 53,
+  "actualizado_utc": "2026-10-13T07:02:45.565169+00:00",
+  "actualizado_ec": "2026-10-13 02:02:45",
+  "total": 54,
   "naves": [
+    {
+      "nave": "HLC2026099 - CAPE SCOTT",
+      "viaje": "644N",
+      "reefer": "",
+      "dry": "",
+      "linea": "HLC",
+      "etb": "2026-10-27 16:00:00",
+      "etd": "2026-10-28 00:30:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MSW"
+    },
     {
       "nave": "HLC2026098 - GUAYAQUIL EXPRESS",
       "viaje": "6239S",
@@ -222,9 +237,9 @@
       "linea": "HLC",
       "etb": "2026-10-13 00:00:00",
       "etd": "2026-10-13 12:00:00",
-      "ata": "",
+      "ata": "2026-10-13 00:03:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_SB"
@@ -253,8 +268,8 @@
       "etb": "2026-10-11 15:30:00",
       "etd": "2026-10-12 22:00:00",
       "ata": "2026-10-11 15:10:00",
-      "atd": "",
-      "status": "IN OPERATION",
+      "atd": "2026-10-12 23:00:00",
+      "status": "DEPARTED",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
