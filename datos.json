@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-13T20:39:32.766281+00:00",
-  "actualizado_ec": "2026-10-13 15:39:32",
+  "actualizado_utc": "2026-10-13T23:56:59.483342+00:00",
+  "actualizado_ec": "2026-10-13 18:56:59",
   "total": 55,
   "naves": [
     {
@@ -237,9 +237,9 @@
       "linea": "HLC",
       "etb": "2026-10-13 19:30:00",
       "etd": "2026-10-14 03:30:00",
-      "ata": "",
+      "ata": "2026-10-13 18:36:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
