@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-14T09:47:22.068293+00:00",
-  "actualizado_ec": "2026-10-14 04:47:22",
+  "actualizado_utc": "2026-10-14T14:43:42.486208+00:00",
+  "actualizado_ec": "2026-10-14 09:43:42",
   "total": 54,
   "naves": [
     {
@@ -20,6 +20,21 @@
       "servicio": "MSW"
     },
     {
+      "nave": "HMM2026009 - HYUNDAI COURAGE",
+      "viaje": "0125W",
+      "reefer": "",
+      "dry": "",
+      "linea": "HMM",
+      "etb": "2026-10-27 10:00:00",
+      "etd": "2026-10-28 10:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AX4"
+    },
+    {
       "nave": "HLC2026098 - GUAYAQUIL EXPRESS",
       "viaje": "6239S",
       "reefer": "",
@@ -33,21 +48,6 @@
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_SB"
-    },
-    {
-      "nave": "HMM2026009 - HYUNDAI COURAGE",
-      "viaje": "0125W",
-      "reefer": "",
-      "dry": "",
-      "linea": "HMM",
-      "etb": "2026-10-26 13:00:00",
-      "etd": "2026-10-28 10:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     },
     {
       "nave": "MAE2026125 - SEALAND LOS ANGELES",
@@ -221,10 +221,10 @@
       "dry": "2026-10-13 19:00:00.0",
       "linea": "ONE",
       "etb": "2026-10-14 07:00:00",
-      "etd": "2026-10-15 02:00:00",
-      "ata": "",
+      "etd": "2026-10-15 01:00:00",
+      "ata": "2026-10-14 07:12:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "AX4"
@@ -239,7 +239,7 @@
       "etd": "2026-10-14 03:30:00",
       "ata": "2026-10-13 18:36:00",
       "atd": "2026-10-14 03:30:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
@@ -266,7 +266,7 @@
       "dry": "",
       "linea": "ZPMC",
       "etb": "2026-10-12 12:30:00",
-      "etd": "2026-10-15 12:30:00",
+      "etd": "2026-10-14 19:00:00",
       "ata": "2026-10-12 13:06:00",
       "atd": "",
       "status": "IN OPERATION",
