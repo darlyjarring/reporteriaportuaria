@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-13T23:56:59.483342+00:00",
-  "actualizado_ec": "2026-10-13 18:56:59",
-  "total": 55,
+  "actualizado_utc": "2026-10-14T04:41:45.132196+00:00",
+  "actualizado_ec": "2026-10-13 23:41:45",
+  "total": 54,
   "naves": [
     {
       "nave": "HLC2026099 - CAPE SCOTT",
@@ -221,7 +221,7 @@
       "dry": "2026-10-13 19:00:00.0",
       "linea": "ONE",
       "etb": "2026-10-14 07:00:00",
-      "etd": "2026-10-15 05:00:00",
+      "etd": "2026-10-15 02:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -813,21 +813,6 @@
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "FE-MAE"
-    },
-    {
-      "nave": "MAE2026106 - MAERSK FINISTERRE",
-      "viaje": "632W",
-      "reefer": "2026-09-12 17:00:00.0",
-      "dry": "2026-09-12 17:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-13 03:30:00",
-      "etd": "2026-09-14 03:30:00",
-      "ata": "2026-09-13 03:10:00",
-      "atd": "2026-09-14 04:45:00",
-      "status": "DEPARTED",
-      "origen": "ECPBO",
-      "destino": "ECPBO",
-      "servicio": "ECUMED"
     }
   ]
 }
