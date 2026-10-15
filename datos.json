@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-15T14:59:21.009376+00:00",
-  "actualizado_ec": "2026-10-15 09:59:21",
+  "actualizado_utc": "2026-10-15T19:03:45.756017+00:00",
+  "actualizado_ec": "2026-10-15 14:03:45",
   "total": 56,
   "naves": [
     {
@@ -112,8 +112,8 @@
     {
       "nave": "CMA2026116 - CMA CGM LIBERTY",
       "viaje": "0MH2WW1MA",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-23 23:00:00.0",
+      "dry": "2026-10-23 23:00:00.0",
       "linea": "CMA",
       "etb": "2026-10-24 01:00:00",
       "etd": "2026-10-25 09:00:00",
@@ -253,7 +253,7 @@
       "etb": "2026-10-15 04:30:00",
       "etd": "2026-10-15 14:30:00",
       "ata": "2026-10-15 03:50:00",
-      "atd": "",
+      "atd": "2026-10-15 12:20:00",
       "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
