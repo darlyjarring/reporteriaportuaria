@@ -1,9 +1,39 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-15T00:36:28.881111+00:00",
-  "actualizado_ec": "2026-10-14 19:36:28",
-  "total": 55,
+  "actualizado_utc": "2026-10-15T05:13:24.092229+00:00",
+  "actualizado_ec": "2026-10-15 00:13:24",
+  "total": 56,
   "naves": [
+    {
+      "nave": "HLC2026100 - SANTOS EXPRESS",
+      "viaje": "6237N",
+      "reefer": "",
+      "dry": "",
+      "linea": "HLC",
+      "etb": "2026-10-29 17:00:00",
+      "etd": "2026-10-30 17:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "SWX_NB"
+    },
+    {
+      "nave": "CMA2026118 - CMA CGM EXCELLENCE",
+      "viaje": "0DVQRN1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-10-29 06:00:00",
+      "etd": "2026-10-29 20:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
+    },
     {
       "nave": "HLC2026099 - CAPE SCOTT",
       "viaje": "644N",
@@ -238,7 +268,7 @@
       "etb": "2026-10-14 07:00:00",
       "etd": "2026-10-14 23:00:00",
       "ata": "2026-10-14 07:12:00",
-      "atd": "",
+      "atd": "2026-10-14 23:03:00",
       "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
@@ -283,7 +313,7 @@
       "etb": "2026-10-12 12:30:00",
       "etd": "2026-10-14 23:00:00",
       "ata": "2026-10-12 13:06:00",
-      "atd": "",
+      "atd": "2026-10-14 23:48:00",
       "status": "IN OPERATION",
       "origen": "CNNTG",
       "destino": "CNNTG",
@@ -813,21 +843,6 @@
       "origen": "COCTG",
       "destino": "COCTG",
       "servicio": "SWX_SB"
-    },
-    {
-      "nave": "MAE2026110 - AS STINE",
-      "viaje": "637S",
-      "reefer": "2026-09-13 18:00:00.0",
-      "dry": "2026-09-13 18:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-14 03:30:00",
-      "etd": "2026-09-15 02:00:00",
-      "ata": "2026-09-14 03:30:00",
-      "atd": "2026-09-15 02:53:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "FE-MAE"
     }
   ]
 }
