@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-14T22:14:19.462919+00:00",
-  "actualizado_ec": "2026-10-14 17:14:19",
+  "actualizado_utc": "2026-10-15T00:36:28.881111+00:00",
+  "actualizado_ec": "2026-10-14 19:36:28",
   "total": 55,
   "naves": [
     {
@@ -281,7 +281,7 @@
       "dry": "",
       "linea": "ZPMC",
       "etb": "2026-10-12 12:30:00",
-      "etd": "2026-10-15 13:00:00",
+      "etd": "2026-10-14 23:00:00",
       "ata": "2026-10-12 13:06:00",
       "atd": "",
       "status": "IN OPERATION",
