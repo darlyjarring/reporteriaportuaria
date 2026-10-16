@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-16T00:29:35.263258+00:00",
-  "actualizado_ec": "2026-10-15 19:29:35",
-  "total": 56,
+  "actualizado_utc": "2026-10-16T04:56:02.588427+00:00",
+  "actualizado_ec": "2026-10-15 23:56:02",
+  "total": 54,
   "naves": [
+    {
+      "nave": "CMA2026119 - CMA CGM BUZIOS",
+      "viaje": "0MH2YW1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-10-30 22:00:00",
+      "etd": "2026-11-01 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "nave": "HLC2026100 - SANTOS EXPRESS",
       "viaje": "6237N",
@@ -299,7 +314,7 @@
       "etd": "2026-10-13 13:00:00",
       "ata": "2026-10-13 00:03:00",
       "atd": "2026-10-13 12:33:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_SB"
@@ -798,51 +813,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "WSX"
-    },
-    {
-      "nave": "MAE2026111 - MAERSK EMDEN",
-      "viaje": "632E",
-      "reefer": "2026-09-15 07:00:00.0",
-      "dry": "2026-09-15 07:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-15 20:30:00",
-      "etd": "2026-09-17 14:00:00",
-      "ata": "2026-09-15 21:00:00",
-      "atd": "2026-09-17 13:58:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "AC2"
-    },
-    {
-      "nave": "HLC2026084 - CAPE SKAGEN",
-      "viaje": "638N",
-      "reefer": "2026-09-14 16:00:00.0",
-      "dry": "2026-09-14 16:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-15 15:00:00",
-      "etd": "2026-09-15 21:00:00",
-      "ata": "2026-09-15 14:10:00",
-      "atd": "2026-09-15 23:42:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MSW"
-    },
-    {
-      "nave": "CMA2026106 - CMA CGM ESTELLE",
-      "viaje": "0WCOPS1MA",
-      "reefer": "2026-09-14 07:00:00.0",
-      "dry": "2026-09-14 07:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-09-15 02:00:00",
-      "etd": "2026-09-15 18:30:00",
-      "ata": "2026-09-15 02:50:00",
-      "atd": "2026-09-15 19:05:00",
-      "status": "DEPARTED",
-      "origen": "COCTG",
-      "destino": "COCTG",
-      "servicio": "SWX_SB"
     }
   ]
 }
