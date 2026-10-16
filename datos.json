@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-16T18:12:02.458135+00:00",
-  "actualizado_ec": "2026-10-16 13:12:02",
-  "total": 53,
+  "actualizado_utc": "2026-10-16T21:23:07.402178+00:00",
+  "actualizado_ec": "2026-10-16 16:23:07",
+  "total": 52,
   "naves": [
     {
       "nave": "CMA2026119 - CMA CGM BUZIOS",
@@ -82,8 +82,8 @@
     {
       "nave": "MAE2026125 - SEALAND LOS ANGELES",
       "viaje": "642S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-25 12:00:00.0",
+      "dry": "2026-10-25 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-25 18:00:00",
       "etd": "2026-10-26 22:00:00",
@@ -97,8 +97,8 @@
     {
       "nave": "MAE2026123 - LEDA MAERSK",
       "viaje": "638W",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-24 17:00:00.0",
+      "dry": "2026-10-24 17:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-24 23:00:00",
       "etd": "2026-10-26 05:00:00",
@@ -182,21 +182,6 @@
       "status": "TO ARRIVE",
       "origen": "COBUN",
       "destino": "COBUN",
-      "servicio": "WCSA"
-    },
-    {
-      "nave": "MAE2026122 - SEALAND PHILADELPHIA",
-      "viaje": "641S",
-      "reefer": "2026-10-18 12:00:00.0",
-      "dry": "2026-10-18 12:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-10-18 18:00:00",
-      "etd": "2026-10-19 22:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PABLB",
-      "destino": "PABLB",
       "servicio": "WCSA-SHTL"
     },
     {
