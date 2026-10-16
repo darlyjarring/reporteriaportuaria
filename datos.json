@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-16T14:17:27.702469+00:00",
-  "actualizado_ec": "2026-10-16 09:17:27",
-  "total": 54,
+  "actualizado_utc": "2026-10-16T18:12:02.458135+00:00",
+  "actualizado_ec": "2026-10-16 13:12:02",
+  "total": 53,
   "naves": [
     {
       "nave": "CMA2026119 - CMA CGM BUZIOS",
@@ -63,21 +63,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
-    },
-    {
-      "nave": "HMM2026009 - HYUNDAI COURAGE",
-      "viaje": "0125W",
-      "reefer": "",
-      "dry": "",
-      "linea": "HMM",
-      "etb": "2026-10-27 10:00:00",
-      "etd": "2026-10-28 10:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     },
     {
       "nave": "HLC2026098 - GUAYAQUIL EXPRESS",
@@ -190,8 +175,8 @@
       "reefer": "2026-10-18 12:00:00.0",
       "dry": "2026-10-18 12:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-18 23:00:00",
-      "etd": "2026-10-19 21:00:00",
+      "etb": "2026-10-18 23:30:00",
+      "etd": "2026-10-19 19:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -221,7 +206,7 @@
       "dry": "2026-10-17 17:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-18 00:00:00",
-      "etd": "2026-10-19 01:00:00",
+      "etd": "2026-10-18 22:30:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -236,7 +221,7 @@
       "dry": "2026-10-16 23:00:00.0",
       "linea": "CMA",
       "etb": "2026-10-17 04:00:00",
-      "etd": "2026-10-18 22:00:00",
+      "etd": "2026-10-19 09:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
