@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-16T09:39:06.367657+00:00",
-  "actualizado_ec": "2026-10-16 04:39:06",
+  "actualizado_utc": "2026-10-16T14:17:27.702469+00:00",
+  "actualizado_ec": "2026-10-16 09:17:27",
   "total": 54,
   "naves": [
     {
@@ -190,8 +190,8 @@
       "reefer": "2026-10-18 12:00:00.0",
       "dry": "2026-10-18 12:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-19 01:00:00",
-      "etd": "2026-10-19 23:00:00",
+      "etb": "2026-10-18 23:00:00",
+      "etd": "2026-10-19 21:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
