@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-17T01:46:49.151315+00:00",
-  "actualizado_ec": "2026-10-16 20:46:49",
-  "total": 52,
+  "actualizado_utc": "2026-10-17T06:16:36.510523+00:00",
+  "actualizado_ec": "2026-10-17 01:16:36",
+  "total": 51,
   "naves": [
     {
       "nave": "CMA2026119 - CMA CGM BUZIOS",
@@ -224,7 +224,7 @@
       "etd": "2026-10-16 19:00:00",
       "ata": "2026-10-15 17:20:00",
       "atd": "2026-10-16 19:00:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
@@ -768,21 +768,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "nave": "XPF2026012 - ECO SIROCCO",
-      "viaje": "26037N",
-      "reefer": "2026-09-16 08:30:00.0",
-      "dry": "2026-09-16 08:30:00.0",
-      "linea": "XPF",
-      "etb": "2026-09-16 20:30:00",
-      "etd": "2026-09-17 06:00:00",
-      "ata": "2026-09-16 21:18:00",
-      "atd": "2026-09-17 05:05:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "WSX"
     }
   ]
 }
