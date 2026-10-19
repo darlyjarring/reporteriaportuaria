@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-19T05:19:07.922847+00:00",
-  "actualizado_ec": "2026-10-19 00:19:07",
-  "total": 49,
+  "actualizado_utc": "2026-10-19T11:00:14.901265+00:00",
+  "actualizado_ec": "2026-10-19 06:00:14",
+  "total": 50,
   "naves": [
     {
       "nave": "CMA2026124 - CMA CGM JACQUES JOSEPH",
@@ -155,6 +155,21 @@
       "servicio": "SWX_NB"
     },
     {
+      "nave": "CMA2026125 - CMA CGM IMAGINATION",
+      "viaje": "0DVQPN1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-10-22 10:00:00",
+      "etd": "2026-10-22 23:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
+    },
+    {
       "nave": "ZPMC2026002 - ZHEN HUA 34",
       "viaje": "263405",
       "reefer": "",
@@ -208,7 +223,7 @@
       "etb": "2026-10-18 00:00:00",
       "etd": "2026-10-19 01:00:00",
       "ata": "2026-10-18 00:15:00",
-      "atd": "",
+      "atd": "2026-10-19 02:40:00",
       "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
