@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-19T00:30:14.700716+00:00",
-  "actualizado_ec": "2026-10-18 19:30:14",
+  "actualizado_utc": "2026-10-19T05:19:07.922847+00:00",
+  "actualizado_ec": "2026-10-19 00:19:07",
   "total": 49,
   "naves": [
+    {
+      "nave": "CMA2026124 - CMA CGM JACQUES JOSEPH",
+      "viaje": "0WCP3S1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-11-02 17:00:00",
+      "etd": "2026-11-03 08:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "COCTG",
+      "destino": "COCTG",
+      "servicio": "SWX_SB"
+    },
     {
       "nave": "CMA2026119 - CMA CGM BUZIOS",
       "viaje": "0MH2YW1MA",
@@ -177,9 +192,9 @@
       "linea": "MAE",
       "etb": "2026-10-18 20:00:00",
       "etd": "2026-10-19 13:00:00",
-      "ata": "",
+      "ata": "2026-10-18 22:30:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "WCSA-SHTL"
@@ -723,21 +738,6 @@
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
-    },
-    {
-      "nave": "CMA2026107 - CMA CGM GALAPAGOS",
-      "viaje": "1MHTNW1MA",
-      "reefer": "2026-09-18 23:00:00.0",
-      "dry": "2026-09-18 23:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-09-18 21:00:00",
-      "etd": "2026-09-20 21:00:00",
-      "ata": "2026-09-18 20:26:00",
-      "atd": "2026-09-20 20:58:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "ACSA"
     }
   ]
 }
