@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-20T10:22:00.317231+00:00",
-  "actualizado_ec": "2026-10-20 05:22:00",
+  "actualizado_utc": "2026-10-20T15:19:18.470269+00:00",
+  "actualizado_ec": "2026-10-20 10:19:18",
   "total": 50,
   "naves": [
     {
@@ -145,8 +145,8 @@
       "reefer": "2026-10-23 23:00:00.0",
       "dry": "2026-10-23 23:00:00.0",
       "linea": "CMA",
-      "etb": "2026-10-24 01:00:00",
-      "etd": "2026-10-25 09:00:00",
+      "etb": "2026-10-23 23:00:00",
+      "etd": "2026-10-25 13:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -161,7 +161,7 @@
       "dry": "2026-10-22 07:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-23 00:00:00",
-      "etd": "2026-10-23 23:00:00",
+      "etd": "2026-10-23 17:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -192,9 +192,9 @@
       "linea": "ZPMC",
       "etb": "2026-10-20 07:00:00",
       "etd": "2026-10-24 10:00:00",
-      "ata": "",
+      "ata": "2026-10-20 07:20:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "MXZLO",
       "destino": "MXZLO",
       "servicio": "DPW"
