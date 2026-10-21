@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-21T20:09:12.663888+00:00",
-  "actualizado_ec": "2026-10-21 15:09:12",
+  "actualizado_utc": "2026-10-21T23:22:35.062718+00:00",
+  "actualizado_ec": "2026-10-21 18:22:35",
   "total": 51,
   "naves": [
     {
@@ -22,8 +22,8 @@
     {
       "nave": "HLC2026103 - CAUCEDO EXPRESS",
       "viaje": "645N",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-11-02 16:00:00.0",
+      "dry": "2026-11-02 16:00:00.0",
       "linea": "HLC",
       "etb": "2026-11-03 05:00:00",
       "etd": "2026-11-04 07:00:00",
@@ -97,17 +97,17 @@
     {
       "nave": "MAE2026127 - MAERSK BUTON",
       "viaje": "642S",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-10-27 07:00:00.0",
+      "dry": "2026-10-27 07:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-27 19:00:00",
-      "etd": "2026-10-28 08:00:00",
+      "etb": "2026-10-27 22:00:00",
+      "etd": "2026-10-28 06:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
       "origen": "PABLB",
       "destino": "PABLB",
-      "servicio": "AC1"
+      "servicio": "OC1"
     },
     {
       "nave": "HLC2026099 - CAPE SCOTT",
@@ -205,8 +205,8 @@
       "reefer": "",
       "dry": "",
       "linea": "CMA",
-      "etb": "2026-10-22 19:00:00",
-      "etd": "2026-10-22 23:00:00",
+      "etb": "2026-10-22 23:00:00",
+      "etd": "2026-10-23 05:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -221,7 +221,7 @@
       "dry": "",
       "linea": "ZPMC",
       "etb": "2026-10-20 07:00:00",
-      "etd": "2026-10-24 10:00:00",
+      "etd": "2026-10-24 12:00:00",
       "ata": "2026-10-20 07:20:00",
       "atd": "",
       "status": "IN OPERATION",
