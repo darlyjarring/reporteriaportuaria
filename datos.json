@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-22T20:48:32.270265+00:00",
-  "actualizado_ec": "2026-10-22 15:48:32",
+  "actualizado_utc": "2026-10-22T23:45:01.445334+00:00",
+  "actualizado_ec": "2026-10-22 18:45:01",
   "total": 54,
   "naves": [
     {
@@ -205,8 +205,8 @@
       "reefer": "2026-10-25 12:00:00.0",
       "dry": "2026-10-25 12:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-25 18:00:00",
-      "etd": "2026-10-26 22:00:00",
+      "etb": "2026-10-26 15:00:00",
+      "etd": "2026-10-27 23:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -267,9 +267,9 @@
       "linea": "CMA",
       "etb": "2026-10-22 15:00:00",
       "etd": "2026-10-23 05:00:00",
-      "ata": "",
+      "ata": "2026-10-22 15:30:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
