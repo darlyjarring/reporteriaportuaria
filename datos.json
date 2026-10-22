@@ -1,9 +1,39 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-22T01:43:38.154296+00:00",
-  "actualizado_ec": "2026-10-21 20:43:38",
-  "total": 51,
+  "actualizado_utc": "2026-10-22T06:39:33.864820+00:00",
+  "actualizado_ec": "2026-10-22 01:39:33",
+  "total": 54,
   "naves": [
+    {
+      "nave": "CMA2026123 - CMA CGM CARL ANTOINE",
+      "viaje": "0WCP0N1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-11-05 17:00:00",
+      "etd": "2026-11-06 17:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "SWX_NB"
+    },
+    {
+      "nave": "CMA2026120 - CMA CGM EXEMPLARITY",
+      "viaje": "0DVQTN1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-11-05 06:00:00",
+      "etd": "2026-11-05 18:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
+    },
     {
       "nave": "HMM2026009 - HYUNDAI COURAGE",
       "viaje": "0125W",
@@ -48,6 +78,36 @@
       "origen": "COCTG",
       "destino": "COCTG",
       "servicio": "SWX_SB"
+    },
+    {
+      "nave": "MAE2026129 - AS PALINA",
+      "viaje": "643S",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-11-01 16:00:00",
+      "etd": "2026-11-02 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
+    {
+      "nave": "MAE2026128 - LEXA MAERSK",
+      "viaje": "639W",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-11-01 03:00:00",
+      "etd": "2026-11-02 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
     },
     {
       "nave": "CMA2026119 - CMA CGM BUZIOS",
@@ -753,21 +813,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
-    },
-    {
-      "nave": "HLC2026085 - VALPARAISO EXPRESS",
-      "viaje": "6234S",
-      "reefer": "2026-09-21 07:00:00.0",
-      "dry": "2026-09-21 07:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-21 15:00:00",
-      "etd": "2026-09-22 14:00:00",
-      "ata": "2026-09-21 14:48:00",
-      "atd": "2026-09-22 14:00:00",
-      "status": "DEPARTED",
-      "origen": "COBUN",
-      "destino": "COBUN",
-      "servicio": "SWX_SB"
     }
   ]
 }
