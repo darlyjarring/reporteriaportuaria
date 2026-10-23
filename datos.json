@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-23T02:02:07.965857+00:00",
-  "actualizado_ec": "2026-10-22 21:02:07",
-  "total": 54,
+  "actualizado_utc": "2026-10-23T07:27:33.621749+00:00",
+  "actualizado_ec": "2026-10-23 02:27:33",
+  "total": 53,
   "naves": [
     {
       "nave": "CMA2026123 - CMA CGM CARL ANTOINE",
@@ -266,7 +266,7 @@
       "dry": "",
       "linea": "CMA",
       "etb": "2026-10-22 15:00:00",
-      "etd": "2026-10-23 05:00:00",
+      "etd": "2026-10-23 08:00:00",
       "ata": "2026-10-22 15:30:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -798,21 +798,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "nave": "HLC2026090 - ODYSSEUS",
-      "viaje": "639N",
-      "reefer": "2026-09-21 16:00:00.0",
-      "dry": "2026-09-21 16:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-22 15:00:00",
-      "etd": "2026-09-23 02:00:00",
-      "ata": "2026-09-22 15:05:00",
-      "atd": "2026-09-23 01:36:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MSW"
     }
   ]
 }
