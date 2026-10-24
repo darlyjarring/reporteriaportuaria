@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-24T01:58:17.776180+00:00",
-  "actualizado_ec": "2026-10-23 20:58:17",
-  "total": 53,
+  "actualizado_utc": "2026-10-24T07:11:36.432216+00:00",
+  "actualizado_ec": "2026-10-24 02:11:36",
+  "total": 54,
   "naves": [
+    {
+      "nave": "CMA2026129 - CMA CGM COPPER",
+      "viaje": "0MH34W1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-11-07 01:00:00",
+      "etd": "2026-11-08 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "nave": "CMA2026123 - CMA CGM CARL ANTOINE",
       "viaje": "0WCP0N1MA",
@@ -237,9 +252,9 @@
       "linea": "CMA",
       "etb": "2026-10-23 23:30:00",
       "etd": "2026-10-25 13:00:00",
-      "ata": "",
+      "ata": "2026-10-23 23:06:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
