@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-26T20:00:53.830631+00:00",
-  "actualizado_ec": "2026-10-26 15:00:53",
+  "actualizado_utc": "2026-10-26T23:50:50.444955+00:00",
+  "actualizado_ec": "2026-10-26 18:50:50",
   "total": 51,
   "naves": [
     {
@@ -254,7 +254,7 @@
       "etd": "2026-10-26 11:00:00",
       "ata": "2026-10-24 18:25:00",
       "atd": "2026-10-26 10:45:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
