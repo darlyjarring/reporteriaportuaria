@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-28T00:00:24.313653+00:00",
-  "actualizado_ec": "2026-10-27 19:00:24",
-  "total": 51,
+  "actualizado_utc": "2026-10-28T05:36:18.439812+00:00",
+  "actualizado_ec": "2026-10-28 00:36:18",
+  "total": 50,
   "naves": [
     {
       "nave": "HLC2026104 - CAPE SKAGEN",
@@ -200,34 +200,34 @@
       "servicio": "MEDCAR"
     },
     {
-      "nave": "MAE2026127 - MAERSK BUTON",
-      "viaje": "642S",
-      "reefer": "2026-10-27 07:00:00.0",
-      "dry": "2026-10-27 07:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-10-27 21:00:00",
-      "etd": "2026-10-28 07:00:00",
-      "ata": "",
-      "atd": "",
-      "status": "TO ARRIVE",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "OC1"
-    },
-    {
       "nave": "HLC2026099 - CAPE SCOTT",
       "viaje": "644N",
       "reefer": "2026-10-26 16:00:00.0",
       "dry": "2026-10-26 16:00:00.0",
       "linea": "HLC",
-      "etb": "2026-10-27 20:00:00",
-      "etd": "2026-10-28 18:00:00",
-      "ata": "",
+      "etb": "2026-10-27 22:00:00",
+      "etd": "2026-10-28 14:00:00",
+      "ata": "2026-10-27 22:05:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
+    },
+    {
+      "nave": "MAE2026127 - MAERSK BUTON",
+      "viaje": "642S",
+      "reefer": "2026-10-27 07:00:00.0",
+      "dry": "2026-10-27 07:00:00.0",
+      "linea": "MAE",
+      "etb": "2026-10-27 19:00:00",
+      "etd": "2026-10-28 08:00:00",
+      "ata": "2026-10-27 19:00:00",
+      "atd": "",
+      "status": "IN OPERATION",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "OC1"
     },
     {
       "nave": "MAE2026125 - SEALAND LOS ANGELES",
@@ -236,7 +236,7 @@
       "dry": "2026-10-25 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-26 18:00:00",
-      "etd": "2026-10-28 15:00:00",
+      "etd": "2026-10-28 22:00:00",
       "ata": "2026-10-26 17:36:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -251,9 +251,9 @@
       "dry": "2026-10-26 07:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-26 13:00:00",
-      "etd": "2026-10-27 14:00:00",
+      "etd": "2026-10-27 18:00:00",
       "ata": "2026-10-26 12:54:00",
-      "atd": "",
+      "atd": "2026-10-27 18:03:00",
       "status": "IN OPERATION",
       "origen": "COBUN",
       "destino": "COBUN",
@@ -753,21 +753,6 @@
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_SB"
-    },
-    {
-      "nave": "MAE2026114 - SEALAND PHILADELPHIA",
-      "viaje": "638S",
-      "reefer": "2026-09-27 12:00:00.0",
-      "dry": "2026-09-27 12:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-27 19:00:00",
-      "etd": "2026-09-29 02:00:00",
-      "ata": "2026-09-27 18:20:00",
-      "atd": "2026-09-29 02:25:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "WCSA-SHTL"
     }
   ]
 }
