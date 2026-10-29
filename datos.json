@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-29T19:54:37.379017+00:00",
-  "actualizado_ec": "2026-10-29 14:54:37",
+  "actualizado_utc": "2026-10-29T23:53:08.519939+00:00",
+  "actualizado_ec": "2026-10-29 18:53:08",
   "total": 53,
   "naves": [
     {
@@ -56,7 +56,7 @@
       "dry": "2026-11-09 12:00:00.0",
       "linea": "ONE",
       "etb": "2026-11-10 00:00:00",
-      "etd": "2026-11-11 09:15:00",
+      "etd": "2026-11-11 09:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -237,9 +237,9 @@
       "linea": "HLC",
       "etb": "2026-10-29 17:00:00",
       "etd": "2026-10-30 18:30:00",
-      "ata": "",
+      "ata": "2026-10-29 16:36:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
