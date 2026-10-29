@@ -1,9 +1,39 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-29T01:40:56.458573+00:00",
-  "actualizado_ec": "2026-10-28 20:40:56",
-  "total": 50,
+  "actualizado_utc": "2026-10-29T07:41:32.719945+00:00",
+  "actualizado_ec": "2026-10-29 02:41:32",
+  "total": 51,
   "naves": [
+    {
+      "nave": "HLC2026106 - GUAYAQUIL EXPRESS",
+      "viaje": "6239N",
+      "reefer": "",
+      "dry": "",
+      "linea": "HLC",
+      "etb": "2026-11-12 17:00:00",
+      "etd": "2026-11-13 17:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "SWX_NB"
+    },
+    {
+      "nave": "CMA2026121 - CMA CGM FORT BOURBON",
+      "viaje": "0DVQVN1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-11-12 06:00:00",
+      "etd": "2026-11-12 18:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
+    },
     {
       "nave": "HLC2026104 - CAPE SKAGEN",
       "viaje": "646N",
@@ -145,8 +175,8 @@
       "reefer": "2026-10-31 17:00:00.0",
       "dry": "2026-10-31 17:00:00.0",
       "linea": "MAE",
-      "etb": "2026-10-31 23:00:00",
-      "etd": "2026-11-02 05:00:00",
+      "etb": "2026-10-31 21:00:00",
+      "etd": "2026-11-02 03:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -738,21 +768,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "AX4"
-    },
-    {
-      "nave": "HLC2026089 - SALVADOR EXPRESS",
-      "viaje": "6235S",
-      "reefer": "2026-09-28 07:00:00.0",
-      "dry": "2026-09-28 07:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-28 12:00:00",
-      "etd": "2026-09-29 16:00:00",
-      "ata": "2026-09-28 12:48:00",
-      "atd": "2026-09-29 15:48:00",
-      "status": "DEPARTED",
-      "origen": "COBUN",
-      "destino": "COBUN",
-      "servicio": "SWX_SB"
     }
   ]
 }
