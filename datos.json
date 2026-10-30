@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-30T05:25:08.488350+00:00",
-  "actualizado_ec": "2026-10-30 00:25:08",
+  "actualizado_utc": "2026-10-30T11:33:22.101037+00:00",
+  "actualizado_ec": "2026-10-30 06:33:22",
   "total": 52,
   "naves": [
     {
@@ -314,7 +314,7 @@
       "etd": "2026-10-29 03:30:00",
       "ata": "2026-10-26 17:36:00",
       "atd": "2026-10-29 03:20:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
