@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-29T23:53:08.519939+00:00",
-  "actualizado_ec": "2026-10-29 18:53:08",
-  "total": 53,
+  "actualizado_utc": "2026-10-30T05:25:08.488350+00:00",
+  "actualizado_ec": "2026-10-30 00:25:08",
+  "total": 52,
   "naves": [
+    {
+      "nave": "CMA2026126 - CSCL NEPTUNE",
+      "viaje": "0MH32W1MA",
+      "reefer": "2026-11-06 23:00:00.0",
+      "dry": "2026-11-06 23:00:00.0",
+      "linea": "CMA",
+      "etb": "2026-11-13 22:00:00",
+      "etd": "2026-11-15 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "nave": "HLC2026106 - GUAYAQUIL EXPRESS",
       "viaje": "6239N",
@@ -252,8 +267,8 @@
       "linea": "CMA",
       "etb": "2026-10-29 06:00:00",
       "etd": "2026-10-29 18:00:00",
-      "ata": "2026-10-29 06:52:00",
-      "atd": "",
+      "ata": "2026-10-29 06:35:00",
+      "atd": "2026-10-29 18:00:00",
       "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
@@ -266,7 +281,7 @@
       "dry": "2026-10-26 16:00:00.0",
       "linea": "HLC",
       "etb": "2026-10-27 22:00:00",
-      "etd": "2026-10-28 19:00:00",
+      "etd": "2026-10-28 20:00:00",
       "ata": "2026-10-27 22:05:00",
       "atd": "2026-10-28 19:54:00",
       "status": "DEPARTED",
@@ -768,36 +783,6 @@
       "origen": "",
       "destino": "",
       "servicio": "AC2"
-    },
-    {
-      "nave": "HLC2026091 - CAPE SPENCER",
-      "viaje": "640N",
-      "reefer": "2026-09-28 16:00:00.0",
-      "dry": "2026-09-28 16:00:00.0",
-      "linea": "HLC",
-      "etb": "2026-09-29 18:00:00",
-      "etd": "2026-09-30 04:30:00",
-      "ata": "2026-09-29 18:18:00",
-      "atd": "2026-09-30 04:36:00",
-      "status": "DEPARTED",
-      "origen": "",
-      "destino": "",
-      "servicio": "MSW"
-    },
-    {
-      "nave": "HMM2026008 - HYUNDAI FORCE",
-      "viaje": "0118W",
-      "reefer": "2026-09-28 21:00:00.0",
-      "dry": "2026-09-28 21:00:00.0",
-      "linea": "HMM",
-      "etb": "2026-09-29 17:30:00",
-      "etd": "2026-09-30 17:30:00",
-      "ata": "2026-09-29 17:30:00",
-      "atd": "2026-09-30 17:36:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     }
   ]
 }
