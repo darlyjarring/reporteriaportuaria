@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-31T01:03:15.226374+00:00",
-  "actualizado_ec": "2026-10-30 20:03:15",
+  "actualizado_utc": "2026-10-31T06:57:54.341393+00:00",
+  "actualizado_ec": "2026-10-31 01:57:54",
   "total": 53,
   "naves": [
+    {
+      "nave": "MAE2026131 - MAERSK FINISTERRE",
+      "viaje": "641W",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-11-14 23:00:00",
+      "etd": "2026-11-16 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
+    },
     {
       "nave": "CMA2026129 - CMA CGM COPPER",
       "viaje": "0MH34W1MA",
@@ -252,9 +267,9 @@
       "linea": "CMA",
       "etb": "2026-10-30 20:00:00",
       "etd": "2026-11-01 07:00:00",
-      "ata": "",
+      "ata": "2026-10-30 20:00:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
@@ -783,21 +798,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "nave": "MAE2026116 - MAERSK EMDEN",
-      "viaje": "637W",
-      "reefer": "2026-09-29 07:00:00.0",
-      "dry": "2026-09-29 07:00:00.0",
-      "linea": "MAE",
-      "etb": "2026-09-30 19:00:00",
-      "etd": "2026-10-01 06:00:00",
-      "ata": "2026-09-30 18:52:00",
-      "atd": "2026-10-01 06:40:00",
-      "status": "DEPARTED",
-      "origen": "",
-      "destino": "",
-      "servicio": "AC2"
     }
   ]
 }
