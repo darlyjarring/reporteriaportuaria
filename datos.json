@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-11-01T00:21:24.516448+00:00",
-  "actualizado_ec": "2026-10-31 19:21:24",
-  "total": 55,
+  "actualizado_utc": "2026-11-01T06:42:18.825681+00:00",
+  "actualizado_ec": "2026-11-01 01:42:18",
+  "total": 53,
   "naves": [
     {
       "nave": "MAE2026131 - MAERSK FINISTERRE",
@@ -160,14 +160,14 @@
       "reefer": "",
       "dry": "",
       "linea": "MAE",
-      "etb": "2026-11-05 18:00:00",
+      "etb": "2026-11-05 21:00:00",
       "etd": "2026-11-06 20:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
       "origen": "PABLB",
       "destino": "PABLB",
-      "servicio": "AC1"
+      "servicio": "OC1"
     },
     {
       "nave": "CMA2026123 - CMA CGM CARL ANTOINE",
@@ -798,36 +798,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
-    },
-    {
-      "nave": "CMA2026110 - CMA CGM ESTELLE",
-      "viaje": "0WCOQN1MA",
-      "reefer": "2026-10-01 07:00:00.0",
-      "dry": "2026-10-01 07:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-10-01 18:30:00",
-      "etd": "2026-10-02 19:30:00",
-      "ata": "2026-10-01 18:00:00",
-      "atd": "2026-10-02 19:30:00",
-      "status": "DEPARTED",
-      "origen": "COBUN",
-      "destino": "COBUN",
-      "servicio": "SWX_NB"
-    },
-    {
-      "nave": "CMA2026109 - CMA CGM BETTER WAYS",
-      "viaje": "0DVQJN1MA",
-      "reefer": "2026-09-30 19:00:00.0",
-      "dry": "2026-09-30 19:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-10-01 08:30:00",
-      "etd": "2026-10-01 19:30:00",
-      "ata": "2026-10-01 08:20:00",
-      "atd": "2026-10-01 19:06:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
     }
   ]
 }
