@@ -1,8 +1,8 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-10-31T21:22:19.088603+00:00",
-  "actualizado_ec": "2026-10-31 16:22:19",
-  "total": 53,
+  "actualizado_utc": "2026-11-01T00:21:24.516448+00:00",
+  "actualizado_ec": "2026-10-31 19:21:24",
+  "total": 55,
   "naves": [
     {
       "nave": "MAE2026131 - MAERSK FINISTERRE",
@@ -110,6 +110,21 @@
       "servicio": "SWX_SB"
     },
     {
+      "nave": "MAE2026135 - LUNA MAERSK",
+      "viaje": "646N",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-11-08 16:00:00",
+      "etd": "2026-11-09 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AC1"
+    },
+    {
       "nave": "MAE2026130 - LOUIS MAERSK",
       "viaje": "640W",
       "reefer": "2026-11-07 17:00:00.0",
@@ -138,6 +153,21 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
+    },
+    {
+      "nave": "MAE2026137 - REN JIAN 8",
+      "viaje": "636E",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-11-05 18:00:00",
+      "etd": "2026-11-06 20:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "AC1"
     },
     {
       "nave": "CMA2026123 - CMA CGM CARL ANTOINE",
@@ -235,7 +265,7 @@
       "reefer": "2026-11-01 12:00:00.0",
       "dry": "2026-11-01 12:00:00.0",
       "linea": "MAE",
-      "etb": "2026-11-01 18:00:00",
+      "etb": "2026-11-01 15:00:00",
       "etd": "2026-11-02 22:00:00",
       "ata": "",
       "atd": "",
@@ -252,9 +282,9 @@
       "linea": "MAE",
       "etb": "2026-10-31 19:00:00",
       "etd": "2026-11-02 05:00:00",
-      "ata": "",
+      "ata": "2026-10-31 19:00:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
