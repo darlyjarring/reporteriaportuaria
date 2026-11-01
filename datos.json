@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-11-01T13:51:39.559197+00:00",
-  "actualizado_ec": "2026-11-01 08:51:39",
+  "actualizado_utc": "2026-11-01T22:32:48.239182+00:00",
+  "actualizado_ec": "2026-11-01 17:32:48",
   "total": 53,
   "naves": [
     {
@@ -267,9 +267,9 @@
       "linea": "MAE",
       "etb": "2026-11-01 15:00:00",
       "etd": "2026-11-02 22:00:00",
-      "ata": "",
+      "ata": "2026-11-01 15:30:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
