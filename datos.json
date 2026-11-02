@@ -1,9 +1,24 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-11-02T01:49:12.440830+00:00",
-  "actualizado_ec": "2026-11-01 20:49:12",
+  "actualizado_utc": "2026-11-02T08:38:22.079424+00:00",
+  "actualizado_ec": "2026-11-02 03:38:22",
   "total": 53,
   "naves": [
+    {
+      "nave": "ONE2026010 - EMERALD TOWER",
+      "viaje": "005E",
+      "reefer": "",
+      "dry": "",
+      "linea": "ONE",
+      "etb": "2026-11-17 00:00:00",
+      "etd": "2026-11-18 09:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AX4"
+    },
     {
       "nave": "MAE2026131 - MAERSK FINISTERRE",
       "viaje": "641W",
@@ -266,7 +281,7 @@
       "dry": "2026-11-01 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-11-01 16:00:00",
-      "etd": "2026-11-02 22:00:00",
+      "etd": "2026-11-03 01:00:00",
       "ata": "2026-11-01 15:30:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -281,7 +296,7 @@
       "dry": "2026-10-31 17:00:00.0",
       "linea": "MAE",
       "etb": "2026-10-31 19:00:00",
-      "etd": "2026-11-02 05:00:00",
+      "etd": "2026-11-02 08:00:00",
       "ata": "2026-10-31 19:00:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -783,21 +798,6 @@
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
-    },
-    {
-      "nave": "CMA2026111 - CMA CGM CHILE",
-      "viaje": "1MHTRW1MA",
-      "reefer": "2026-10-02 23:00:00.0",
-      "dry": "2026-10-02 23:00:00.0",
-      "linea": "CMA",
-      "etb": "2026-10-02 21:00:00",
-      "etd": "2026-10-04 23:30:00",
-      "ata": "2026-10-02 20:42:00",
-      "atd": "2026-10-04 23:36:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "ACSA"
     }
   ]
 }
