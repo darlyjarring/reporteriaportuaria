@@ -1,7 +1,7 @@
 {
   "fuente": "https://www.dpworldposorja.com.ec/itinerarios.php",
-  "actualizado_utc": "2026-11-02T18:51:01.104823+00:00",
-  "actualizado_ec": "2026-11-02 13:51:01",
+  "actualizado_utc": "2026-11-03T01:29:36.249997+00:00",
+  "actualizado_ec": "2026-11-02 20:29:36",
   "total": 53,
   "naves": [
     {
@@ -127,8 +127,8 @@
     {
       "nave": "MAE2026135 - LUNA MAERSK",
       "viaje": "646N",
-      "reefer": "",
-      "dry": "",
+      "reefer": "2026-11-08 12:00:00.0",
+      "dry": "2026-11-08 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-11-08 16:00:00",
       "etd": "2026-11-09 22:00:00",
@@ -137,7 +137,7 @@
       "status": "TO ARRIVE",
       "origen": "PECLL",
       "destino": "PECLL",
-      "servicio": "AC1"
+      "servicio": "WCSA-SHTL"
     },
     {
       "nave": "MAE2026130 - LOUIS MAERSK",
@@ -250,7 +250,7 @@
       "reefer": "2026-11-02 22:00:00.0",
       "dry": "2026-11-02 22:00:00.0",
       "linea": "HMM",
-      "etb": "2026-11-03 12:00:00",
+      "etb": "2026-11-03 13:00:00",
       "etd": "2026-11-04 12:00:00",
       "ata": "",
       "atd": "",
@@ -281,7 +281,7 @@
       "dry": "2026-11-01 12:00:00.0",
       "linea": "MAE",
       "etb": "2026-11-01 16:00:00",
-      "etd": "2026-11-03 07:00:00",
+      "etd": "2026-11-03 10:00:00",
       "ata": "2026-11-01 15:30:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -314,7 +314,7 @@
       "etd": "2026-11-01 05:00:00",
       "ata": "2026-10-30 20:00:00",
       "atd": "2026-11-01 05:06:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
