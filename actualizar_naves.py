@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 import requests
 from bs4 import BeautifulSoup
 
-URL = "https://www.dpworldposorja.com.ec/itinerarios.php"
+URL = "https://dponline.dpworldposorja.ec/ItinerarioNaves"
 OUT = Path("datos.json")
 ECUADOR = ZoneInfo("America/Guayaquil")
 
