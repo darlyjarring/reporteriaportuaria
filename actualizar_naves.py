@@ -3,7 +3,7 @@
 Obtiene la tabla pública de itinerarios de DP World Posorja y genera datos.json.
 
 Fuente:
-https://www.dpworldposorja.com.ec/itinerarios.php
+https://dponline.dpworldposorja.ec/ItinerarioNaves
 
 No se guarda HTML de la página: solamente los campos necesarios para el tablero.
 """
