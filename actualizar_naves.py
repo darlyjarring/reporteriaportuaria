@@ -1,35 +1,34 @@
+
 #!/usr/bin/env python3
 """
-Obtiene la tabla pública de itinerarios de DP World Posorja y genera datos.json.
-
-Fuente:
-https://dponline.dpworldposorja.ec/ItinerarioNaves
-
-No se guarda HTML de la página: solamente los campos necesarios para el tablero.
+Obtiene los itinerarios directamente del servicio de DP World Posorja.
+Convierte la respuesta XML en datos.json para el tablero de tráfico de naves.
 """
 
 import json
 import re
+import requests
+import xml.etree.ElementTree as ET
+
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
-
-import requests
-from bs4 import BeautifulSoup
 
 URL = "https://dponline.dpworldposorja.ec/ItinerarioNaves/data"
 OUT = Path("datos.json")
 ECUADOR = ZoneInfo("America/Guayaquil")
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; DPWorldNavesBot/1.0; +https://github.com/)",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+    "Accept": "application/xml, text/xml, */*",
     "Accept-Language": "es-EC,es;q=0.9,en;q=0.8",
+    "Referer": "https://dponline.dpworldposorja.ec/ItinerarioNaves"
 }
 
 def clean(value):
-    value = "" if value is None else str(value)
-    value = value.replace("\xa0", " ")
+    if value is None:
+        return ""
+    value = str(value).replace("\xa0", " ")
     value = re.sub(r"\s+", " ", value).strip()
     if value.lower() in {"null", "none", "-"}:
         return ""
@@ -37,106 +36,118 @@ def clean(value):
 
 def clean_date(value):
     value = clean(value)
-    # DP World publica "2026-09-26 23:00:00.0"
-    value = re.sub(r"\.0+$", "", value)
-    return value
+    return re.sub(r"\.0+$", "", value)
 
-def header_key(value):
-    return clean(value).upper().replace(" ", "")
+def get_value(element, field):
+    for child in element:
+        # Permite trabajar incluso si el XML contiene namespaces.
+        tag = child.tag.split("}")[-1]
+        if tag == field:
+            return clean(child.text)
+    return ""
 
-def main():
-    response = requests.get(URL, headers=HEADERS, timeout=30)
+def obtener_naves():
+    response = requests.get(
+        URL,
+        headers=HEADERS,
+        timeout=60
+    )
     response.raise_for_status()
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    # Verificar que la respuesta sea XML válido.
+    try:
+        root = ET.fromstring(response.content)
+    except ET.ParseError as error:
+        raise RuntimeError(
+            f"DP World no devolvió un XML válido: {error}"
+        )
 
-    target = None
-    headers = None
+    elementos = [
+        elemento for elemento in root.iter()
+        if elemento.tag.split("}")[-1] == "vessel"
+    ]
 
-    for table in soup.find_all("table"):
-        row = table.find("tr")
-        if not row:
-            continue
-        cells = row.find_all(["th", "td"])
-        hs = [clean(c.get_text(" ", strip=True)) for c in cells]
-        keys = [header_key(x) for x in hs]
-        if "STATUS" in keys and "NAVE" in keys and "ETB" in keys:
-            target = table
-            headers = hs
-            break
-
-    if target is None:
-        raise RuntimeError("No se encontró la tabla de itinerarios con las columnas esperadas.")
-
-    index = {header_key(h): i for i, h in enumerate(headers)}
-
-    aliases = {
-        "NAVE": ["NAVE"],
-        "VIAJE": ["VIAJE"],
-        "REEFER CUTOFF": ["REEFERCUTOFF"],
-        "DRY CUTOFF": ["DRYCUTOFF"],
-        "LINEA": ["LINEA", "LÍNEA"],
-        "ETB": ["ETB"],
-        "ETD": ["ETD"],
-        "ATA": ["ATA"],
-        "ATD": ["ATD"],
-        "STATUS": ["STATUS"],
-        "PTO.ORIGEN": ["PTO.ORIGEN", "PTOORIGEN"],
-        "PTO.DESTINO": ["PTO.DESTINO", "PTODESTINO"],
-        "SERVICIO": ["SERVICIO"],
-    }
-
-    def pos(name):
-        for alias in aliases[name]:
-            k = header_key(alias)
-            if k in index:
-                return index[k]
-        return None
-
-    required = ["NAVE","VIAJE","LINEA","ETB","ETD","ATA","ATD","STATUS","PTO.ORIGEN","PTO.DESTINO","SERVICIO"]
-    missing = [x for x in required if pos(x) is None]
-    if missing:
-        raise RuntimeError("Faltan columnas en DP World: " + ", ".join(missing))
+    if not elementos:
+        raise RuntimeError(
+            "La respuesta XML no contiene registros vessel. "
+            "No se actualizará datos.json."
+        )
 
     naves = []
-    for tr in target.find_all("tr")[1:]:
-        cells = tr.find_all(["td","th"])
-        if len(cells) < len(headers):
-            continue
-        values = [clean(c.get_text(" ", strip=True)) for c in cells]
-        nave = values[pos("NAVE")]
-        if not nave:
-            continue
 
-        naves.append({
-            "nave": nave,
-            "viaje": values[pos("VIAJE")],
-            "reefer": values[pos("REEFER CUTOFF")] if pos("REEFER CUTOFF") is not None else "",
-            "dry": values[pos("DRY CUTOFF")] if pos("DRY CUTOFF") is not None else "",
-            "linea": values[pos("LINEA")],
-            "etb": clean_date(values[pos("ETB")]),
-            "etd": clean_date(values[pos("ETD")]),
-            "ata": clean_date(values[pos("ATA")]),
-            "atd": clean_date(values[pos("ATD")]),
-            "status": values[pos("STATUS")],
-            "origen": values[pos("PTO.ORIGEN")],
-            "destino": values[pos("PTO.DESTINO")],
-            "servicio": values[pos("SERVICIO")],
-        })
+    for vessel in elementos:
+
+        status = get_value(vessel, "status")
+
+        # Se conserva la estructura de datos que utiliza el tablero.
+        nave = {
+            "gkey": get_value(vessel, "gkey"),
+            "referencia": get_value(vessel, "referencia"),
+            "nave": get_value(vessel, "vesselName"),
+            "viaje": get_value(vessel, "nroViaje"),
+            "viaje_salida": get_value(vessel, "nroViajeSalida"),
+            "reefer": clean_date(
+                get_value(vessel, "reeferCutOff")
+            ),
+            "dry": clean_date(
+                get_value(vessel, "dryCutOff")
+            ),
+            "linea": get_value(vessel, "lineId"),
+            "etb": clean_date(get_value(vessel, "etb")),
+            "etd": clean_date(get_value(vessel, "etd")),
+            "ata": clean_date(get_value(vessel, "ata")),
+            "atd": clean_date(get_value(vessel, "atd")),
+            "status": status,
+            "origen": get_value(vessel, "puertoOrigenId"),
+            "destino": get_value(vessel, "puertoDestinoId"),
+            "servicio": get_value(vessel, "servicioId")
+        }
+
+        naves.append(nave)
+
+    return naves
+
+def main():
 
     now_utc = datetime.now(timezone.utc)
     now_ec = now_utc.astimezone(ECUADOR)
+
+    print("Consultando itinerarios de DP World Posorja...")
+
+    naves = obtener_naves()
+
+    # Validación para evitar sobrescribir datos válidos
+    # con una respuesta inesperada.
+    if not naves:
+        raise RuntimeError("No existen naves para guardar.")
 
     data = {
         "fuente": URL,
         "actualizado_utc": now_utc.isoformat(),
         "actualizado_ec": now_ec.strftime("%Y-%m-%d %H:%M:%S"),
         "total": len(naves),
-        "naves": naves,
+        "naves": naves
     }
 
-    OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"OK: {len(naves)} naves guardadas en {OUT}")
+    # Escritura temporal para proteger el archivo anterior.
+    temporal = OUT.with_suffix(".tmp")
+
+    temporal.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    temporal.replace(OUT)
+
+    print("--------------------------------------")
+    print("ACTUALIZACION EXITOSA")
+    print(f"Total de naves: {len(naves)}")
+    print(f"Por arribar: {sum(1 for n in naves if n['status'].upper() == 'TO ARRIVE')}")
+    print(f"Trabajando: {sum(1 for n in naves if n['status'].upper() == 'IN OPERATION')}")
+    print(f"Zarpadas: {sum(1 for n in naves if n['status'].upper() == 'DEPARTED')}")
+    print(f"Actualización Ecuador: {data['actualizado_ec']}")
+    print(f"Archivo generado: {OUT}")
+    print("--------------------------------------")
 
 if __name__ == "__main__":
     main()
