@@ -1,25 +1,21 @@
 
 #!/usr/bin/env python3
-"""
-Obtiene los itinerarios directamente del servicio de DP World Posorja.
-Convierte la respuesta XML en datos.json para el tablero de tráfico de naves.
-"""
 
 import json
 import re
 import requests
 import xml.etree.ElementTree as ET
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 URL = "https://dponline.dpworldposorja.ec/ItinerarioNaves/data"
 OUT = Path("datos.json")
-ECUADOR = ZoneInfo("America/Guayaquil")
+
+ECUADOR = timezone(timedelta(hours=-5))
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0",
     "Accept": "application/xml, text/xml, */*",
     "Accept-Language": "es-EC,es;q=0.9,en;q=0.8",
     "Referer": "https://dponline.dpworldposorja.ec/ItinerarioNaves"
@@ -40,27 +36,29 @@ def clean_date(value):
 
 def get_value(element, field):
     for child in element:
-        # Permite trabajar incluso si el XML contiene namespaces.
         tag = child.tag.split("}")[-1]
         if tag == field:
             return clean(child.text)
     return ""
 
 def obtener_naves():
+
+    print("Conectando con DP World Posorja...")
+
     response = requests.get(
         URL,
         headers=HEADERS,
         timeout=60
     )
+
     response.raise_for_status()
 
-    # Verificar que la respuesta sea XML válido.
+    print("Respuesta recibida:", response.status_code)
+
     try:
         root = ET.fromstring(response.content)
     except ET.ParseError as error:
-        raise RuntimeError(
-            f"DP World no devolvió un XML válido: {error}"
-        )
+        raise RuntimeError(f"Error interpretando XML: {error}")
 
     elementos = [
         elemento for elemento in root.iter()
@@ -68,10 +66,7 @@ def obtener_naves():
     ]
 
     if not elementos:
-        raise RuntimeError(
-            "La respuesta XML no contiene registros vessel. "
-            "No se actualizará datos.json."
-        )
+        raise RuntimeError("El XML no contiene registros de naves.")
 
     naves = []
 
@@ -79,19 +74,14 @@ def obtener_naves():
 
         status = get_value(vessel, "status")
 
-        # Se conserva la estructura de datos que utiliza el tablero.
         nave = {
             "gkey": get_value(vessel, "gkey"),
             "referencia": get_value(vessel, "referencia"),
             "nave": get_value(vessel, "vesselName"),
             "viaje": get_value(vessel, "nroViaje"),
             "viaje_salida": get_value(vessel, "nroViajeSalida"),
-            "reefer": clean_date(
-                get_value(vessel, "reeferCutOff")
-            ),
-            "dry": clean_date(
-                get_value(vessel, "dryCutOff")
-            ),
+            "reefer": clean_date(get_value(vessel, "reeferCutOff")),
+            "dry": clean_date(get_value(vessel, "dryCutOff")),
             "linea": get_value(vessel, "lineId"),
             "etb": clean_date(get_value(vessel, "etb")),
             "etd": clean_date(get_value(vessel, "etd")),
@@ -109,17 +99,12 @@ def obtener_naves():
 
 def main():
 
-    now_utc = datetime.now(timezone.utc)
-    now_ec = now_utc.astimezone(ECUADOR)
-
-    print("Consultando itinerarios de DP World Posorja...")
+    print("Iniciando actualización...")
 
     naves = obtener_naves()
 
-    # Validación para evitar sobrescribir datos válidos
-    # con una respuesta inesperada.
-    if not naves:
-        raise RuntimeError("No existen naves para guardar.")
+    now_utc = datetime.now(timezone.utc)
+    now_ec = now_utc.astimezone(ECUADOR)
 
     data = {
         "fuente": URL,
@@ -129,7 +114,6 @@ def main():
         "naves": naves
     }
 
-    # Escritura temporal para proteger el archivo anterior.
     temporal = OUT.with_suffix(".tmp")
 
     temporal.write_text(
@@ -139,15 +123,15 @@ def main():
 
     temporal.replace(OUT)
 
-    print("--------------------------------------")
+    print("--------------------------------")
     print("ACTUALIZACION EXITOSA")
-    print(f"Total de naves: {len(naves)}")
-    print(f"Por arribar: {sum(1 for n in naves if n['status'].upper() == 'TO ARRIVE')}")
-    print(f"Trabajando: {sum(1 for n in naves if n['status'].upper() == 'IN OPERATION')}")
-    print(f"Zarpadas: {sum(1 for n in naves if n['status'].upper() == 'DEPARTED')}")
-    print(f"Actualización Ecuador: {data['actualizado_ec']}")
-    print(f"Archivo generado: {OUT}")
-    print("--------------------------------------")
+    print("Total naves:", len(naves))
+    print("Por arribar:", sum(n["status"].upper() == "TO ARRIVE" for n in naves))
+    print("Trabajando:", sum(n["status"].upper() == "IN OPERATION" for n in naves))
+    print("Zarpadas:", sum(n["status"].upper() == "DEPARTED" for n in naves))
+    print("Hora Ecuador:", data["actualizado_ec"])
+    print("Archivo:", OUT)
+    print("--------------------------------")
 
 if __name__ == "__main__":
     main()
