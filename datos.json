@@ -1,9 +1,27 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-14T02:30:44.736263+00:00",
-  "actualizado_ec": "2026-11-13 21:30:44",
+  "actualizado_utc": "2026-11-14T09:24:51.441362+00:00",
+  "actualizado_ec": "2026-11-14 04:24:51",
   "total": 52,
   "naves": [
+    {
+      "gkey": "1945347133",
+      "referencia": "MAE2026133",
+      "nave": "MAERSK NOKWANDA",
+      "viaje": "643W",
+      "viaje_salida": "648E",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-11-28 23:00:00",
+      "etd": "2026-11-30 05:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "ECPBO",
+      "destino": "ECPBO",
+      "servicio": "ECUMED"
+    },
     {
       "gkey": "1936514175",
       "referencia": "HLC2026107",
@@ -267,7 +285,7 @@
       "linea": "CMA",
       "etb": "2026-11-13 20:00:00",
       "etd": "2026-11-15 07:00:00",
-      "ata": "2026-11-13 07:48:00",
+      "ata": "2026-11-13 19:48:00",
       "atd": "",
       "status": "IN OPERATION",
       "origen": "PECLL",
@@ -305,7 +323,7 @@
       "etd": "2026-11-13 18:00:00",
       "ata": "2026-11-12 17:30:00",
       "atd": "2026-11-13 18:12:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
@@ -921,24 +939,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "gkey": "1909014618",
-      "referencia": "ONE2026008",
-      "nave": "CONTI CONTESSA",
-      "viaje": "026E",
-      "viaje_salida": "026W",
-      "reefer": "2026-10-13 19:00:00",
-      "dry": "2026-10-13 19:00:00",
-      "linea": "ONE",
-      "etb": "2026-10-14 07:00:00",
-      "etd": "2026-10-14 23:00:00",
-      "ata": "2026-10-14 07:12:00",
-      "atd": "2026-10-14 23:03:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "AX4"
     }
   ]
 }
