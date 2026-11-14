@@ -1,7 +1,7 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-13T22:16:12.073252+00:00",
-  "actualizado_ec": "2026-11-13 17:16:12",
+  "actualizado_utc": "2026-11-14T02:30:44.736263+00:00",
+  "actualizado_ec": "2026-11-13 21:30:44",
   "total": 52,
   "naves": [
     {
@@ -266,10 +266,10 @@
       "dry": "2026-11-13 23:00:00",
       "linea": "CMA",
       "etb": "2026-11-13 20:00:00",
-      "etd": "2026-11-15 17:00:00",
-      "ata": "",
+      "etd": "2026-11-15 07:00:00",
+      "ata": "2026-11-13 07:48:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
@@ -284,7 +284,7 @@
       "dry": "2026-11-08 12:00:00",
       "linea": "MAE",
       "etb": "2026-11-12 21:00:00",
-      "etd": "2026-11-14 09:00:00",
+      "etd": "2026-11-14 04:30:00",
       "ata": "2026-11-12 20:40:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -304,7 +304,7 @@
       "etb": "2026-11-12 17:00:00",
       "etd": "2026-11-13 18:00:00",
       "ata": "2026-11-12 17:30:00",
-      "atd": "",
+      "atd": "2026-11-13 18:12:00",
       "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
