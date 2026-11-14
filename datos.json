@@ -1,7 +1,7 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-14T09:24:51.441362+00:00",
-  "actualizado_ec": "2026-11-14 04:24:51",
+  "actualizado_utc": "2026-11-14T15:59:15.508172+00:00",
+  "actualizado_ec": "2026-11-14 10:59:15",
   "total": 52,
   "naves": [
     {
@@ -265,8 +265,8 @@
       "reefer": "2026-11-14 17:00:00",
       "dry": "2026-11-14 17:00:00",
       "linea": "MAE",
-      "etb": "2026-11-14 23:00:00",
-      "etd": "2026-11-16 05:00:00",
+      "etb": "2026-11-14 20:00:00",
+      "etd": "2026-11-16 02:00:00",
       "ata": "",
       "atd": "",
       "status": "TO ARRIVE",
@@ -304,8 +304,8 @@
       "etb": "2026-11-12 21:00:00",
       "etd": "2026-11-14 04:30:00",
       "ata": "2026-11-12 20:40:00",
-      "atd": "",
-      "status": "IN OPERATION",
+      "atd": "2026-11-14 06:50:00",
+      "status": "DEPARTED",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
