@@ -1,7 +1,7 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-15T14:44:06.042368+00:00",
-  "actualizado_ec": "2026-11-15 09:44:06",
+  "actualizado_utc": "2026-11-15T19:59:27.266104+00:00",
+  "actualizado_ec": "2026-11-15 14:59:27",
   "total": 51,
   "naves": [
     {
@@ -304,8 +304,8 @@
       "etb": "2026-11-13 20:00:00",
       "etd": "2026-11-15 06:00:00",
       "ata": "2026-11-13 19:48:00",
-      "atd": "",
-      "status": "IN OPERATION",
+      "atd": "2026-11-15 06:54:00",
+      "status": "DEPARTED",
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "ACSA"
