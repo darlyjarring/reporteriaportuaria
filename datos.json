@@ -1,7 +1,7 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-16T06:07:46.698589+00:00",
-  "actualizado_ec": "2026-11-16 01:07:46",
+  "actualizado_utc": "2026-11-16T15:46:50.866283+00:00",
+  "actualizado_ec": "2026-11-16 10:46:50",
   "total": 52,
   "naves": [
     {
@@ -304,7 +304,7 @@
       "etb": "2026-11-14 20:00:00",
       "etd": "2026-11-16 05:00:00",
       "ata": "2026-11-14 20:05:00",
-      "atd": "",
+      "atd": "2026-11-16 04:50:00",
       "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
