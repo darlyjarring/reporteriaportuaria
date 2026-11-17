@@ -1,8 +1,8 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-16T23:52:24.104411+00:00",
-  "actualizado_ec": "2026-11-16 18:52:24",
-  "total": 52,
+  "actualizado_utc": "2026-11-17T07:36:08.934127+00:00",
+  "actualizado_ec": "2026-11-17 02:36:08",
+  "total": 51,
   "naves": [
     {
       "gkey": "1962403031",
@@ -921,24 +921,6 @@
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
-    },
-    {
-      "gkey": "1912185434",
-      "referencia": "CMA2026114",
-      "nave": "CMA CGM MERCURY",
-      "viaje": "0MH2UW1MA",
-      "viaje_salida": "0MH2UW1MA",
-      "reefer": "2026-10-16 23:00:00",
-      "dry": "2026-10-16 23:00:00",
-      "linea": "CMA",
-      "etb": "2026-10-17 04:00:00",
-      "etd": "2026-10-18 18:00:00",
-      "ata": "2026-10-17 04:17:00",
-      "atd": "2026-10-18 18:00:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "ACSA"
     }
   ]
 }
