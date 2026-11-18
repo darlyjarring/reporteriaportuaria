@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consulta Flotante - Vessel Schedule</title>
+<style>
+  * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
+  body {
+    margin: 0;
+    background: transparent;
+    color: #1f2937;
+  }
+
+  /* Botón flotante disparador */
+  .btn-flotante-trigger {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9998;
+    background: #123b5d;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .btn-flotante-trigger:hover {
+    background: #0d2a44;
+    transform: translateY(-2px);
+  }
+
+  /* Ventana flotante estilo escritorio / Navis */
+  .ventana-flotante {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    width: min(1050px, 94vw);
+    max-height: 85vh;
+    background: #f0f0f0;
+    border: 1px solid #5a7fa6;
+    border-radius: 6px 6px 2px 2px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ventana-flotante.oculta {
+    display: none;
+  }
+
+  /* Barra de título arrastrable */
+  .barra-titulo {
+    background: linear-gradient(180deg, #b8d3ee 0%, #99bce0 100%);
+    border-bottom: 1px solid #759bc4;
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    user-select: none;
+  }
+  .barra-titulo .titulo-texto {
+    font-size: 12px;
+    font-weight: bold;
+    color: #0f2942;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .controles-ventana {
+    display: flex;
+    gap: 4px;
+  }
+  .btn-win {
+    width: 22px;
+    height: 20px;
+    border: 1px solid #6b8cb3;
+    border-radius: 3px;
+    background: #e1ebf5;
+    color: #1e293b;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-win:hover { background: #cbdcf0; }
+  .btn-win.cerrar-win {
+    background: #d9534f;
+    color: #fff;
+    border-color: #b52b27;
+  }
+  .btn-win.cerrar-win:hover { background: #c9302c; }
+
+  /* Barra de herramientas y buscador */
+  .toolbar-busqueda {
+    background: #e9edf2;
+    border-bottom: 1px solid #cbd5e1;
+    padding: 8px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .toolbar-busqueda input, .toolbar-busqueda select {
+    height: 28px;
+    padding: 3px 8px;
+    border: 1px solid #94a3b8;
+    border-radius: 3px;
+    font-size: 12px;
+    background: #fff;
+  }
+  .toolbar-busqueda input[type="text"] {
+    flex: 1 1 220px;
+  }
+  .btn-accion {
+    height: 28px;
+    padding: 0 12px;
+    background: #123b5d;
+    color: #fff;
+    border: 1px solid #0d2a44;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .btn-accion:hover { opacity: 0.92; }
+  .btn-accion.sec {
+    background: #64748b;
+    border-color: #475569;
+  }
+  .estado-carga {
+    font-size: 11px;
+    color: #475569;
+    margin-left: auto;
+  }
+
+  /* Tabla estilo Navis N4 */
+  .tabla-contenedor {
+    overflow: auto;
+    background: #fff;
+    flex: 1;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(180deg, #f8fafc 0%, #dce6f2 100%);
+    border-right: 1px solid #b8c7d9;
+    border-bottom: 1px solid #94a3b8;
+    padding: 5px 8px;
+    text-align: left;
+    font-weight: bold;
+    color: #1e293b;
+    z-index: 2;
+  }
+  tbody td {
+    padding: 4px 8px;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  tbody tr:hover td {
+    background-color: #e0f2fe !important;
+  }
+  tbody tr.seleccionada td {
+    background-color: #0066cc !important;
+    color: #fff !important;
+  }
+
+  /* Celdas coloreadas por línea/servicio como en Navis */
+  .badge-celda {
+    font-weight: bold;
+    text-align: center;
+  }
+  .pie-ventana {
+    background: #e2e8f0;
+    border-top: 1px solid #cbd5e1;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #334155;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<!-- Botón flotante para abrir/cerrar la ventana de consulta -->
+<button type="button" class="btn-flotante-trigger" onclick="toggleVentana()">
+  🚢 Consultar Vessel Schedule
+</button>
+
+<!-- Ventana flotante arrastrable -->
+<div class="ventana-flotante" id="ventanaSchedule">
+  <div class="barra-titulo" id="barraArrastre">
+    <div class="titulo-texto">
+      <span>🚢</span>
+      <span id="tituloVentana">Vessel Schedule (Consulta Rápida): 0</span>
+    </div>
+    <div class="controles-ventana">
+      <button type="button" class="btn-win" title="Actualizar datos" onclick="cargarDatosFlotante()">↻</button>
+      <button type="button" class="btn-win cerrar-win" title="Cerrar" onclick="toggleVentana()">×</button>
+    </div>
+  </div>
+
+  <div class="toolbar-busqueda">
+    <input type="text" id="buscadorTexto" placeholder="Buscar nave, referencia (Ship Ref), viaje o servicio..." oninput="filtrarTabla()">
+    <select id="filtroFase" onchange="filtrarTabla()">
+      <option value="">Todas las fases</option>
+      <option value="Working">Working (Trabajando)</option>
+      <option value="Inbound">Inbound (Por arribar)</option>
+      <option value="Departed">Departed (Zarpó)</option>
+    </select>
+    <select id="filtroLinea" onchange="filtrarTabla()">
+      <option value="">Todas las líneas</option>
+    </select>
+    <button type="button" class="btn-accion" onclick="cargarDatosFlotante()">CONSULTAR</button>
+    <button type="button" class="btn-accion sec" onclick="limpiarFiltros()">LIMPIAR</button>
+    <span class="estado-carga" id="estadoFuente">Conectando a datos.json...</span>
+  </div>
+
+  <div class="tabla-contenedor">
+    <table>
+      <thead>
+        <tr>
+          <th>Arribo a muelle</th>
+          <th>Est. Zarpe</th>
+          <th>*Cut-Off*</th>
+          <th>Ship Reference</th>
+          <th>Vessel Name</th>
+          <th>VLine Op.</th>
+          <th>Vessel Service</th>
+          <th>Visit Phase</th>
+          <th>Origen / Destino</th>
+        </tr>
+      </thead>
+      <tbody id="cuerpoTabla">
+        <tr><td colspan="9" style="text-align:center;padding:20px;">Cargando itinerario...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pie-ventana">
+    <span id="contadorRegistros">0 naves encontradas</span>
+    <span>Arrastra desde la barra superior para mover la ventana</span>
+  </div>
+</div>
+
+<script>
+let NAVES_DATA = [];
+const NAVES_RESPALDO = [
+  {nave:'CMA2026122 - EDISON',viaje:'0MH30W1MA',linea:'CMA',etb:'2026-11-13 20:00:00',etd:'2026-11-15 06:00:00',ata:'2026-11-13 20:00:00',atd:'',reefer:'2026-11-13 23:00:00',status:'IN OPERATION',origen:'PECLL',destino:'PECLL',servicio:'ACSA'},
+  {nave:'MAE2026131 - MAERSK FINISTERRE',viaje:'641W',linea:'MAE',etb:'2026-11-14 20:00:00',etd:'2026-11-16 03:00:00',ata:'2026-11-14 20:00:00',atd:'',reefer:'2026-11-14 17:00:00',status:'IN OPERATION',origen:'ECPBO',destino:'ECPBO',servicio:'ECUMED'},
+  {nave:'MAE2026139 - SEALAND LOS ANGELES',viaje:'645S',linea:'MAE',etb:'2026-11-15 18:00:00',etd:'2026-11-16 22:00:00',ata:'',atd:'',reefer:'2026-11-15 12:00:00',status:'TO ARRIVE',origen:'PABLB',destino:'PABLB',servicio:'WCSA-SHTL'},
+  {nave:'COS2026009 - COSCO SHIPPING SEINE',viaje:'048S',linea:'COS',etb:'2026-11-16 20:00:00',etd:'2026-11-17 12:00:00',ata:'',atd:'',reefer:'2026-11-16 08:00:00',status:'TO ARRIVE',origen:'COBUN',destino:'COBUN',servicio:'SWX_SB'},
+  {nave:'ONE2026010 - EMERALD TOWER',viaje:'005E',linea:'ONE',etb:'2026-11-17 11:00:00',etd:'2026-11-18 20:00:00',ata:'',atd:'',reefer:'2026-11-16 12:00:00',status:'TO ARRIVE',origen:'PECLL',destino:'PECLL',servicio:'AX4'},
+  {nave:'HLC2026108 - ODYSSEUS',viaje:'647N',linea:'HLC',etb:'2026-11-17 18:00:00',etd:'2026-11-18 05:00:00',ata:'',atd:'',reefer:'2026-11-16 16:00:00',status:'TO ARRIVE',origen:'PEPAI',destino:'PEPAI',servicio:'MSW'}
+];
+
+const MESES = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const COLOR_LINEA = {
+  'CMA': { bg: '#0055ff', fg: '#fff' },
+  'MAE': { bg: '#bae6fd', fg: '#0f172a' },
+  'COS': { bg: '#92400e', fg: '#fff' },
+  'ONE': { bg: '#f0abfc', fg: '#0f172a' },
+  'HLC': { bg: '#f97316', fg: '#0f172a' },
+  'HMM': { bg: '#15803d', fg: '#fff' }
+};
+const COLOR_SERVICIO = {
+  'ACSA': { bg: '#dc2626', fg: '#fff' },
+  'ECUMED': { bg: '#67e8f9', fg: '#0f172a' },
+  'WCSA-SHTL': { bg: '#e0f2fe', fg: '#0f172a' },
+  'SWX_SB': { bg: '#ea580c', fg: '#fff' },
+  'SWX_NB': { bg: '#0284c7', fg: '#fff' },
+  'AX4': { bg: '#e879f9', fg: '#0f172a' },
+  'MSW': { bg: '#7e22ce', fg: '#fff' },
+  'MEDCAR': { bg: '#16a34a', fg: '#fff' }
+};
+
+function parseFecha(valor) {
+  if (!valor) return null;
+  let s = String(valor).trim();
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if (m) return new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:00-05:00`);
+  m = s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})[ T](\d{2}):(\d{2})/);
+  if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}T${m[4]}:${m[5]}:00-05:00`);
+  return null;
+}
+
+function formatoNavis(valor) {
+  const d = parseFecha(valor);
+  if (!d || isNaN(d.getTime())) return '—';
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = MESES[d.getMonth()];
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${dia} ${mes} ${hh}${mm}`;
+}
+
+function normalizarRegistro(x) {
+  x = x || {};
+  const rawNave = String(x.nave ?? x.Nave ?? x.nombre ?? '').trim();
+  let shipRef = x.viaje ?? x.Viaje ?? '';
+  let vesselName = rawNave;
+
+  const match = rawNave.match(/^([A-Z0-9]+)\s*-\s*(.+)$/i);
+  if (match) {
+    shipRef = match[1].trim() + (shipRef ? ` (${shipRef})` : '');
+    vesselName = match[2].trim();
+  }
+
+  return {
+    shipRef,
+    vesselName,
+    viaje: String(x.viaje ?? x.Viaje ?? ''),
+    linea: String(x.linea ?? x.Linea ?? x.LINEA ?? '').toUpperCase().trim(),
+    etb: x.etb ?? x.ETB ?? '',
+    etd: x.etd ?? x.ETD ?? '',
+    ata: x.ata ?? x.ATA ?? '',
+    atd: x.atd ?? x.ATD ?? '',
+    cutoff: x.reefer ?? x['Reefer CutOff'] ?? x.dry ?? x['Dry CutOff'] ?? '',
+    status: String(x.status ?? x.STATUS ?? '').toUpperCase().trim(),
+    origen: x.origen ?? x['PTO.ORIGEN'] ?? '',
+    destino: x.destino ?? x['PTO.DESTINO'] ?? '',
+    servicio: String(x.servicio ?? x.SERVICIO ?? '').toUpperCase().trim()
+  };
+}
+
+function obtenerVisitPhase(n) {
+  const s = n.status;
+  const now = new Date();
+  const etb = parseFecha(n.etb);
+  if (n.atd || s === 'DEPARTED' || s.includes('SAILED')) return 'Departed';
+  if (s.includes('IN OPERATION') || s.includes('OPERATING') || s === 'WORKING' || (n.ata && !n.atd)) return 'Working';
+  if (etb && now >= etb && !n.atd) return 'Working';
+  return 'Inbound';
+}
+
+async function cargarDatosFlotante() {
+  const est = document.getElementById('estadoFuente');
+  est.textContent = 'Actualizando datos.json...';
+  try {
+    const r = await fetch('datos.json?ts=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    const arr = Array.isArray(j) ? j : (j.naves || j.NAVES || j.data || j.datos || []);
+    if (!Array.isArray(arr) || !arr.length) throw new Error('Sin registros');
+    NAVES_DATA = arr.map(normalizarRegistro);
+    est.textContent = `Fuente: datos.json (${new Date().toLocaleTimeString('es-EC')})`;
+    est.style.color = '#166534';
+  } catch (e) {
+    NAVES_DATA = NAVES_RESPALDO.map(normalizarRegistro);
+    est.textContent = 'Modo respaldo (sin datos.json local)';
+    est.style.color = '#b91c1c';
+  }
+  poblarSelectLineas();
+  filtrarTabla();
+}
+
+function poblarSelectLineas() {
+  const sel = document.getElementById('filtroLinea');
+  const actual = sel.value;
+  const lineas = [...new Set(NAVES_DATA.map(n => n.linea).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Todas las líneas</option>' +
+    lineas.map(l => `<option value="${l}">${l}</option>`).join('');
+  sel.value = actual;
+}
+
+function filtrarTabla() {
+  const q = document.getElementById('buscadorTexto').value.toUpperCase().trim();
+  const fase = document.getElementById('filtroFase').value;
+  const linea = document.getElementById('filtroLinea').value;
+
+  const filtrados = NAVES_DATA.filter(n => {
+    const vPhase = obtenerVisitPhase(n);
+    if (fase && vPhase !== fase) return false;
+    if (linea && n.linea !== linea) return false;
+    if (q) {
+      const texto = `${n.shipRef} ${n.vesselName} ${n.viaje} ${n.linea} ${n.servicio} ${n.origen} ${n.destino}`.toUpperCase();
+      if (!texto.includes(q)) return false;
+    }
+    return true;
+  }).sort((a, b) => (parseFecha(a.etb) || 0) - (parseFecha(b.etb) || 0));
+
+  renderizarTabla(filtrados);
+}
+
+function renderizarTabla(lista) {
+  const tbody = document.getElementById('cuerpoTabla');
+  document.getElementById('tituloVentana').textContent = `Vessel Schedule (Consulta Rápida): ${lista.length}`;
+  document.getElementById('contadorRegistros').textContent = `${lista.length} nave(s) mostrada(s)`;
+
+  if (!lista.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:18px;color:#64748b;">No se encontraron naves con ese criterio de búsqueda.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = lista.map(n => {
+    const phase = obtenerVisitPhase(n);
+    const cLin = COLOR_LINEA[n.linea] || { bg: '#e2e8f0', fg: '#1e293b' };
+    const cSrv = COLOR_SERVICIO[n.servicio] || { bg: '#f1f5f9', fg: '#1e293b' };
+    const arribo = n.ata ? formatoNavis(n.ata) : formatoNavis(n.etb);
+    const zarpe = n.atd ? formatoNavis(n.atd) : formatoNavis(n.etd);
+
+    return `<tr onclick="seleccionarFila(this)">
+      <td>${arribo}</td>
+      <td>${zarpe}</td>
+      <td>${formatoNavis(n.cutoff)}</td>
+      <td style="font-weight:bold;">${n.shipRef || n.viaje || '—'}</td>
+      <td>${n.vesselName}</td>
+      <td class="badge-celda" style="background:${cLin.bg};color:${cLin.fg};">${n.linea || '—'}</td>
+      <td class="badge-celda" style="background:${cSrv.bg};color:${cSrv.fg};">${n.servicio || '—'}</td>
+      <td><strong>${phase}</strong></td>
+      <td>${n.origen || '—'} / ${n.destino || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function seleccionarFila(tr) {
+  document.querySelectorAll('#cuerpoTabla tr').forEach(r => r.classList.remove('seleccionada'));
+  tr.classList.add('seleccionada');
+}
+
+function limpiarFiltros() {
+  document.getElementById('buscadorTexto').value = '';
+  document.getElementById('filtroFase').value = '';
+  document.getElementById('filtroLinea').value = '';
+  filtrarTabla();
+}
+
+function toggleVentana() {
+  document.getElementById('ventanaSchedule').classList.toggle('oculta');
+}
+
+/* Hacer arrastrable la ventana flotante */
+(function hacerArrastrable() {
+  const win = document.getElementById('ventanaSchedule');
+  const bar = document.getElementById('barraArrastre');
+  let arrastrando = false, offsetX = 0, offsetY = 0;
+
+  bar.addEventListener('mousedown', (e) => {
+    if (e.target.tagName === 'BUTTON') return;
+    arrastrando = true;
+    const rect = win.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!arrastrando) return;
+    const x = Math.max(0, Math.min(window.innerWidth - 150, e.clientX - offsetX));
+    const y = Math.max(0, Math.min(window.innerHeight - 50, e.clientY - offsetY));
+    win.style.left = x + 'px';
+    win.style.top = y + 'px';
+  });
+
+  document.addEventListener('mouseup', () => { arrastrando = false; });
+})();
+
+cargarDatosFlotante();
+</script>
+</body>
+</html>
+Analizando
