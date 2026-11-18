@@ -79,6 +79,7 @@ let NAVES_FALLBACK=[
 const COLORES=['#2563eb','#16a34a','#dc2626','#9333ea','#ea580c','#0891b2','#db2777','#475569','#65a30d','#7c3aed','#a16207','#0f766e'];
 let PX_HORA=42;
 let ultimoInicio=null,ultimoFin=null,ultimoFiltrado=[];
+let MODO_VISTA='INICIAL';
 
 function fecha(valor){
  if(!valor)return null;
@@ -125,8 +126,8 @@ function estado(n){
  return 'POR ARRIBAR';
 }
 function fechaLocalInput(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function hoy(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(a);consultar()}
-function rango7(){const a=new Date(),b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(b);consultar()}
+function hoy(){const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(a);MODO_VISTA='RANGO';consultar()}
+function rango7(){const a=new Date(),b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaDesde').value=fechaLocalInput(a);document.getElementById('fechaHasta').value=fechaLocalInput(b);MODO_VISTA='RANGO';consultar()}
 function cambiarZoom(dir){const z=document.getElementById('zoom');z.value=Math.max(+z.min,Math.min(+z.max,+z.value+dir*6));aplicarZoom(z.value)}
 function aplicarZoom(v){PX_HORA=+v;document.getElementById('zoom').value=v;document.getElementById('zoomNum').textContent=v+' px/h';if(ultimoInicio&&ultimoFin)dibujarTimeline(ultimoFiltrado,ultimoInicio,ultimoFin)}
 
@@ -139,26 +140,54 @@ async function cargarDatos(){
   const arr=Array.isArray(j)?j:(j.naves||j.NAVES||j.data||j.datos||[]);
   if(!Array.isArray(arr)||!arr.length)throw new Error('datos.json no contiene naves');
   NAVES=arr.map(normalizarNave);
-  fuente.className='fuente ok';fuente.textContent='Fuente: datos.json · '+NAVES.length+' naves · actualización '+new Date().toLocaleString('es-EC');
-  consultar();
+  fuente.className='fuente ok';fuente.textContent='Fuente: datos.json · '+NAVES.length+' naves recibidas · vista inicial: operaciones activas · actualización '+new Date().toLocaleString('es-EC');
+  if(MODO_VISTA==='INICIAL') mostrarActivasIniciales(); else consultar();
  }catch(e){
   NAVES=NAVES_FALLBACK.map(normalizarNave);
   fuente.className='fuente error';fuente.textContent='No se pudo leer datos.json. Se muestran datos de respaldo. '+e.message;
-  consultar();
+  if(MODO_VISTA==='INICIAL') mostrarActivasIniciales(); else consultar();
  }
 }
 
+function rangoFechasNave(n){
+ const puntos=[fecha(n.etb),fecha(n.ata),fecha(n.etd),fecha(n.atd)].filter(Boolean);
+ if(!puntos.length)return null;
+ const inicio=new Date(Math.min(...puntos.map(x=>x.getTime())));
+ let fin=new Date(Math.max(...puntos.map(x=>x.getTime())));
+ // Una nave que sigue trabajando permanece dibujada hasta el momento actual.
+ if(estado(n)==='TRABAJANDO' && !fecha(n.atd) && fin<new Date())fin=new Date();
+ return {inicio,fin};
+}
+function fechaInputDesdeDate(d){return fechaLocalInput(d)}
+function mostrarActivasIniciales(){
+ const activas=NAVES.filter(n=>estado(n)!=='ZARPÓ' && rangoFechasNave(n));
+ const rangos=activas.map(rangoFechasNave);
+ const ahora=new Date();
+ let inicio,fin;
+ if(rangos.length){
+  inicio=new Date(Math.min(...rangos.map(r=>r.inicio.getTime())));
+  fin=new Date(Math.max(...rangos.map(r=>r.fin.getTime())));
+ }else{inicio=ahora;fin=new Date(ahora);fin.setDate(fin.getDate()+6)}
+ const desde=new Date(inicio);desde.setHours(0,0,0,0);
+ const hasta=new Date(fin);hasta.setHours(23,59,59,999);
+ document.getElementById('fechaDesde').value=fechaInputDesdeDate(desde);
+ document.getElementById('fechaHasta').value=fechaInputDesdeDate(hasta);
+ ultimoInicio=desde;ultimoFin=hasta;ultimoFiltrado=activas.sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
+ dibujarTimeline(ultimoFiltrado,desde,hasta);
+}
+
 function consultar(){
+ MODO_VISTA='RANGO';
  const ds=document.getElementById('fechaDesde').value,hs=document.getElementById('fechaHasta').value;
  if(!ds||!hs){hoy();return}
  let inicio=new Date(ds+'T00:00:00-05:00'),fin=new Date(hs+'T23:59:59-05:00');
  if(fin<inicio){alert('La fecha Hasta no puede ser menor que Desde.');return}
  const filtradas=NAVES.filter(n=>{
-  const puntos=[fecha(n.etb),fecha(n.ata),fecha(n.etd),fecha(n.atd)].filter(Boolean);
-  if(!puntos.length)return false;
-  const inicioN=puntos[0],finN=puntos[puntos.length-1];
-  return puntos.some(x=>x>=inicio&&x<=fin)||(inicioN<=fin&&finN>=inicio);
- }).sort((a,b)=>(fecha(a.etb)||fecha(a.ata)||0)-(fecha(b.etb)||fecha(b.ata)||0));
+  const rango=rangoFechasNave(n);
+  if(!rango)return false;
+  // Incluye cualquier escala que se cruce con el rango consultado, incluso si llegó días antes.
+  return rango.fin>=inicio && rango.inicio<=fin;
+ }).sort((a,b)=>(fechaLlegada(a)||0)-(fechaLlegada(b)||0));
  ultimoInicio=inicio;ultimoFin=fin;ultimoFiltrado=filtradas;dibujarTimeline(filtradas,inicio,fin)
 }
 
@@ -226,17 +255,18 @@ function dibujarTimeline(naves,inicio,fin){
     const etb=fecha(n.etb),ata=fecha(n.ata),etd=fecha(n.etd),atd=fecha(n.atd);
     const inicioN=etb||ata||etd||atd;
     if(!inicioN)return;
-    const finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
+    let finN=atd||etd||new Date(inicioN.getTime()+2*3600000);
+    if(estado(n)==='TRABAJANDO' && !atd && finN<new Date())finN=new Date();
     if(finN<=inicioN)return;
 
     const pxDesdeInicio=d=>(d-inicio)/3600000*PX_HORA;
     const x1=pxDesdeInicio(inicioN);
     const x2=pxDesdeInicio(finN);
-
-    if(x2<=0 || x1>=(ancho-72))return;
-
-    const left=x1;
-    const w=x2-x1;
+    const limite=ancho-72;
+    if(x2<=0 || x1>=limite)return;
+    const left=Math.max(0,x1);
+    const right=Math.min(limite,x2);
+    const w=right-left;
 
     const bar=document.createElement('div');
     bar.className='vessel';
@@ -246,20 +276,20 @@ function dibujarTimeline(naves,inicio,fin){
     bar.title=`ETB: ${n.etb||'—'} | ETD: ${n.etd||'—'} | Click para ver información`;
     bar.innerHTML=`<div class="nombre">${escapeHtml(limpiarNombre(n.nave)||'NAVE')}</div><div class="linea">${escapeHtml(n.linea||'')}</div><div class="estado">${escapeHtml(estado(n))}</div>`;
 
-    if(etb && etb>=inicioN && etb<=finN){
-      const posRelativa = (etb - inicioN) / (finN - inicioN);
+    if(etb && etb>=inicioN && etb<=finN && etb>=inicio && etb<=fin){
+      const marcaX=(etb-inicio)/3600000*PX_HORA-left;
       const marca=document.createElement('span');
       marca.className='marca-etb';
-      marca.style.left=(posRelativa*100)+'%';
+      marca.style.left=marcaX+'px';
       marca.title='ETB: '+n.etb;
       bar.appendChild(marca);
     }
 
-    if(ata && ata>=inicioN && ata<=finN){
-      const rel=(ata-inicioN)/(finN-inicioN);
+    if(ata && ata>=inicioN && ata<=finN && ata>=inicio && ata<=fin){
+      const marcaX=(ata-inicio)/3600000*PX_HORA-left;
       const marca=document.createElement('span');
       marca.className='marca-ata';
-      marca.style.left=(rel*100)+'%';
+      marca.style.left=marcaX+'px';
       marca.title='ATA: '+n.ata;
       bar.appendChild(marca);
     }
@@ -337,12 +367,12 @@ function cerrarModal(e){if(!e||e.target===document.getElementById('modalFondo'))
 })();
 
 (async function(){
-  const a=new Date();document.getElementById('fechaDesde').value=fechaLocalInput(a);
-  const b=new Date(a);b.setDate(b.getDate()+6);document.getElementById('fechaHasta').value=fechaLocalInput(b);
+  // Primera carga: muestra todas las naves activas, incluidas las que llegaron ayer o antes.
+  MODO_VISTA='INICIAL';
   await cargarDatos();
 })();
 
-setInterval(()=>{if(ultimoInicio&&ultimoFin)consultar()},60000);
+setInterval(()=>{if(MODO_VISTA==='INICIAL')mostrarActivasIniciales();else if(ultimoInicio&&ultimoFin)consultar()},60000);
 setInterval(()=>cargarDatos(),15*60*1000);
 </script>
 </body>
