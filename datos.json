@@ -1,7 +1,7 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-18T05:27:30.202740+00:00",
-  "actualizado_ec": "2026-11-18 00:27:30",
+  "actualizado_utc": "2026-11-18T14:29:23.202575+00:00",
+  "actualizado_ec": "2026-11-18 09:29:23",
   "total": 51,
   "naves": [
     {
@@ -266,7 +266,7 @@
       "dry": "2026-11-16 16:00:00",
       "linea": "HLC",
       "etb": "2026-11-17 21:00:00",
-      "etd": "2026-11-18 08:00:00",
+      "etd": "2026-11-18 09:00:00",
       "ata": "2026-11-17 20:48:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -284,7 +284,7 @@
       "dry": "2026-11-16 22:00:00",
       "linea": "ONE",
       "etb": "2026-11-17 14:00:00",
-      "etd": "2026-11-18 10:00:00",
+      "etd": "2026-11-18 12:00:00",
       "ata": "2026-11-17 14:18:00",
       "atd": "",
       "status": "IN OPERATION",
@@ -305,7 +305,7 @@
       "etd": "2026-11-17 13:00:00",
       "ata": "2026-11-16 16:15:00",
       "atd": "2026-11-17 12:58:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "COBUN",
       "destino": "COBUN",
       "servicio": "SWX_SB"
@@ -323,7 +323,7 @@
       "etd": "2026-11-17 17:00:00",
       "ata": "2026-11-16 10:50:00",
       "atd": "2026-11-17 17:12:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
