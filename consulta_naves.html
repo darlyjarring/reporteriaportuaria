@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Consulta Flotante - Vessel Schedule</title>
 <style>
   * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
@@ -15,22 +15,23 @@
   /* Botón flotante disparador */
   .btn-flotante-trigger {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 20px;
+    right: 20px;
     z-index: 9998;
     background: #123b5d;
     color: #fff;
     border: none;
     border-radius: 50px;
-    padding: 12px 20px;
+    padding: 12px 18px;
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
     display: flex;
     align-items: center;
     gap: 8px;
     transition: transform 0.15s, background 0.15s;
+    touch-action: manipulation;
   }
   .btn-flotante-trigger:hover {
     background: #0d2a44;
@@ -40,10 +41,10 @@
   /* Ventana flotante estilo escritorio / Navis */
   .ventana-flotante {
     position: fixed;
-    top: 40px;
-    left: 40px;
-    width: min(1050px, 94vw);
-    max-height: 85vh;
+    top: 24px;
+    left: 24px;
+    width: min(1140px, 95vw);
+    max-height: 88vh;
     background: #f0f0f0;
     border: 1px solid #5a7fa6;
     border-radius: 6px 6px 2px 2px;
@@ -61,12 +62,13 @@
   .barra-titulo {
     background: linear-gradient(180deg, #b8d3ee 0%, #99bce0 100%);
     border-bottom: 1px solid #759bc4;
-    padding: 6px 10px;
+    padding: 7px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: move;
     user-select: none;
+    touch-action: none;
   }
   .barra-titulo .titulo-texto {
     font-size: 12px;
@@ -75,20 +77,24 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .controles-ventana {
     display: flex;
-    gap: 4px;
+    gap: 6px;
+    flex-shrink: 0;
   }
   .btn-win {
-    width: 22px;
-    height: 20px;
+    width: 24px;
+    height: 22px;
     border: 1px solid #6b8cb3;
     border-radius: 3px;
     background: #e1ebf5;
     color: #1e293b;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1;
     cursor: pointer;
     display: flex;
@@ -103,8 +109,8 @@
   }
   .btn-win.cerrar-win:hover { background: #c9302c; }
 
-  /* Barra de herramientas y buscador */
-  .toolbar-busqueda {
+  /* Barra superior estilo Navis N4 */
+  .navis-toolbar {
     background: #e9edf2;
     border-bottom: 1px solid #cbd5e1;
     padding: 8px 10px;
@@ -113,25 +119,36 @@
     gap: 8px;
     align-items: center;
   }
-  .toolbar-busqueda input, .toolbar-busqueda select {
-    height: 28px;
-    padding: 3px 8px;
+  .navis-toolbar label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #334155;
+  }
+  .navis-toolbar select, .navis-toolbar input {
+    height: 30px;
+    padding: 3px 6px;
     border: 1px solid #94a3b8;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 12px;
     background: #fff;
   }
-  .toolbar-busqueda input[type="text"] {
-    flex: 1 1 220px;
+  .grupo-filtro {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .grupo-botones {
+    display: flex;
+    gap: 6px;
   }
   .btn-accion {
-    height: 28px;
+    height: 30px;
     padding: 0 12px;
     background: #123b5d;
     color: #fff;
     border: 1px solid #0d2a44;
-    border-radius: 3px;
-    font-size: 12px;
+    border-radius: 4px;
+    font-size: 11px;
     font-weight: bold;
     cursor: pointer;
   }
@@ -140,15 +157,16 @@
     background: #64748b;
     border-color: #475569;
   }
-  .estado-carga {
+  .estado-fuente {
     font-size: 11px;
     color: #475569;
     margin-left: auto;
   }
 
-  /* Tabla estilo Navis N4 */
+  /* Tabla estilo Navis N4 con scroll táctil fluido */
   .tabla-contenedor {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     background: #fff;
     flex: 1;
   }
@@ -164,14 +182,28 @@
     background: linear-gradient(180deg, #f8fafc 0%, #dce6f2 100%);
     border-right: 1px solid #b8c7d9;
     border-bottom: 1px solid #94a3b8;
-    padding: 5px 8px;
+    padding: 6px 8px;
     text-align: left;
     font-weight: bold;
     color: #1e293b;
+    z-index: 3;
+  }
+  /* Fijar columna Vessel Name en scroll horizontal para no perder referencia en móvil */
+  thead th.col-fija, tbody td.col-fija {
+    position: sticky;
+    left: 0;
     z-index: 2;
   }
+  thead th.col-fija {
+    z-index: 4;
+    background: linear-gradient(180deg, #f8fafc 0%, #dce6f2 100%);
+  }
+  tbody td.col-fija {
+    background: #fff;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.06);
+  }
   tbody td {
-    padding: 4px 8px;
+    padding: 6px 8px;
     border-right: 1px solid #e2e8f0;
     border-bottom: 1px solid #e2e8f0;
   }
@@ -183,7 +215,6 @@
     color: #fff !important;
   }
 
-  /* Celdas coloreadas por línea/servicio como en Navis */
   .badge-celda {
     font-weight: bold;
     text-align: center;
@@ -191,59 +222,159 @@
   .pie-ventana {
     background: #e2e8f0;
     border-top: 1px solid #cbd5e1;
-    padding: 4px 10px;
+    padding: 5px 10px;
     font-size: 11px;
     color: #334155;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* --- ADAPTACIÓN RESPONSIVE PARA MÓVIL (PANTALLAS <= 768px) --- */
+  @media (max-width: 768px) {
+    .ventana-flotante {
+      top: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      max-height: 92vh;
+      border-radius: 12px 12px 0 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+    }
+    .barra-titulo {
+      padding: 10px 12px;
+      cursor: default;
+    }
+    .barra-titulo .titulo-texto {
+      font-size: 13px;
+    }
+    .btn-win {
+      width: 30px;
+      height: 28px;
+      font-size: 15px;
+    }
+    .navis-toolbar {
+      padding: 8px;
+      gap: 6px;
+    }
+    .grupo-filtro {
+      flex: 1 1 46%;
+      min-width: 135px;
+    }
+    .grupo-filtro.ancho-completo {
+      flex: 1 1 100%;
+    }
+    .navis-toolbar select, .navis-toolbar input {
+      width: 100% !important;
+      height: 36px;
+      font-size: 13px;
+    }
+    .grupo-botones {
+      flex: 1 1 100%;
+    }
+    .btn-accion {
+      flex: 1;
+      height: 36px;
+      font-size: 12px;
+    }
+    .estado-fuente {
+      width: 100%;
+      margin-left: 0;
+      text-align: right;
+      font-size: 10px;
+    }
+    table {
+      font-size: 11px;
+    }
+    thead th, tbody td {
+      padding: 7px 6px;
+    }
+    .pie-ventana {
+      font-size: 10px;
+      padding: 6px 10px;
+    }
+    .nota-escritorio {
+      display: none;
+    }
+    .btn-flotante-trigger {
+      bottom: 16px;
+      right: 16px;
+      padding: 11px 16px;
+      font-size: 12px;
+    }
   }
 </style>
 </head>
 <body>
 
-<!-- Botón flotante para abrir/cerrar la ventana de consulta -->
+<!-- Botón flotante disparador -->
 <button type="button" class="btn-flotante-trigger" onclick="toggleVentana()">
-  🚢 Consultar Vessel Schedule
+  🚢 Vessel Schedule
 </button>
 
-<!-- Ventana flotante arrastrable -->
+<!-- Ventana flotante principal -->
 <div class="ventana-flotante" id="ventanaSchedule">
   <div class="barra-titulo" id="barraArrastre">
     <div class="titulo-texto">
       <span>🚢</span>
-      <span id="tituloVentana">Vessel Schedule (Consulta Rápida): 0</span>
+      <span id="tituloVentana">Vessel Schedule: 0 naves</span>
     </div>
     <div class="controles-ventana">
-      <button type="button" class="btn-win" title="Actualizar datos" onclick="cargarDatosFlotante()">↻</button>
+      <button type="button" class="btn-win" title="Actualizar" onclick="cargarDatosFlotante()">↻</button>
       <button type="button" class="btn-win cerrar-win" title="Cerrar" onclick="toggleVentana()">×</button>
     </div>
   </div>
 
-  <div class="toolbar-busqueda">
-    <input type="text" id="buscadorTexto" placeholder="Buscar nave, referencia (Ship Ref), viaje o servicio..." oninput="filtrarTabla()">
-    <select id="filtroFase" onchange="filtrarTabla()">
-      <option value="">Todas las fases</option>
-      <option value="Working">Working (Trabajando)</option>
-      <option value="Inbound">Inbound (Por arribar)</option>
-      <option value="Departed">Departed (Zarpó)</option>
-    </select>
-    <select id="filtroLinea" onchange="filtrarTabla()">
-      <option value="">Todas las líneas</option>
-    </select>
-    <button type="button" class="btn-accion" onclick="cargarDatosFlotante()">CONSULTAR</button>
-    <button type="button" class="btn-accion sec" onclick="limpiarFiltros()">LIMPIAR</button>
-    <span class="estado-carga" id="estadoFuente">Conectando a datos.json...</span>
+  <div class="navis-toolbar">
+    <div class="grupo-filtro">
+      <label>Rango:</label>
+      <select id="selectRango" onchange="cambiarRangoFechas()">
+        <option value="7">Next 7 Days</option>
+        <option value="14">Next 14 Days</option>
+        <option value="21">Next 21 Days</option>
+        <option value="-7">Past 7 Days & Future</option>
+        <option value="personalizado">Personalizado</option>
+      </select>
+    </div>
+    <div class="grupo-filtro">
+      <select id="filtroFase" onchange="aplicarConsulta()">
+        <option value="">Todas las fases</option>
+        <option value="Working">Working (Trabajando)</option>
+        <option value="Inbound">Inbound (Por arribar)</option>
+        <option value="Departed">Departed (Zarpó)</option>
+      </select>
+    </div>
+    <div class="grupo-filtro">
+      <label>Desde:</label>
+      <input type="date" id="fechaInicio" onchange="marcarPersonalizado()">
+    </div>
+    <div class="grupo-filtro">
+      <label>Hasta:</label>
+      <input type="date" id="fechaFin" onchange="marcarPersonalizado()">
+    </div>
+    <div class="grupo-filtro ancho-completo">
+      <input type="text" id="buscadorTexto" placeholder="Buscar nave, ref, viaje, línea o servicio..." oninput="aplicarConsulta()" style="width: 210px;">
+    </div>
+    <div class="grupo-botones">
+      <button type="button" class="btn-accion" onclick="cargarDatosFlotante()">CONSULTAR</button>
+      <button type="button" class="btn-accion sec" onclick="limpiarFiltros()">LIMPIAR</button>
+    </div>
+    <span class="estado-fuente" id="estadoFuente">Cargando...</span>
   </div>
 
   <div class="tabla-contenedor">
     <table>
       <thead>
         <tr>
+          <th class="col-fija">Vessel Name</th>
           <th>Arribo a muelle</th>
           <th>Est. Zarpe</th>
           <th>*Cut-Off*</th>
           <th>Ship Reference</th>
-          <th>Vessel Name</th>
           <th>VLine Op.</th>
           <th>Vessel Service</th>
           <th>Visit Phase</th>
@@ -251,14 +382,15 @@
         </tr>
       </thead>
       <tbody id="cuerpoTabla">
-        <tr><td colspan="9" style="text-align:center;padding:20px;">Cargando itinerario...</td></tr>
+        <tr><td colspan="9" style="text-align:center;padding:20px;">Cargando itinerario de naves...</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="pie-ventana">
-    <span id="contadorRegistros">0 naves encontradas</span>
-    <span>Arrastra desde la barra superior para mover la ventana</span>
+    <span id="contadorRegistros">0 naves mostradas</span>
+    <span class="nota-escritorio">Arrastre desde la barra superior para mover</span>
+    <span>Deslice la tabla horizontalmente →</span>
   </div>
 </div>
 
@@ -313,6 +445,44 @@ function formatoNavis(valor) {
   return `${dia} ${mes} ${hh}${mm}`;
 }
 
+function fechaLocalInput(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function inicializarFechasPorDefecto() {
+  const hoy = new Date();
+  const fin = new Date(hoy);
+  fin.setDate(fin.getDate() + 7);
+  document.getElementById('fechaInicio').value = fechaLocalInput(hoy);
+  document.getElementById('fechaFin').value = fechaLocalInput(fin);
+}
+
+function marcarPersonalizado() {
+  document.getElementById('selectRango').value = 'personalizado';
+  aplicarConsulta();
+}
+
+function cambiarRangoFechas() {
+  const val = document.getElementById('selectRango').value;
+  if (val === 'personalizado') return;
+  
+  const hoy = new Date();
+  const inicio = new Date(hoy);
+  const fin = new Date(hoy);
+  const dias = parseInt(val, 10);
+
+  if (dias < 0) {
+    inicio.setDate(inicio.getDate() + dias);
+    fin.setDate(fin.getDate() + 14);
+  } else {
+    fin.setDate(fin.getDate() + dias);
+  }
+
+  document.getElementById('fechaInicio').value = fechaLocalInput(inicio);
+  document.getElementById('fechaFin').value = fechaLocalInput(fin);
+  aplicarConsulta();
+}
+
 function normalizarRegistro(x) {
   x = x || {};
   const rawNave = String(x.nave ?? x.Nave ?? x.nombre ?? '').trim();
@@ -352,9 +522,18 @@ function obtenerVisitPhase(n) {
   return 'Inbound';
 }
 
+function rangoFechasNave(n) {
+  const puntos = [parseFecha(n.etb), parseFecha(n.ata), parseFecha(n.etd), parseFecha(n.atd)].filter(Boolean);
+  if (!puntos.length) return null;
+  const inicio = new Date(Math.min(...puntos.map(x => x.getTime())));
+  let fin = new Date(Math.max(...puntos.map(x => x.getTime())));
+  if (obtenerVisitPhase(n) === 'Working' && !parseFecha(n.atd) && fin < new Date()) fin = new Date();
+  return { inicio, fin };
+}
+
 async function cargarDatosFlotante() {
   const est = document.getElementById('estadoFuente');
-  est.textContent = 'Actualizando datos.json...';
+  est.textContent = 'Actualizando...';
   try {
     const r = await fetch('datos.json?ts=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -362,52 +541,53 @@ async function cargarDatosFlotante() {
     const arr = Array.isArray(j) ? j : (j.naves || j.NAVES || j.data || j.datos || []);
     if (!Array.isArray(arr) || !arr.length) throw new Error('Sin registros');
     NAVES_DATA = arr.map(normalizarRegistro);
-    est.textContent = `Fuente: datos.json (${new Date().toLocaleTimeString('es-EC')})`;
+    est.textContent = `datos.json (${new Date().toLocaleTimeString('es-EC', {hour:'2-digit', minute:'2-digit'})})`;
     est.style.color = '#166534';
   } catch (e) {
     NAVES_DATA = NAVES_RESPALDO.map(normalizarRegistro);
-    est.textContent = 'Modo respaldo (sin datos.json local)';
+    est.textContent = 'Modo respaldo';
     est.style.color = '#b91c1c';
   }
-  poblarSelectLineas();
-  filtrarTabla();
+  aplicarConsulta();
 }
 
-function poblarSelectLineas() {
-  const sel = document.getElementById('filtroLinea');
-  const actual = sel.value;
-  const lineas = [...new Set(NAVES_DATA.map(n => n.linea).filter(Boolean))].sort();
-  sel.innerHTML = '<option value="">Todas las líneas</option>' +
-    lineas.map(l => `<option value="${l}">${l}</option>`).join('');
-  sel.value = actual;
-}
-
-function filtrarTabla() {
+function aplicarConsulta() {
+  const ds = document.getElementById('fechaInicio').value;
+  const hs = document.getElementById('fechaFin').value;
   const q = document.getElementById('buscadorTexto').value.toUpperCase().trim();
   const fase = document.getElementById('filtroFase').value;
-  const linea = document.getElementById('filtroLinea').value;
+
+  if (!ds || !hs) return;
+  const inicioFiltro = new Date(ds + 'T00:00:00-05:00');
+  const finFiltro = new Date(hs + 'T23:59:59-05:00');
 
   const filtrados = NAVES_DATA.filter(n => {
     const vPhase = obtenerVisitPhase(n);
     if (fase && vPhase !== fase) return false;
-    if (linea && n.linea !== linea) return false;
+
+    const rango = rangoFechasNave(n);
+    if (rango) {
+      const seCruza = rango.fin >= inicioFiltro && rango.inicio <= finFiltro;
+      if (!seCruza && vPhase !== 'Working') return false;
+    }
+
     if (q) {
       const texto = `${n.shipRef} ${n.vesselName} ${n.viaje} ${n.linea} ${n.servicio} ${n.origen} ${n.destino}`.toUpperCase();
       if (!texto.includes(q)) return false;
     }
     return true;
-  }).sort((a, b) => (parseFecha(a.etb) || 0) - (parseFecha(b.etb) || 0));
+  }).sort((a, b) => (parseFecha(a.etb) || parseFecha(a.ata) || 0) - (parseFecha(b.etb) || parseFecha(b.ata) || 0));
 
   renderizarTabla(filtrados);
 }
 
 function renderizarTabla(lista) {
   const tbody = document.getElementById('cuerpoTabla');
-  document.getElementById('tituloVentana').textContent = `Vessel Schedule (Consulta Rápida): ${lista.length}`;
-  document.getElementById('contadorRegistros').textContent = `${lista.length} nave(s) mostrada(s)`;
+  document.getElementById('tituloVentana').textContent = `Vessel Schedule (${lista.length})`;
+  document.getElementById('contadorRegistros').textContent = `${lista.length} nave(s) encontrada(s)`;
 
   if (!lista.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:18px;color:#64748b;">No se encontraron naves con ese criterio de búsqueda.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:18px;color:#64748b;">No hay naves en este rango de fechas. Pruebe ampliando a 14 o 21 días.</td></tr>';
     return;
   }
 
@@ -419,11 +599,11 @@ function renderizarTabla(lista) {
     const zarpe = n.atd ? formatoNavis(n.atd) : formatoNavis(n.etd);
 
     return `<tr onclick="seleccionarFila(this)">
+      <td class="col-fija" style="font-weight:bold;">${n.vesselName}</td>
       <td>${arribo}</td>
       <td>${zarpe}</td>
       <td>${formatoNavis(n.cutoff)}</td>
-      <td style="font-weight:bold;">${n.shipRef || n.viaje || '—'}</td>
-      <td>${n.vesselName}</td>
+      <td>${n.shipRef || n.viaje || '—'}</td>
       <td class="badge-celda" style="background:${cLin.bg};color:${cLin.fg};">${n.linea || '—'}</td>
       <td class="badge-celda" style="background:${cSrv.bg};color:${cSrv.fg};">${n.servicio || '—'}</td>
       <td><strong>${phase}</strong></td>
@@ -440,22 +620,22 @@ function seleccionarFila(tr) {
 function limpiarFiltros() {
   document.getElementById('buscadorTexto').value = '';
   document.getElementById('filtroFase').value = '';
-  document.getElementById('filtroLinea').value = '';
-  filtrarTabla();
+  document.getElementById('selectRango').value = '7';
+  cambiarRangoFechas();
 }
 
 function toggleVentana() {
   document.getElementById('ventanaSchedule').classList.toggle('oculta');
 }
 
-/* Hacer arrastrable la ventana flotante */
+/* Arrastrar ventana flotante (solo escritorio) */
 (function hacerArrastrable() {
   const win = document.getElementById('ventanaSchedule');
   const bar = document.getElementById('barraArrastre');
   let arrastrando = false, offsetX = 0, offsetY = 0;
 
   bar.addEventListener('mousedown', (e) => {
-    if (e.target.tagName === 'BUTTON') return;
+    if (window.innerWidth <= 768 || e.target.tagName === 'BUTTON') return;
     arrastrando = true;
     const rect = win.getBoundingClientRect();
     offsetX = e.clientX - rect.left;
@@ -473,8 +653,8 @@ function toggleVentana() {
   document.addEventListener('mouseup', () => { arrastrando = false; });
 })();
 
+inicializarFechasPorDefecto();
 cargarDatosFlotante();
 </script>
 </body>
 </html>
-Analizando
