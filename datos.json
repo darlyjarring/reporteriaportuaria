@@ -1,7 +1,7 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-20T09:55:40.680245+00:00",
-  "actualizado_ec": "2026-11-20 04:55:40",
+  "actualizado_utc": "2026-11-20T18:28:36.642039+00:00",
+  "actualizado_ec": "2026-11-20 13:28:36",
   "total": 52,
   "naves": [
     {
@@ -229,7 +229,7 @@
       "reefer": "2026-11-22 12:00:00",
       "dry": "2026-11-22 12:00:00",
       "linea": "MAE",
-      "etb": "2026-11-22 17:00:00",
+      "etb": "2026-11-23 00:00:00",
       "etd": "2026-11-23 22:00:00",
       "ata": "",
       "atd": "",
@@ -247,7 +247,7 @@
       "reefer": "2026-11-21 17:00:00",
       "dry": "2026-11-21 17:00:00",
       "linea": "MAE",
-      "etb": "2026-11-21 23:00:00",
+      "etb": "2026-11-22 02:30:00",
       "etd": "2026-11-23 15:00:00",
       "ata": "",
       "atd": "",
@@ -305,7 +305,7 @@
       "etd": "2026-11-20 02:00:00",
       "ata": "2026-11-19 06:55:00",
       "atd": "2026-11-20 02:55:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
