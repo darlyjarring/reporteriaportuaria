@@ -1,9 +1,27 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-20T01:56:43.113948+00:00",
-  "actualizado_ec": "2026-11-19 20:56:43",
+  "actualizado_utc": "2026-11-20T09:55:40.680245+00:00",
+  "actualizado_ec": "2026-11-20 04:55:40",
   "total": 52,
   "naves": [
+    {
+      "gkey": "1973737818",
+      "referencia": "CMA2026134",
+      "nave": "COSCO PRINCE RUPERT",
+      "viaje": "M2X0L0W19",
+      "viaje_salida": "M2X0L0W19",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-12-04 22:00:00",
+      "etd": "2026-12-06 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "gkey": "1973740321",
       "referencia": "CMA2026136",
@@ -286,7 +304,7 @@
       "etb": "2026-11-19 07:00:00",
       "etd": "2026-11-20 02:00:00",
       "ata": "2026-11-19 06:55:00",
-      "atd": "",
+      "atd": "2026-11-20 02:55:00",
       "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
@@ -921,24 +939,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "gkey": "1917792199",
-      "referencia": "ZPMC2026002",
-      "nave": "ZHEN HUA 34",
-      "viaje": "263405",
-      "viaje_salida": "263405",
-      "reefer": "",
-      "dry": "",
-      "linea": "ZPMC",
-      "etb": "2026-10-20 07:00:00",
-      "etd": "2026-10-24 12:00:00",
-      "ata": "2026-10-20 07:20:00",
-      "atd": "2026-10-23 00:25:00",
-      "status": "DEPARTED",
-      "origen": "MXZLO",
-      "destino": "MXZLO",
-      "servicio": "DPW"
     }
   ]
 }
