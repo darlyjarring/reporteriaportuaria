@@ -1,9 +1,27 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-22T01:15:08.410828+00:00",
-  "actualizado_ec": "2026-11-21 20:15:08",
-  "total": 53,
+  "actualizado_utc": "2026-11-22T08:12:12.204829+00:00",
+  "actualizado_ec": "2026-11-22 03:12:12",
+  "total": 54,
   "naves": [
+    {
+      "gkey": "1975645710",
+      "referencia": "MAE2026143",
+      "nave": "SEALAND LOS ANGELES",
+      "viaje": "648S",
+      "viaje_salida": "650N",
+      "reefer": "",
+      "dry": "",
+      "linea": "MAE",
+      "etb": "2026-12-06 16:00:00",
+      "etd": "2026-12-07 22:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PABLB",
+      "destino": "PABLB",
+      "servicio": "WCSA-SHTL"
+    },
     {
       "gkey": "1975645795",
       "referencia": "MAE2026141",
@@ -75,6 +93,24 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
+    },
+    {
+      "gkey": "1977033760",
+      "referencia": "HMM2026011",
+      "nave": "HMM IVY",
+      "viaje": "0006W",
+      "viaje_salida": "0006W",
+      "reefer": "2026-11-30 12:00:00",
+      "dry": "2026-11-30 12:00:00",
+      "linea": "HMM",
+      "etb": "2026-11-30 17:00:00",
+      "etd": "2026-12-02 00:05:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "AX4"
     },
     {
       "gkey": "1962403031",
@@ -229,7 +265,7 @@
       "reefer": "2026-11-23 07:00:00",
       "dry": "2026-11-23 07:00:00",
       "linea": "CMA",
-      "etb": "2026-11-23 17:00:00",
+      "etb": "2026-11-23 19:00:00",
       "etd": "2026-11-24 14:00:00",
       "ata": "",
       "atd": "",
@@ -266,10 +302,10 @@
       "dry": "2026-11-21 19:00:00",
       "linea": "MAE",
       "etb": "2026-11-22 03:00:00",
-      "etd": "2026-11-23 15:00:00",
-      "ata": "",
+      "etd": "2026-11-23 17:00:00",
+      "ata": "2026-11-22 02:20:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "WCSA-SHTL"
@@ -939,24 +975,6 @@
       "origen": "PECLL",
       "destino": "PECLL",
       "servicio": "SWX_NB"
-    },
-    {
-      "gkey": "1933696095",
-      "referencia": "CMA2026125",
-      "nave": "CMA CGM IMAGINATION",
-      "viaje": "0DVQPN1MA",
-      "viaje_salida": "0DVQPN1MA",
-      "reefer": "",
-      "dry": "",
-      "linea": "CMA",
-      "etb": "2026-10-22 15:00:00",
-      "etd": "2026-10-23 09:00:00",
-      "ata": "2026-10-22 15:30:00",
-      "atd": "2026-10-23 09:40:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MEDCAR"
     }
   ]
 }
