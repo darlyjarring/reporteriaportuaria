@@ -1,8 +1,8 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-23T02:31:56.043676+00:00",
-  "actualizado_ec": "2026-11-22 21:31:56",
-  "total": 54,
+  "actualizado_utc": "2026-11-23T11:16:02.913694+00:00",
+  "actualizado_ec": "2026-11-23 06:16:02",
+  "total": 52,
   "naves": [
     {
       "gkey": "1975645710",
@@ -285,9 +285,9 @@
       "linea": "MAE",
       "etb": "2026-11-23 02:30:00",
       "etd": "2026-11-24 04:30:00",
-      "ata": "",
+      "ata": "2026-11-23 04:35:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
@@ -322,7 +322,7 @@
       "etb": "2026-11-20 21:00:00",
       "etd": "2026-11-22 23:00:00",
       "ata": "2026-11-20 21:48:00",
-      "atd": "",
+      "atd": "2026-11-22 23:48:00",
       "status": "IN OPERATION",
       "origen": "PECLL",
       "destino": "PECLL",
@@ -939,42 +939,6 @@
       "origen": "ECPBO",
       "destino": "ECPBO",
       "servicio": "ECUMED"
-    },
-    {
-      "gkey": "1917430036",
-      "referencia": "CMA2026116",
-      "nave": "CMA CGM LIBERTY",
-      "viaje": "0MH2WW1MA",
-      "viaje_salida": "0MH2WW1MA",
-      "reefer": "2026-10-23 23:00:00",
-      "dry": "2026-10-23 23:00:00",
-      "linea": "CMA",
-      "etb": "2026-10-23 23:30:00",
-      "etd": "2026-10-25 02:00:00",
-      "ata": "2026-10-23 23:06:00",
-      "atd": "2026-10-25 03:42:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "ACSA"
-    },
-    {
-      "gkey": "1899180391",
-      "referencia": "HLC2026097",
-      "nave": "ISTANBUL EXPRESS",
-      "viaje": "6236N",
-      "viaje_salida": "6236N",
-      "reefer": "2026-10-22 07:00:00",
-      "dry": "2026-10-22 07:00:00",
-      "linea": "HLC",
-      "etb": "2026-10-23 02:00:00",
-      "etd": "2026-10-23 19:00:00",
-      "ata": "2026-10-23 01:54:00",
-      "atd": "2026-10-23 18:54:00",
-      "status": "DEPARTED",
-      "origen": "PECLL",
-      "destino": "PECLL",
-      "servicio": "SWX_NB"
     }
   ]
 }
