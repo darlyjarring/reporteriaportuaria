@@ -304,7 +304,6 @@
 
     <!-- METADATOS DE LA NAVE SELECCIONADA -->
     <div id="infoNaveActiva" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-3 text-xs">
-      <!-- Se llena dinámicamente -->
     </div>
   </section>
 
@@ -326,7 +325,7 @@
             Haz clic o arrastra uno o varios archivos aquí
           </p>
           <p class="text-[11px] text-slate-500 mt-1">
-            Soporta <strong>.PDF</strong>, <strong>.XLSX</strong>, <strong>.XLS</strong>, <strong>.CSV</strong> · Se suman a lo ya guardado en la nave activa
+            Soporta <strong>.PDF</strong>, <strong>.XLSX</strong>, <strong>.XLS</strong>, <strong>.CSV</strong> · Detecta <em>CA</em>, <em>Cold</em>, <em>cold</em>, <em>COLD</em> y <em>cold treatmen(t)</em>
           </p>
           <input type="file" id="fileInput" multiple accept=".pdf,.xlsx,.xls,.csv" class="hidden" onchange="procesarArchivosSeleccionados(this.files)">
         </label>
@@ -339,7 +338,6 @@
           <span id="estadoProceso" class="text-xs font-semibold text-cyan-700">Listo</span>
         </div>
 
-        <!-- Barra de progreso -->
         <div class="w-full bg-slate-100 rounded-full h-2 mt-2 overflow-hidden">
           <div id="barraProgreso" class="bg-cyan-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
         </div>
@@ -1017,7 +1015,6 @@ async function extraerTextoArchivo(file) {
     for (let p = 1; p <= pdf.numPages; p++) {
       const page = await pdf.getPage(p);
       const content = await page.getTextContent();
-      // Agrupar items por coordenada Y aproximada para conservar filas
       const filasMap = new Map();
       for (const item of content.items) {
         if (!item.str) continue;
@@ -1045,7 +1042,14 @@ async function extraerTextoArchivo(file) {
   }
 }
 
-/* --- DETECCIÓN SEMÁNTICA HEURÍSTICA + GEMINI AI --- */
+/* --- DETECCIÓN SEMÁNTICA HEURÍSTICA + GEMINI AI (Cold / cold / COLD / cold treatmen(t)) --- */
+function normalizarTextoBusqueda(str) {
+  return String(str || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 function detectarLineaEnTexto(texto, fallbackLinea) {
   const up = texto.toUpperCase();
   const codigos = ['CMA', 'MAE', 'MSK', 'HLC', 'COS', 'ONE', 'HMM', 'MSC', 'ZIM', 'PIL', 'YML', 'EVERGREEN', 'EMC'];
@@ -1063,38 +1067,47 @@ function analizarHeuristicamente(texto, fileName, nave) {
   const regexContenedor = /\b([A-Z]{4})\s*-?\s*(\d{7})\b/g;
   const lineaGlobal = detectarLineaEnTexto(texto.slice(0, 2500), nave?.linea || 'SIN_LINEA');
 
-  const regexCA = /\b(CA|CONTROLLED\s*ATMOSPHERE|ATMOSFERA\s*CONTROLADA|STARCOOL\s*CA|EVERFRESH|LIVENTUS|MAXTEND|O2\s*[:=]?\s*\d|CO2\s*[:=]?\s*\d)\b/i;
-  const regexCOLD = /\b(COLD\s*TREATMENT|COLD\s*TRMT|CT\b|USDA|APGIS|APHIS|QUARANTINE|CUARENTENA|PULP\s*PROBE|SONDA|IN\s*TRANSIT\s*COLD)\b/i;
+  const regexCA = /\b(ca|controlled\s*atmosphere|atmosfera\s*controlada|starcool\s*ca|everfresh|liventus|maxtend|o2\s*[:=]?\s*\d|co2\s*[:=]?\s*\d)\b/i;
+  // Detecta cold treatmen / cold treatment / Cold / cold / COLD / tratamiento frio / CT / USDA / cuarentena
+  const regexCOLD = /(\bcold\b|cold\s*treatmen[t]?|cold\s*trmt|cold\s*tmt|tratamiento\s*(en\s*)?frio|\bct\b|usda|aphis|quarantine|cuarentena|pulp\s*probe|in\s*transit\s*cold)/i;
 
   const encontrados = new Map();
 
   for (let i = 0; i < lineas.length; i++) {
-    const contexto = [lineas[i - 1] || '', lineas[i] || '', lineas[i + 1] || ''].join(' | ');
+    const contextoOriginal = [lineas[i - 1] || '', lineas[i] || '', lineas[i + 1] || ''].join(' | ');
+    const contextoLimpio = normalizarTextoBusqueda(contextoOriginal);
+
     let match;
     regexContenedor.lastIndex = 0;
     while ((match = regexContenedor.exec(lineas[i])) !== null) {
       const cntr = `${match[1]}${match[2]}`.toUpperCase();
-      const tieneCA = regexCA.test(contexto);
-      const tieneCOLD = regexCOLD.test(contexto);
+      const tieneCA = regexCA.test(contextoLimpio);
+      const tieneCOLD = regexCOLD.test(contextoLimpio);
 
       if (tieneCA || tieneCOLD) {
         let tipo = 'CA';
         if (tieneCA && tieneCOLD) tipo = 'MIXTO';
         else if (tieneCOLD) tipo = 'COLD';
 
-        const tempMatch = contexto.match(/([+-]?\d{1,2}(?:[.,]\d{1,2})?\s*°?\s*[CF])\b/i);
-        const o2Match = contexto.match(/\bO2[:\s]*(\d{1,2}(?:[.,]\d)?%?)/i);
-        const co2Match = contexto.match(/\bCO2[:\s]*(\d{1,2}(?:[.,]\d)?%?)/i);
-        const coldMatch = contexto.match(/\b(USDA\s*[A-Z0-9-]+|\d{1,2}(?:[.,]\d)?\s*°?C\s*(?:FOR|X)\s*\d+\s*DAYS?)\b/i);
+        const tempMatch = contextoOriginal.match(/([+-]?\d{1,2}(?:[.,]\d{1,2})?\s*°?\s*[CF])\b/i);
+        const o2Match = contextoOriginal.match(/\bO2[:\s]*(\d{1,2}(?:[.,]\d)?%?)/i);
+        const co2Match = contextoOriginal.match(/\bCO2[:\s]*(\d{1,2}(?:[.,]\d)?%?)/i);
+        const coldMatch = contextoOriginal.match(/(cold\s*treatmen[t]?[^\n|;]{0,45}|\bcold\b[^\n|;]{0,35}|usda\s*[a-z0-9-]+|\d{1,2}(?:[.,]\d)?\s*°?c\s*(?:for|x)\s*\d+\s*days?)/i);
 
         let params = [];
         if (tempMatch) params.push(`Set ${tempMatch[1].replace(',', '.')}`);
         if (o2Match) params.push(`O2 ${o2Match[1]}`);
         if (co2Match) params.push(`CO2 ${co2Match[1]}`);
-        if (coldMatch) params.push(coldMatch[1]);
-        if (!params.length) params.push(tipo === 'MIXTO' ? 'CA + Cold Treatment' : (tipo === 'CA' ? 'Controlled Atmosphere' : 'Cold Treatment'));
+        if (coldMatch) params.push(coldMatch[1].trim());
+        if (!params.length) {
+          params.push(
+            tipo === 'MIXTO'
+              ? 'CA + Cold Treatment'
+              : (tipo === 'CA' ? 'Controlled Atmosphere' : 'Cold / Cold Treatment')
+          );
+        }
 
-        const lineaDetectada = detectarLineaEnTexto(contexto, lineaGlobal);
+        const lineaDetectada = detectarLineaEnTexto(contextoOriginal, lineaGlobal);
 
         if (!encontrados.has(cntr)) {
           encontrados.set(cntr, {
@@ -1103,7 +1116,7 @@ function analizarHeuristicamente(texto, fileName, nave) {
             tipo,
             parametros: params.join(' · '),
             archivo: fileName,
-            evidencia: contexto.trim().slice(0, 350)
+            evidencia: contextoOriginal.trim().slice(0, 350)
           });
         } else {
           const prev = encontrados.get(cntr);
@@ -1127,12 +1140,13 @@ async function analizarConGeminiSiDisponible(texto, fileName, nave) {
 
   try {
     const prompt = `Analiza este manifiesto de carga ("${fileName}") para la nave "${nave?.vesselName || ''}" (viaje "${nave?.viaje || ''}", línea "${nave?.linea || ''}").
-Extrae ÚNICAMENTE los contenedores que requieran Atmósfera Controlada (CA), Cold Treatment (COLD/CT/USDA/cuarentena) o ambos (MIXTO).
+Extrae ÚNICAMENTE los contenedores que requieran Atmósfera Controlada (CA), Cold Treatment (incluyendo "Cold", "cold", "COLD", "cold treatmen", "cold treatment", "CT", "USDA", cuarentena) o ambos (MIXTO).
+No importa si las palabras están en mayúsculas, minúsculas o capitalizadas.
 Devuelve un JSON array de objetos con:
 - "contenedor": string ISO (ej. "MSKU1234567")
 - "linea": código corto de línea naviera (ej. "MAE", "CMA", "HLC", "COS", "ONE", "MSC")
 - "tipo": "CA" | "COLD" | "MIXTO"
-- "parametros": string breve con temperatura, O2/CO2 o protocolo cold
+- "parametros": string breve con temperatura, O2/CO2 o unidad/protocolo cold
 - "evidencia": fragmento corto del texto donde aparece
 
 Texto del manifiesto:
@@ -1217,7 +1231,6 @@ async function procesarArchivosSeleccionados(fileList) {
     const texto = await extraerTextoArchivo(file);
     const detectados = await analizarConGeminiSiDisponible(texto, file.name, nave);
 
-    // Acumular sin duplicar el mismo contenedor del mismo archivo
     let agregadosEnArchivo = 0;
     for (const item of detectados) {
       const existeMismoArchivo = bucket.contenedores.some(
@@ -1276,7 +1289,6 @@ function renderizarTodo() {
   const nave = obtenerNaveActiva();
   const bucket = nave ? ACUMULADO_POR_NAVE[nave._key] : null;
 
-  // 1. Archivos de la nave activa
   const archivosList = bucket?.archivos || [];
   document.getElementById('conteoArchivosNave').textContent = archivosList.length;
   const listaEl = document.getElementById('listaArchivosNave');
@@ -1291,7 +1303,6 @@ function renderizarTodo() {
     `).join('');
   }
 
-  // 2. Contenedores en alcance y KPIs
   const scope = obtenerContenedoresScope();
   const totalCA = scope.filter(c => c.tipo === 'CA').length;
   const totalCOLD = scope.filter(c => c.tipo === 'COLD').length;
@@ -1306,7 +1317,6 @@ function renderizarTodo() {
     ? `Nave activa: ${nave.vesselName} (${nave.viaje || '—'})`
     : 'Mostrando todas las naves acumuladas';
 
-  // 3. Agrupar por Línea Naviera
   const porLinea = new Map();
   for (const c of scope) {
     const lin = c.linea || 'SIN_LINEA';
@@ -1342,7 +1352,6 @@ function renderizarTodo() {
     }).join('');
   }
 
-  // Actualizar combo de líneas
   const selLinea = document.getElementById('filtroLinea');
   const valorActualLinea = selLinea.value;
   const lineasUnicas = Array.from(porLinea.keys()).sort();
@@ -1375,7 +1384,7 @@ function renderizarTablaContenedores() {
     return;
   }
 
-  tbody.innerHTML = filtrados.map((c, i) => {
+  tbody.innerHTML = filtrados.map(c => {
     const badge = c.tipo === 'CA'
       ? '<span class="px-2 py-0.5 rounded bg-teal-100 text-teal-800 font-sans font-bold text-[11px]">CA</span>'
       : c.tipo === 'COLD'
