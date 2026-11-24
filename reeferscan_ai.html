@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ReeferScan AI · CA &amp; Cold Treatment + Vessel Schedule</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: #eef2f6;
+    color: #0f172a;
+  }
+
+  /* --- ESTILOS VENTANA FLOTANTE NAVIS N4 (consulta_naves.html) --- */
+  .n4-font { font-family: Tahoma, "Segoe UI", Arial, sans-serif; color: #000; }
+  .btn-flotante-trigger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9998;
+    background: #123b5d;
+    color: #fff;
+    border: 1px solid #092136;
+    border-radius: 50px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, background 0.15s;
+    touch-action: manipulation;
+  }
+  .btn-flotante-trigger:hover {
+    background: #0d2a44;
+    transform: translateY(-2px);
+  }
+  .ventana-flotante {
+    position: fixed;
+    top: 56px;
+    left: 24px;
+    width: min(1180px, 96vw);
+    max-height: 84vh;
+    background: #d4d0c8;
+    border: 2px solid #5a7fa6;
+    border-radius: 6px 6px 2px 2px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .ventana-flotante.oculta { display: none; }
+  .barra-titulo {
+    background: linear-gradient(180deg, #b8d3ee 0%, #8eb4dc 50%, #7da7d4 100%);
+    border-bottom: 1px solid #5981ab;
+    padding: 5px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+  }
+  .barra-titulo .titulo-texto {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .controles-ventana { display: flex; gap: 3px; flex-shrink: 0; }
+  .btn-win {
+    width: 22px;
+    height: 20px;
+    border: 1px solid #5a7ca3;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #f4f8fc 0%, #cddff2 100%);
+    color: #000;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-win:hover { background: #dcebfa; }
+  .btn-win.cerrar-win {
+    background: linear-gradient(180deg, #f28b82 0%, #d9534f 100%);
+    color: #fff;
+    border-color: #9e2b27;
+  }
+  .navis-toolbar {
+    background: #ece9d8;
+    border-bottom: 1px solid #aca899;
+    padding: 4px 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .navis-select, .navis-input {
+    height: 24px;
+    padding: 1px 6px;
+    border: 1px solid #7f9db9;
+    border-radius: 2px;
+    font-size: 11px;
+    background: #fff;
+    color: #000;
+  }
+  .grupo-n4 { display: flex; align-items: center; gap: 4px; }
+  .grupo-n4 label { font-size: 11px; color: #222; }
+  .btn-n4 {
+    height: 24px;
+    padding: 0 10px;
+    background: linear-gradient(180deg, #ffffff 0%, #dcdad5 100%);
+    color: #000;
+    border: 1px solid #7f9db9;
+    border-radius: 2px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .btn-n4:hover {
+    background: linear-gradient(180deg, #fff8e6 0%, #f5deb3 100%);
+    border-color: #d49b35;
+  }
+  .btn-n4.primario {
+    background: #123b5d;
+    color: #fff;
+    border-color: #092136;
+    font-weight: bold;
+  }
+  .estado-fuente { font-size: 11px; color: #444; margin-left: auto; }
+  .tabla-contenedor {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+    flex: 1;
+  }
+  .tabla-n4 {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .tabla-n4 thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #e4e8f0 55%, #cfd7e6 100%);
+    border-right: 1px solid #b5becd;
+    border-bottom: 1px solid #8e99ad;
+    padding: 4px 8px;
+    text-align: center;
+    font-weight: normal;
+    color: #000;
+    z-index: 3;
+    user-select: none;
+  }
+  .tabla-n4 thead th.col-icon { width: 28px; padding: 2px 4px; text-align: center; }
+  .tabla-n4 tbody td {
+    padding: 2px 8px;
+    border-right: 1px solid #e6e6e6;
+    border-bottom: 1px solid #ececec;
+    font-family: "Consolas", "Lucida Console", monospace;
+    font-size: 11.5px;
+    height: 20px;
+    cursor: pointer;
+  }
+  .tabla-n4 tbody td.col-icon {
+    text-align: center;
+    background: #f4f4f4;
+    border-right: 1px solid #ccc;
+    font-family: Tahoma, Arial, sans-serif;
+    padding: 1px 4px;
+  }
+  .tabla-n4 tbody tr:hover td { outline: 1px solid #7da2ce; }
+  .tabla-n4 tbody tr.seleccionada td {
+    background-color: #0066cc !important;
+    color: #ffffff !important;
+  }
+  .tabla-n4 tbody tr.seleccionada td.col-icon {
+    background-color: #0055aa !important;
+  }
+  .pie-ventana {
+    background: #ece9d8;
+    border-top: 1px solid #aca899;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .ventana-flotante {
+      top: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      max-height: 92vh;
+      border-radius: 10px 10px 0 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+    }
+    .barra-titulo { padding: 9px 12px; cursor: default; }
+    .btn-win { width: 28px; height: 26px; font-size: 14px; }
+    .navis-toolbar { padding: 8px; gap: 6px; }
+    .grupo-n4 { flex: 1 1 46%; min-width: 135px; }
+    .grupo-n4.full { flex: 1 1 100%; }
+    .navis-select, .navis-input { width: 100% !important; height: 34px; font-size: 12px; }
+    .btn-n4 { flex: 1; height: 34px; font-size: 12px; }
+    .tabla-n4 thead th, .tabla-n4 tbody td { padding: 5px 7px; font-size: 11px; }
+    .tabla-n4 thead th.col-vessel, .tabla-n4 tbody td.col-vessel {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.08);
+    }
+    .tabla-n4 thead th.col-vessel { z-index: 4; }
+    .tabla-n4 tbody td.col-vessel { background: #fff; }
+    .estado-fuente { width: 100%; margin-left: 0; text-align: right; font-size: 10px; }
+    .nota-pc { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CABECERA PRINCIPAL -->
+<header class="bg-[#0c2740] text-white border-b border-[#1b466e] sticky top-0 z-40 shadow">
+  <div class="max-w-[1440px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-lg font-bold text-cyan-300">
+        ❄
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-base sm:text-lg font-bold tracking-tight">ReeferScan AI</h1>
+          <span class="text-[11px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-200 border border-cyan-400/30 font-semibold">CA &amp; COLD TREATMENT</span>
+        </div>
+        <p class="text-xs text-slate-300">Acumulador de manifiestos PDF/Excel por nave y línea naviera · Sincronizado con Vessel Schedule</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button type="button" onclick="toggleVentana()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs flex items-center gap-1.5 transition cursor-pointer">
+        <span>🚢</span>
+        <span>Vessel Schedule (Navis N4)</span>
+      </button>
+
+      <input type="password" id="geminiApiKey" placeholder="Gemini API Key (opcional)" oninput="guardarApiKey()"
+        class="px-2.5 py-1.5 rounded-lg bg-slate-900/80 border border-slate-600 text-xs text-white placeholder-slate-400 w-44 focus:outline-none focus:border-cyan-400">
+
+      <button type="button" onclick="exportarExcel()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition cursor-pointer">
+        ⬇ Exportar .XLSX
+      </button>
+      <button type="button" onclick="exportarCSV()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-semibold text-xs transition cursor-pointer">
+        ⬇ CSV
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="max-w-[1440px] mx-auto px-4 py-4 space-y-4">
+
+  <!-- BARRA DE NAVE ACTIVA VINCULADA A consulta_naves.html -->
+  <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Nave Activa (Itinerario):</span>
+        <select id="selectorNaveActiva" onchange="seleccionarNavePorId(this.value)"
+          class="px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-sm font-bold text-[#0c2740] focus:outline-none focus:border-blue-600">
+        </select>
+        <button type="button" onclick="toggleVentana()" class="text-xs px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold cursor-pointer">
+          Cambiar en tabla N4
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 text-xs">
+        <label class="inline-flex items-center gap-1.5 cursor-pointer select-none font-medium text-slate-700">
+          <input type="checkbox" id="chkSoloNaveActiva" checked onchange="renderizarTodo()" class="rounded border-slate-300 text-blue-600">
+          <span>Filtrar vista por nave seleccionada</span>
+        </label>
+        <button type="button" onclick="limpiarDatosNaveActual()" class="text-rose-600 hover:text-rose-800 font-semibold cursor-pointer">
+          🗑 Borrar datos de esta nave
+        </button>
+      </div>
+    </div>
+
+    <!-- METADATOS DE LA NAVE SELECCIONADA -->
+    <div id="infoNaveActiva" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-3 text-xs">
+      <!-- Se llena dinámicamente -->
+    </div>
+  </section>
+
+  <!-- ZONA DE CARGA MÚLTIPLE + RESUMEN POR LÍNEA NAVIERA -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <!-- CARGA INCREMENTAL DE ARCHIVOS (5 cols) -->
+    <section class="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col justify-between space-y-3">
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-slate-800">1. Cargar 1 o varios manifiestos (PDF / Excel / CSV)</h2>
+          <span class="text-[11px] text-slate-500">Acumula por nave &amp; línea</span>
+        </div>
+
+        <label id="dropZone" for="fileInput"
+          class="block border-2 border-dashed border-cyan-500/50 hover:border-cyan-600 bg-cyan-50/40 hover:bg-cyan-50 rounded-xl p-5 text-center cursor-pointer transition">
+          <div class="text-2xl mb-1">📄📊</div>
+          <p class="text-xs sm:text-sm font-semibold text-slate-800">
+            Haz clic o arrastra uno o varios archivos aquí
+          </p>
+          <p class="text-[11px] text-slate-500 mt-1">
+            Soporta <strong>.PDF</strong>, <strong>.XLSX</strong>, <strong>.XLS</strong>, <strong>.CSV</strong> · Se suman a lo ya guardado en la nave activa
+          </p>
+          <input type="file" id="fileInput" multiple accept=".pdf,.xlsx,.xls,.csv" class="hidden" onchange="procesarArchivosSeleccionados(this.files)">
+        </label>
+
+        <div class="mt-3 flex items-center justify-between gap-2">
+          <label class="inline-flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+            <input type="checkbox" id="chkUsarIA" checked class="rounded border-slate-300 text-cyan-600">
+            <span>Usar Gemini AI (si hay API Key) + Motor Semántico Reefer</span>
+          </label>
+          <span id="estadoProceso" class="text-xs font-semibold text-cyan-700">Listo</span>
+        </div>
+
+        <!-- Barra de progreso -->
+        <div class="w-full bg-slate-100 rounded-full h-2 mt-2 overflow-hidden">
+          <div id="barraProgreso" class="bg-cyan-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Historial de archivos acumulados para la nave activa -->
+      <div class="border-t border-slate-100 pt-2.5">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+          Archivos acumulados en esta nave (<span id="conteoArchivosNave">0</span>)
+        </div>
+        <div id="listaArchivosNave" class="max-h-28 overflow-y-auto space-y-1 text-xs">
+          <p class="text-slate-400 italic">Aún no se han cargado manifiestos para esta nave.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACUMULADO POR LÍNEA NAVIERA (7 cols) -->
+    <section class="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div>
+          <h2 class="text-sm font-bold text-slate-800">2. Acumulado CA y COLD por Línea Naviera</h2>
+          <p id="subtituloAcumulado" class="text-xs text-slate-500">Conteo consolidado de contenedores detectados</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 border border-teal-200 font-bold">
+            Total CA: <span id="kpiTotalCA">0</span>
+          </span>
+          <span class="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200 font-bold">
+            Total COLD: <span id="kpiTotalCOLD">0</span>
+          </span>
+          <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-bold">
+            Mixtos (CA+COLD): <span id="kpiTotalMIX">0</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto flex-1 border border-slate-200 rounded-lg">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+            <tr>
+              <th class="py-2 px-3">Línea Naviera</th>
+              <th class="py-2 px-3">Nave / Viaje</th>
+              <th class="py-2 px-3 text-center">Atmósfera Controlada (CA)</th>
+              <th class="py-2 px-3 text-center">Cold Treatment (COLD)</th>
+              <th class="py-2 px-3 text-center">CA + COLD</th>
+              <th class="py-2 px-3 text-center">Total Filtrado</th>
+              <th class="py-2 px-3 text-right">Archivos</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoResumenLinea" class="divide-y divide-slate-100">
+            <tr><td colspan="7" class="py-6 text-center text-slate-400">Sin contenedores CA o COLD registrados aún.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- TABLA DETALLADA DE CONTENEDORES + COPILOTO IA -->
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+
+    <!-- TABLA DE CONTENEDORES (8 cols) -->
+    <section class="xl:col-span-8 bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <h2 class="text-sm font-bold text-slate-800">3. Detalle de Contenedores CA y COLD</h2>
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="filtroTipo" onchange="renderizarTablaContenedores()" class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs bg-white">
+            <option value="ALL">Todos (CA, COLD, Mixto)</option>
+            <option value="CA">Solo Atmósfera Controlada (CA)</option>
+            <option value="COLD">Solo Cold Treatment (COLD)</option>
+            <option value="MIXTO">Solo Mixtos (CA + COLD)</option>
+          </select>
+          <select id="filtroLinea" onchange="renderizarTablaContenedores()" class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs bg-white">
+            <option value="">Todas las líneas</option>
+          </select>
+          <input type="text" id="buscarContenedor" oninput="renderizarTablaContenedores()" placeholder="Buscar contenedor, booking, protocolo..."
+            class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs w-48">
+        </div>
+      </div>
+
+      <div class="overflow-x-auto max-h-[420px] overflow-y-auto border border-slate-200 rounded-lg">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200 sticky top-0 z-10">
+            <tr>
+              <th class="py-2 px-2.5">Contenedor</th>
+              <th class="py-2 px-2.5">Línea</th>
+              <th class="py-2 px-2.5">Nave</th>
+              <th class="py-2 px-2.5">Clasificación</th>
+              <th class="py-2 px-2.5">Temp / Parámetros CA &amp; COLD</th>
+              <th class="py-2 px-2.5">Archivo Origen</th>
+              <th class="py-2 px-2.5 text-center">Evidencia</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoContenedores" class="divide-y divide-slate-100 font-mono">
+            <tr><td colspan="7" class="py-8 text-center text-slate-400 font-sans">Carga un PDF o Excel para extraer contenedores CA y COLD.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COPILOTO REEFER AI (4 cols) -->
+    <section class="xl:col-span-4 bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-bold text-slate-800">🤖 Copiloto Reefer AI</h2>
+        <span class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold">Auditoría</span>
+      </div>
+      <p class="text-xs text-slate-500 mb-2.5">
+        Consulta conteos por línea, protocolos de cold treatment, niveles de O₂/CO₂ o discrepancias en los manifiestos cargados.
+      </p>
+
+      <div id="chatCopiloto" class="flex-1 min-h-[220px] max-h-[300px] overflow-y-auto bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2.5 text-xs mb-2.5">
+        <div class="bg-white border border-slate-200 rounded-lg p-2.5 text-slate-700">
+          <strong>Reefer AI:</strong> Selecciona una nave en <em>Vessel Schedule</em> y sube uno o varios manifiestos. Iré acumulando los <strong>CA</strong> y <strong>COLD</strong> por línea naviera para que podamos auditarlos.
+        </div>
+      </div>
+
+      <form onsubmit="enviarConsultaCopiloto(event)" class="flex gap-2">
+        <input type="text" id="inputCopiloto" placeholder="Ej: ¿Cuántos COLD tiene MAE en esta nave?"
+          class="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:border-cyan-600">
+        <button type="submit" class="px-3 py-1.5 rounded-lg bg-[#0c2740] hover:bg-[#163d61] text-white text-xs font-semibold cursor-pointer">
+          Enviar
+        </button>
+      </form>
+    </section>
+  </div>
+</main>
+
+<!-- MODAL DE EVIDENCIA DEL MANIFIESTO -->
+<div id="modalEvidencia" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-[10000]">
+  <div class="bg-white rounded-xl max-w-xl w-full p-5 shadow-2xl border border-slate-200">
+    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+      <h3 id="tituloModalEvidencia" class="text-sm font-bold text-slate-800">Evidencia en Manifiesto</h3>
+      <button type="button" onclick="cerrarModalEvidencia()" class="text-slate-400 hover:text-slate-700 font-bold text-lg leading-none cursor-pointer">&times;</button>
+    </div>
+    <div id="contenidoModalEvidencia" class="mt-3 text-xs space-y-2"></div>
+  </div>
+</div>
+
+<!-- BOTÓN FLOTANTE VESSEL SCHEDULE (consulta_naves.html) -->
+<button type="button" class="btn-flotante-trigger n4-font" onclick="toggleVentana()">
+  🚢 Vessel Schedule
+</button>
+
+<!-- VENTANA FLOTANTE NAVIS N4 (consulta_naves.html) -->
+<div class="ventana-flotante n4-font" id="ventanaSchedule">
+  <div class="barra-titulo" id="barraArrastre">
+    <div class="titulo-texto">
+      <span>🚢</span>
+      <span id="tituloVentana">Vessel Schedule: 0</span>
+    </div>
+    <div class="controles-ventana">
+      <button type="button" class="btn-win" title="Actualizar datos.json" onclick="cargarDatosFlotante()">↻</button>
+      <button type="button" class="btn-win cerrar-win" title="Cerrar" onclick="toggleVentana()">×</button>
+    </div>
+  </div>
+
+  <div class="navis-toolbar">
+    <div class="grupo-n4">
+      <select class="navis-select" id="selectActions" onchange="ejecutarAccionN4(this)">
+        <option value="">Actions</option>
+        <option value="refresh">Refresh Data (datos.json)</option>
+        <option value="working">Filter: Working Only</option>
+        <option value="inbound">Filter: Inbound Only</option>
+        <option value="clear">Reset All Filters</option>
+      </select>
+    </div>
+    <div class="grupo-n4">
+      <select class="navis-select" id="filtroFase" onchange="aplicarConsulta()">
+        <option value="">Display: All Phases</option>
+        <option value="Working">Display: Working</option>
+        <option value="Inbound">Display: Inbound</option>
+        <option value="Departed">Display: Departed</option>
+      </select>
+    </div>
+    <div class="grupo-n4">
+      <select class="navis-select" id="selectRango" onchange="cambiarRangoFechas()">
+        <option value="7">Next 7 Days</option>
+        <option value="14">Next 14 Days</option>
+        <option value="21">Next 21 Days</option>
+        <option value="-7">Past 7 Days &amp; Next 7</option>
+        <option value="personalizado">Custom Dates</option>
+      </select>
+    </div>
+    <div class="grupo-n4">
+      <label>Desde:</label>
+      <input type="date" class="navis-input" id="fechaInicio" onchange="marcarPersonalizado()">
+    </div>
+    <div class="grupo-n4">
+      <label>Hasta:</label>
+      <input type="date" class="navis-input" id="fechaFin" onchange="marcarPersonalizado()">
+    </div>
+    <div class="grupo-n4 full">
+      <input type="text" class="navis-input" id="buscadorTexto" placeholder="Buscar nave, ref, viaje, origen, destino..." oninput="aplicarConsulta()" style="width: 215px;">
+    </div>
+    <div class="grupo-n4 full">
+      <button type="button" class="btn-n4 primario" onclick="cargarDatosFlotante()">CONSULTAR</button>
+      <button type="button" class="btn-n4" onclick="limpiarFiltros()">LIMPIAR</button>
+    </div>
+    <span class="estado-fuente" id="estadoFuente">Conectando a datos.json...</span>
+  </div>
+
+  <div class="tabla-contenedor">
+    <table class="tabla-n4">
+      <thead>
+        <tr>
+          <th class="col-icon">🚢</th>
+          <th>Arribo a muelle</th>
+          <th>Est. Zarpe</th>
+          <th>*Cut-Off*</th>
+          <th>Ship Reference</th>
+          <th class="col-vessel">Vessel Name</th>
+          <th>VLine Op.</th>
+          <th>Vessel Service</th>
+          <th>Visit Phase</th>
+          <th>P.Origen</th>
+          <th>P.Destino</th>
+        </tr>
+      </thead>
+      <tbody id="cuerpoTabla">
+        <tr><td colspan="11" style="text-align:center;padding:18px;font-family:Tahoma,sans-serif;">Cargando datos.json...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pie-ventana">
+    <span id="contadorRegistros">0 registros</span>
+    <span class="nota-pc">Clic en fila para fijar Nave Activa · Arrastre barra para mover</span>
+    <span>Deslice →</span>
+  </div>
+</div>
+
+<script>
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+const STORAGE_KEY_MANIFIESTOS = 'reeferscan_acumulado_v1';
+const STORAGE_KEY_APIKEY = 'reeferscan_gemini_key_v1';
+
+let NAVES_DATA = [];
+let NAVES_FILTRADAS_ACTUALES = [];
+let NAVE_ACTIVA_KEY = '';
+let ACUMULADO_POR_NAVE = cargarEstadoGuardado();
+
+const NAVES_RESPALDO = [
+  {
+    "gkey": "1962403010",
+    "referencia": "CMA2026122",
+    "nave": "EDISON",
+    "viaje": "0MH30W1MA",
+    "viaje_salida": "0MH30W1MA",
+    "reefer": "2026-11-13 23:00:00",
+    "dry": "2026-11-13 23:00:00",
+    "linea": "CMA",
+    "etb": "2026-11-13 20:00:00",
+    "etd": "2026-11-15 06:00:00",
+    "ata": "2026-11-13 20:00:00",
+    "atd": "",
+    "status": "IN OPERATION",
+    "origen": "PECLL",
+    "destino": "PECLL",
+    "servicio": "ACSA"
+  },
+  {
+    "gkey": "1962403015",
+    "referencia": "MAE2026131",
+    "nave": "MAERSK FINISTERRE",
+    "viaje": "641W",
+    "viaje_salida": "641W",
+    "reefer": "2026-11-14 17:00:00",
+    "dry": "2026-11-14 17:00:00",
+    "linea": "MAE",
+    "etb": "2026-11-14 20:00:00",
+    "etd": "2026-11-16 03:00:00",
+    "ata": "2026-11-14 20:00:00",
+    "atd": "",
+    "status": "IN OPERATION",
+    "origen": "ECPBO",
+    "destino": "ECPBO",
+    "servicio": "ECUMED"
+  },
+  {
+    "gkey": "1962403031",
+    "referencia": "HLC2026110",
+    "nave": "CARTAGENA EXPRESS",
+    "viaje": "6244S",
+    "viaje_salida": "6244S",
+    "reefer": "2026-11-30 07:00:00",
+    "dry": "2026-11-30 07:00:00",
+    "linea": "HLC",
+    "etb": "2026-11-30 17:00:00",
+    "etd": "2026-12-01 08:00:00",
+    "ata": "",
+    "atd": "",
+    "status": "TO ARRIVE",
+    "origen": "COBUN",
+    "destino": "COBUN",
+    "servicio": "SWX_SB"
+  }
+];
+
+const MESES = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+const ESTILO_LINEA = {
+  'CMA': { bg: '#0055ff', fg: '#ffffff' },
+  'MAE': { bg: '#ccffff', fg: '#000000' },
+  'COS': { bg: '#8b5a2b', fg: '#ffffff' },
+  'ONE': { bg: '#ff00ff', fg: '#000000' },
+  'HLC': { bg: '#ff9900', fg: '#000000' },
+  'HMM': { bg: '#008000', fg: '#ffffff' }
+};
+
+const ESTILO_SERVICIO = {
+  'ACSA': { bg: '#ff0000', fg: '#ffffff' },
+  'ECUMED': { bg: '#66ffff', fg: '#000000' },
+  'WCSA-SHTL': { bg: '#ffffff', fg: '#000000' },
+  'SWX_SB': { bg: '#ff6600', fg: '#ffffff' },
+  'SWX_NB': { bg: '#0044cc', fg: '#ffffff' },
+  'AX4': { bg: '#ff00ff', fg: '#000000' },
+  'MSW': { bg: '#7f00ff', fg: '#ffffff' },
+  'MEDCAR': { bg: '#22b14c', fg: '#ffffff' },
+  'OC1': { bg: '#008080', fg: '#ffffff' }
+};
+
+function cargarEstadoGuardado() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_MANIFIESTOS);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function guardarEstado() {
+  try {
+    localStorage.setItem(STORAGE_KEY_MANIFIESTOS, JSON.stringify(ACUMULADO_POR_NAVE));
+  } catch (e) {
+    console.warn('No se pudo guardar en localStorage:', e);
+  }
+}
+
+function guardarApiKey() {
+  localStorage.setItem(STORAGE_KEY_APIKEY, document.getElementById('geminiApiKey').value.trim());
+}
+
+function cargarApiKey() {
+  const k = localStorage.getItem(STORAGE_KEY_APIKEY) || '';
+  document.getElementById('geminiApiKey').value = k;
+}
+
+function obtenerClaveNave(n) {
+  return `${n.gkey || ''}|${n.referencia || ''}|${n.vesselName || ''}|${n.viaje || ''}`.toUpperCase();
+}
+
+function parseFecha(valor) {
+  if (!valor) return null;
+  let s = String(valor).trim();
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if (m) return new Date(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:00-05:00`);
+  m = s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})[ T](\d{2}):(\d{2})/);
+  if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}T${m[4]}:${m[5]}:00-05:00`);
+  return null;
+}
+
+function formatoNavis(valor) {
+  const d = parseFecha(valor);
+  if (!d || isNaN(d.getTime())) return '';
+  const dia = String(d.getDate()).padStart(2, '0');
+  const mes = MESES[d.getMonth()];
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${dia} ${mes} ${hh}${mm}`;
+}
+
+function formatoTituloFecha(isoStr) {
+  if (!isoStr) return '';
+  const [y, m, d] = isoStr.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function fechaLocalInput(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function inicializarFechasPorDefecto() {
+  const hoy = new Date();
+  const fin = new Date(hoy);
+  fin.setDate(fin.getDate() + 7);
+  document.getElementById('fechaInicio').value = fechaLocalInput(hoy);
+  document.getElementById('fechaFin').value = fechaLocalInput(fin);
+}
+
+function marcarPersonalizado() {
+  document.getElementById('selectRango').value = 'personalizado';
+  aplicarConsulta();
+}
+
+function cambiarRangoFechas() {
+  const val = document.getElementById('selectRango').value;
+  if (val === 'personalizado') return;
+
+  const hoy = new Date();
+  const inicio = new Date(hoy);
+  const fin = new Date(hoy);
+  const dias = parseInt(val, 10);
+
+  if (dias < 0) {
+    inicio.setDate(inicio.getDate() + dias);
+    fin.setDate(fin.getDate() + 7);
+  } else {
+    fin.setDate(fin.getDate() + dias);
+  }
+
+  document.getElementById('fechaInicio').value = fechaLocalInput(inicio);
+  document.getElementById('fechaFin').value = fechaLocalInput(fin);
+  aplicarConsulta();
+}
+
+function normalizarRegistro(x) {
+  x = x || {};
+  let ref = String(x.referencia ?? x.REFERENCIA ?? '').trim();
+  let vesselName = String(x.nave ?? x.Nave ?? x.nombre ?? '').trim();
+
+  const match = vesselName.match(/^([A-Z0-9]+)\s*-\s*(.+)$/i);
+  if (match) {
+    if (!ref) ref = match[1].trim();
+    vesselName = match[2].trim();
+  }
+
+  const shipRefDisplay = ref ? (ref.includes('.') ? ref : `${ref}.1`) : (x.viaje || '—');
+
+  const reg = {
+    gkey: String(x.gkey ?? ''),
+    referencia: ref,
+    shipRefDisplay,
+    vesselName,
+    viaje: String(x.viaje ?? x.Viaje ?? ''),
+    linea: String(x.linea ?? x.Linea ?? x.LINEA ?? '').toUpperCase().trim(),
+    etb: x.etb ?? x.ETB ?? '',
+    etd: x.etd ?? x.ETD ?? '',
+    ata: x.ata ?? x.ATA ?? '',
+    atd: x.atd ?? x.ATD ?? '',
+    cutoff: x.reefer ?? x['Reefer CutOff'] ?? x.dry ?? x['Dry CutOff'] ?? '',
+    status: String(x.status ?? x.STATUS ?? '').toUpperCase().trim(),
+    origen: String(x.origen ?? x['PTO.ORIGEN'] ?? '').toUpperCase().trim(),
+    destino: String(x.destino ?? x['PTO.DESTINO'] ?? '').toUpperCase().trim(),
+    servicio: String(x.servicio ?? x.SERVICIO ?? '').toUpperCase().trim()
+  };
+  reg._key = obtenerClaveNave(reg);
+  return reg;
+}
+
+function obtenerVisitPhase(n) {
+  const s = n.status;
+  const now = new Date();
+  const etb = parseFecha(n.etb);
+  if (n.atd || s === 'DEPARTED' || s.includes('SAILED')) return 'Departed';
+  if (s.includes('IN OPERATION') || s.includes('OPERATING') || s === 'WORKING' || (n.ata && !n.atd)) return 'Working';
+  if (etb && now >= etb && !n.atd) return 'Working';
+  return 'Inbound';
+}
+
+function rangoFechasNave(n) {
+  const puntos = [parseFecha(n.etb), parseFecha(n.ata), parseFecha(n.etd), parseFecha(n.atd)].filter(Boolean);
+  if (!puntos.length) return null;
+  const inicio = new Date(Math.min(...puntos.map(x => x.getTime())));
+  let fin = new Date(Math.max(...puntos.map(x => x.getTime())));
+  if (obtenerVisitPhase(n) === 'Working' && !parseFecha(n.atd) && fin < new Date()) fin = new Date();
+  return { inicio, fin };
+}
+
+async function cargarDatosFlotante() {
+  const est = document.getElementById('estadoFuente');
+  est.textContent = 'Leyendo datos.json...';
+  try {
+    const r = await fetch('datos.json?ts=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    const arr = Array.isArray(j) ? j : (j.naves || j.NAVES || j.data || j.datos || []);
+    if (!Array.isArray(arr) || !arr.length) throw new Error('datos.json vacío');
+    NAVES_DATA = arr.map(normalizarRegistro);
+    est.textContent = `datos.json (${NAVES_DATA.length} naves · ${new Date().toLocaleTimeString('es-EC', {hour:'2-digit', minute:'2-digit'})})`;
+    est.style.color = '#166534';
+  } catch (e) {
+    NAVES_DATA = NAVES_RESPALDO.map(normalizarRegistro);
+    est.textContent = 'Modo respaldo (sin datos.json)';
+    est.style.color = '#b91c1c';
+  }
+  poblarSelectorNaves();
+  aplicarConsulta();
+}
+
+function poblarSelectorNaves() {
+  const sel = document.getElementById('selectorNaveActiva');
+  const prevKey = NAVE_ACTIVA_KEY;
+  sel.innerHTML = NAVES_DATA.map(n =>
+    `<option value="${n._key}">${n.vesselName} · Viaje: ${n.viaje || '—'} · Línea: ${n.linea || '—'} (${n.referencia || n.gkey})</option>`
+  ).join('');
+
+  if (prevKey && NAVES_DATA.some(n => n._key === prevKey)) {
+    sel.value = prevKey;
+    NAVE_ACTIVA_KEY = prevKey;
+  } else if (NAVES_DATA.length) {
+    NAVE_ACTIVA_KEY = NAVES_DATA[0]._key;
+    sel.value = NAVE_ACTIVA_KEY;
+  }
+  renderizarInfoNaveActiva();
+  renderizarTodo();
+}
+
+function obtenerNaveActiva() {
+  return NAVES_DATA.find(n => n._key === NAVE_ACTIVA_KEY) || NAVES_DATA[0] || null;
+}
+
+function seleccionarNavePorId(key) {
+  NAVE_ACTIVA_KEY = key;
+  document.getElementById('selectorNaveActiva').value = key;
+  const idx = NAVES_FILTRADAS_ACTUALES.findIndex(n => n._key === key);
+  if (idx >= 0) {
+    const rows = document.querySelectorAll('#cuerpoTabla tr');
+    rows.forEach((r, i) => r.classList.toggle('seleccionada', i === idx));
+  }
+  renderizarInfoNaveActiva();
+  renderizarTodo();
+}
+
+function renderizarInfoNaveActiva() {
+  const nave = obtenerNaveActiva();
+  const box = document.getElementById('infoNaveActiva');
+  if (!nave) {
+    box.innerHTML = '<div class="col-span-full text-slate-400">No hay nave seleccionada.</div>';
+    return;
+  }
+  const cLin = ESTILO_LINEA[nave.linea] || { bg: '#e2e8f0', fg: '#0f172a' };
+  const items = [
+    { label: 'Vessel Name', val: nave.vesselName || '—' },
+    { label: 'Ship Reference', val: nave.shipRefDisplay || '—' },
+    { label: 'Viaje (Voyage)', val: nave.viaje || '—' },
+    { label: 'VLine Op. (Itinerario)', val: `<span class="px-2 py-0.5 rounded font-bold" style="background:${cLin.bg};color:${cLin.fg}">${nave.linea || '—'}</span>` },
+    { label: 'Servicio / Ruta', val: `${nave.servicio || '—'} (${nave.origen || '—'} → ${nave.destino || '—'})` },
+    { label: 'Arribo / Cut-Off', val: `${formatoNavis(nave.ata || nave.etb) || '—'} / ${formatoNavis(nave.cutoff) || '—'}` }
+  ];
+  box.innerHTML = items.map(it => `
+    <div class="bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-2">
+      <div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">${it.label}</div>
+      <div class="text-xs font-bold text-slate-800 mt-0.5 truncate">${it.val}</div>
+    </div>
+  `).join('');
+}
+
+function aplicarConsulta() {
+  const ds = document.getElementById('fechaInicio').value;
+  const hs = document.getElementById('fechaFin').value;
+  const q = document.getElementById('buscadorTexto').value.toUpperCase().trim();
+  const fase = document.getElementById('filtroFase').value;
+
+  if (!ds || !hs) return;
+  const inicioFiltro = new Date(ds + 'T00:00:00-05:00');
+  const finFiltro = new Date(hs + 'T23:59:59-05:00');
+
+  const filtrados = NAVES_DATA.filter(n => {
+    const vPhase = obtenerVisitPhase(n);
+    if (fase && vPhase !== fase) return false;
+
+    const rango = rangoFechasNave(n);
+    if (rango) {
+      const seCruza = rango.fin >= inicioFiltro && rango.inicio <= finFiltro;
+      if (!seCruza && vPhase !== 'Working') return false;
+    }
+
+    if (q) {
+      const texto = `${n.referencia} ${n.shipRefDisplay} ${n.vesselName} ${n.viaje} ${n.linea} ${n.servicio} ${n.origen} ${n.destino}`.toUpperCase();
+      if (!texto.includes(q)) return false;
+    }
+    return true;
+  }).sort((a, b) => (parseFecha(a.etb) || parseFecha(a.ata) || 0) - (parseFecha(b.etb) || parseFecha(b.ata) || 0));
+
+  NAVES_FILTRADAS_ACTUALES = filtrados;
+  document.getElementById('tituloVentana').textContent = `Vessel Schedule (${formatoTituloFecha(ds)}-${formatoTituloFecha(hs)}): ${filtrados.length}`;
+  renderizarTabla(filtrados);
+}
+
+function renderizarTabla(lista) {
+  const tbody = document.getElementById('cuerpoTabla');
+  document.getElementById('contadorRegistros').textContent = `${lista.length} registros`;
+
+  if (!lista.length) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:18px;font-family:Tahoma,sans-serif;color:#555;">No hay naves en el rango consultado. Pruebe ampliando el rango o limpiando filtros.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = lista.map((n, idx) => {
+    const phase = obtenerVisitPhase(n);
+    const cLin = ESTILO_LINEA[n.linea] || { bg: '#e2e8f0', fg: '#000000' };
+    const cSrv = ESTILO_SERVICIO[n.servicio] || { bg: '#f1f5f9', fg: '#000000' };
+
+    const arribo = n.ata ? formatoNavis(n.ata) : formatoNavis(n.etb);
+    const zarpe = n.atd ? formatoNavis(n.atd) : formatoNavis(n.etd);
+    const cutoff = formatoNavis(n.cutoff);
+
+    const esActiva = n._key === NAVE_ACTIVA_KEY || (!NAVE_ACTIVA_KEY && idx === 0) ? 'seleccionada' : '';
+
+    return `<tr class="${esActiva}" onclick="seleccionarFilaNave('${n._key}', this)" title="Clic para fijar como Nave Activa · GKey: ${n.gkey} | Viaje: ${n.viaje}">
+      <td class="col-icon">🚢</td>
+      <td>${arribo}</td>
+      <td>${zarpe}</td>
+      <td>${cutoff}</td>
+      <td style="background:${cSrv.bg};color:${cSrv.fg};">${n.shipRefDisplay}</td>
+      <td class="col-vessel">${n.vesselName}</td>
+      <td style="background:${cLin.bg};color:${cLin.fg};">${n.linea}</td>
+      <td style="background:${cSrv.bg};color:${cSrv.fg};">${n.servicio}</td>
+      <td>${phase}</td>
+      <td>${n.origen || '—'}</td>
+      <td>${n.destino || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function seleccionarFilaNave(key, tr) {
+  document.querySelectorAll('#cuerpoTabla tr').forEach(r => r.classList.remove('seleccionada'));
+  tr.classList.add('seleccionada');
+  seleccionarNavePorId(key);
+}
+
+function ejecutarAccionN4(sel) {
+  const val = sel.value;
+  if (val === 'refresh') cargarDatosFlotante();
+  if (val === 'working') { document.getElementById('filtroFase').value = 'Working'; aplicarConsulta(); }
+  if (val === 'inbound') { document.getElementById('filtroFase').value = 'Inbound'; aplicarConsulta(); }
+  if (val === 'clear') limpiarFiltros();
+  sel.value = '';
+}
+
+function limpiarFiltros() {
+  document.getElementById('buscadorTexto').value = '';
+  document.getElementById('filtroFase').value = '';
+  document.getElementById('selectRango').value = '7';
+  cambiarRangoFechas();
+}
+
+function toggleVentana() {
+  document.getElementById('ventanaSchedule').classList.toggle('oculta');
+}
+
+(function hacerArrastrable() {
+  const win = document.getElementById('ventanaSchedule');
+  const bar = document.getElementById('barraArrastre');
+  let arrastrando = false, offsetX = 0, offsetY = 0;
+
+  bar.addEventListener('mousedown', (e) => {
+    if (window.innerWidth <= 768 || e.target.tagName === 'BUTTON') return;
+    arrastrando = true;
+    const rect = win.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!arrastrando) return;
+    const x = Math.max(0, Math.min(window.innerWidth - 150, e.clientX - offsetX));
+    const y = Math.max(0, Math.min(window.innerHeight - 50, e.clientY - offsetY));
+    win.style.left = x + 'px';
+    win.style.top = y + 'px';
+  });
+
+  document.addEventListener('mouseup', () => { arrastrando = false; });
+})();
+
+/* --- EXTRACCIÓN DE TEXTO DE PDF Y EXCEL/CSV --- */
+async function extraerTextoArchivo(file) {
+  const nombre = file.name.toLowerCase();
+  if (nombre.endsWith('.pdf')) {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let paginasTexto = [];
+    for (let p = 1; p <= pdf.numPages; p++) {
+      const page = await pdf.getPage(p);
+      const content = await page.getTextContent();
+      // Agrupar items por coordenada Y aproximada para conservar filas
+      const filasMap = new Map();
+      for (const item of content.items) {
+        if (!item.str) continue;
+        const y = Math.round(item.transform[5] / 4) * 4;
+        if (!filasMap.has(y)) filasMap.set(y, []);
+        filasMap.get(y).push({ x: item.transform[4], str: item.str });
+      }
+      const ys = Array.from(filasMap.keys()).sort((a, b) => b - a);
+      const lineas = ys.map(y =>
+        filasMap.get(y).sort((a, b) => a.x - b.x).map(i => i.str.trim()).filter(Boolean).join(' ')
+      );
+      paginasTexto.push(`--- PAGINA ${p} ---\n` + lineas.join('\n'));
+    }
+    return paginasTexto.join('\n');
+  } else {
+    const buffer = await file.arrayBuffer();
+    const wb = XLSX.read(buffer, { type: 'array' });
+    let salida = [];
+    wb.SheetNames.forEach(sheetName => {
+      const ws = wb.Sheets[sheetName];
+      const csv = XLSX.utils.sheet_to_csv(ws, { FS: ' | ' });
+      salida.push(`--- HOJA: ${sheetName} ---\n` + csv);
+    });
+    return salida.join('\n');
+  }
+}
+
+/* --- DETECCIÓN SEMÁNTICA HEURÍSTICA + GEMINI AI --- */
+function detectarLineaEnTexto(texto, fallbackLinea) {
+  const up = texto.toUpperCase();
+  const codigos = ['CMA', 'MAE', 'MSK', 'HLC', 'COS', 'ONE', 'HMM', 'MSC', 'ZIM', 'PIL', 'YML', 'EVERGREEN', 'EMC'];
+  for (const c of codigos) {
+    const re = new RegExp(`\\b${c}\\b`);
+    if (re.test(up)) {
+      return c === 'MSK' ? 'MAE' : (c === 'EVERGREEN' ? 'EMC' : c);
+    }
+  }
+  return fallbackLinea || 'SIN_LINEA';
+}
+
+function analizarHeuristicamente(texto, fileName, nave) {
+  const lineas = texto.split(/\r?\n/);
+  const regexContenedor = /\b([A-Z]{4})\s*-?\s*(\d{7})\b/g;
+  const lineaGlobal = detectarLineaEnTexto(texto.slice(0, 2500), nave?.linea || 'SIN_LINEA');
+
+  const regexCA = /\b(CA|CONTROLLED\s*ATMOSPHERE|ATMOSFERA\s*CONTROLADA|STARCOOL\s*CA|EVERFRESH|LIVENTUS|MAXTEND|O2\s*[:=]?\s*\d|CO2\s*[:=]?\s*\d)\b/i;
+  const regexCOLD = /\b(COLD\s*TREATMENT|COLD\s*TRMT|CT\b|USDA|APGIS|APHIS|QUARANTINE|CUARENTENA|PULP\s*PROBE|SONDA|IN\s*TRANSIT\s*COLD)\b/i;
+
+  const encontrados = new Map();
+
+  for (let i = 0; i < lineas.length; i++) {
+    const contexto = [lineas[i - 1] || '', lineas[i] || '', lineas[i + 1] || ''].join(' | ');
+    let match;
+    regexContenedor.lastIndex = 0;
+    while ((match = regexContenedor.exec(lineas[i])) !== null) {
+      const cntr = `${match[1]}${match[2]}`.toUpperCase();
+      const tieneCA = regexCA.test(contexto);
+      const tieneCOLD = regexCOLD.test(contexto);
+
+      if (tieneCA || tieneCOLD) {
+        let tipo = 'CA';
+        if (tieneCA && tieneCOLD) tipo = 'MIXTO';
+        else if (tieneCOLD) tipo = 'COLD';
+
+        const tempMatch = contexto.match(/([+-]?\d{1,2}(?:[.,]\d{1,2})?\s*°?\s*[CF])\b/i);
+        const o2Match = contexto.match(/\bO2[:\s]*(\d{1,2}(?:[.,]\d)?%?)/i);
+        const co2Match = contexto.match(/\bCO2[:\s]*(\d{1,2}(?:[.,]\d)?%?)/i);
+        const coldMatch = contexto.match(/\b(USDA\s*[A-Z0-9-]+|\d{1,2}(?:[.,]\d)?\s*°?C\s*(?:FOR|X)\s*\d+\s*DAYS?)\b/i);
+
+        let params = [];
+        if (tempMatch) params.push(`Set ${tempMatch[1].replace(',', '.')}`);
+        if (o2Match) params.push(`O2 ${o2Match[1]}`);
+        if (co2Match) params.push(`CO2 ${co2Match[1]}`);
+        if (coldMatch) params.push(coldMatch[1]);
+        if (!params.length) params.push(tipo === 'MIXTO' ? 'CA + Cold Treatment' : (tipo === 'CA' ? 'Controlled Atmosphere' : 'Cold Treatment'));
+
+        const lineaDetectada = detectarLineaEnTexto(contexto, lineaGlobal);
+
+        if (!encontrados.has(cntr)) {
+          encontrados.set(cntr, {
+            contenedor: cntr,
+            linea: lineaDetectada,
+            tipo,
+            parametros: params.join(' · '),
+            archivo: fileName,
+            evidencia: contexto.trim().slice(0, 350)
+          });
+        } else {
+          const prev = encontrados.get(cntr);
+          if (prev.tipo !== tipo) prev.tipo = 'MIXTO';
+        }
+      }
+    }
+  }
+
+  return Array.from(encontrados.values());
+}
+
+async function analizarConGeminiSiDisponible(texto, fileName, nave) {
+  const apiKey = document.getElementById('geminiApiKey').value.trim();
+  const usarIA = document.getElementById('chkUsarIA').checked;
+  const baseHeuristic = analizarHeuristicamente(texto, fileName, nave);
+
+  if (!apiKey || !usarIA) {
+    return baseHeuristic;
+  }
+
+  try {
+    const prompt = `Analiza este manifiesto de carga ("${fileName}") para la nave "${nave?.vesselName || ''}" (viaje "${nave?.viaje || ''}", línea "${nave?.linea || ''}").
+Extrae ÚNICAMENTE los contenedores que requieran Atmósfera Controlada (CA), Cold Treatment (COLD/CT/USDA/cuarentena) o ambos (MIXTO).
+Devuelve un JSON array de objetos con:
+- "contenedor": string ISO (ej. "MSKU1234567")
+- "linea": código corto de línea naviera (ej. "MAE", "CMA", "HLC", "COS", "ONE", "MSC")
+- "tipo": "CA" | "COLD" | "MIXTO"
+- "parametros": string breve con temperatura, O2/CO2 o protocolo cold
+- "evidencia": fragmento corto del texto donde aparece
+
+Texto del manifiesto:
+${texto.slice(0, 28000)}`;
+
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.1
+        }
+      })
+    });
+
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+    const parsed = JSON.parse(rawJson);
+    if (!Array.isArray(parsed) || !parsed.length) return baseHeuristic;
+
+    const mapa = new Map(baseHeuristic.map(x => [x.contenedor, x]));
+    for (const item of parsed) {
+      const cntr = String(item.contenedor || '').replace(/[^A-Z0-9]/gi, '').toUpperCase();
+      if (!/^[A-Z]{4}\d{7}$/.test(cntr)) continue;
+      let tipo = String(item.tipo || '').toUpperCase();
+      if (!['CA', 'COLD', 'MIXTO'].includes(tipo)) tipo = 'CA';
+      const linea = String(item.linea || nave?.linea || 'SIN_LINEA').toUpperCase().trim();
+      mapa.set(cntr, {
+        contenedor: cntr,
+        linea,
+        tipo,
+        parametros: String(item.parametros || tipo),
+        archivo: fileName,
+        evidencia: String(item.evidencia || 'Detectado por Gemini AI')
+      });
+    }
+    return Array.from(mapa.values());
+  } catch (err) {
+    console.warn('Gemini AI fallback a heurística:', err);
+    return baseHeuristic;
+  }
+}
+
+/* --- PROCESAMIENTO ACUMULATIVO DE 1 A VARIOS ARCHIVOS --- */
+async function procesarArchivosSeleccionados(fileList) {
+  if (!fileList || !fileList.length) return;
+  const nave = obtenerNaveActiva();
+  if (!nave) {
+    alert('Primero selecciona o carga una nave en Vessel Schedule.');
+    return;
+  }
+
+  const archivos = Array.from(fileList);
+  const estadoEl = document.getElementById('estadoProceso');
+  const barraEl = document.getElementById('barraProgreso');
+
+  if (!ACUMULADO_POR_NAVE[nave._key]) {
+    ACUMULADO_POR_NAVE[nave._key] = {
+      naveInfo: {
+        key: nave._key,
+        vesselName: nave.vesselName,
+        viaje: nave.viaje,
+        referencia: nave.referencia,
+        lineaItinerario: nave.linea
+      },
+      archivos: [],
+      contenedores: []
+    };
+  }
+
+  const bucket = ACUMULADO_POR_NAVE[nave._key];
+
+  for (let i = 0; i < archivos.length; i++) {
+    const file = archivos[i];
+    const pct = Math.round(((i + 0.3) / archivos.length) * 100);
+    barraEl.style.width = `${pct}%`;
+    estadoEl.textContent = `Procesando (${i + 1}/${archivos.length}): ${file.name}...`;
+
+    const texto = await extraerTextoArchivo(file);
+    const detectados = await analizarConGeminiSiDisponible(texto, file.name, nave);
+
+    // Acumular sin duplicar el mismo contenedor del mismo archivo
+    let agregadosEnArchivo = 0;
+    for (const item of detectados) {
+      const existeMismoArchivo = bucket.contenedores.some(
+        c => c.contenedor === item.contenedor && c.archivo === item.archivo
+      );
+      if (!existeMismoArchivo) {
+        bucket.contenedores.push({
+          ...item,
+          nave: nave.vesselName,
+          viaje: nave.viaje,
+          naveKey: nave._key,
+          fechaCarga: new Date().toISOString()
+        });
+        agregadosEnArchivo++;
+      }
+    }
+
+    bucket.archivos.push({
+      nombre: file.name,
+      detectados: detectados.length,
+      agregados: agregadosEnArchivo,
+      hora: new Date().toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' })
+    });
+
+    barraEl.style.width = `${Math.round(((i + 1) / archivos.length) * 100)}%`;
+  }
+
+  guardarEstado();
+  document.getElementById('fileInput').value = '';
+  estadoEl.textContent = `Completado · ${archivos.length} archivo(s) acumulado(s)`;
+  setTimeout(() => { barraEl.style.width = '0%'; }, 1400);
+  renderizarTodo();
+}
+
+function limpiarDatosNaveActual() {
+  const nave = obtenerNaveActiva();
+  if (!nave || !ACUMULADO_POR_NAVE[nave._key]) return;
+  if (!confirm(`¿Borrar todos los manifiestos y contenedores CA/COLD acumulados para ${nave.vesselName}?`)) return;
+  delete ACUMULADO_POR_NAVE[nave._key];
+  guardarEstado();
+  renderizarTodo();
+}
+
+/* --- RENDERIZADO DE RESUMEN POR LÍNEA, ARCHIVOS Y TABLA --- */
+function obtenerContenedoresScope() {
+  const soloActiva = document.getElementById('chkSoloNaveActiva').checked;
+  const nave = obtenerNaveActiva();
+
+  if (soloActiva && nave) {
+    return (ACUMULADO_POR_NAVE[nave._key]?.contenedores || []);
+  }
+  return Object.values(ACUMULADO_POR_NAVE).flatMap(b => b.contenedores || []);
+}
+
+function renderizarTodo() {
+  const nave = obtenerNaveActiva();
+  const bucket = nave ? ACUMULADO_POR_NAVE[nave._key] : null;
+
+  // 1. Archivos de la nave activa
+  const archivosList = bucket?.archivos || [];
+  document.getElementById('conteoArchivosNave').textContent = archivosList.length;
+  const listaEl = document.getElementById('listaArchivosNave');
+  if (!archivosList.length) {
+    listaEl.innerHTML = '<p class="text-slate-400 italic">Aún no se han cargado manifiestos para esta nave.</p>';
+  } else {
+    listaEl.innerHTML = archivosList.map(a => `
+      <div class="flex items-center justify-between bg-slate-50 border border-slate-200/70 rounded px-2.5 py-1">
+        <span class="font-medium text-slate-700 truncate pr-2" title="${a.nombre}">📎 ${a.nombre}</span>
+        <span class="text-[11px] text-cyan-800 font-semibold shrink-0">+${a.agregados} CA/COLD (${a.hora})</span>
+      </div>
+    `).join('');
+  }
+
+  // 2. Contenedores en alcance y KPIs
+  const scope = obtenerContenedoresScope();
+  const totalCA = scope.filter(c => c.tipo === 'CA').length;
+  const totalCOLD = scope.filter(c => c.tipo === 'COLD').length;
+  const totalMIX = scope.filter(c => c.tipo === 'MIXTO').length;
+
+  document.getElementById('kpiTotalCA').textContent = totalCA;
+  document.getElementById('kpiTotalCOLD').textContent = totalCOLD;
+  document.getElementById('kpiTotalMIX').textContent = totalMIX;
+
+  const soloActiva = document.getElementById('chkSoloNaveActiva').checked;
+  document.getElementById('subtituloAcumulado').textContent = soloActiva && nave
+    ? `Nave activa: ${nave.vesselName} (${nave.viaje || '—'})`
+    : 'Mostrando todas las naves acumuladas';
+
+  // 3. Agrupar por Línea Naviera
+  const porLinea = new Map();
+  for (const c of scope) {
+    const lin = c.linea || 'SIN_LINEA';
+    if (!porLinea.has(lin)) {
+      porLinea.set(lin, { linea: lin, naves: new Set(), ca: 0, cold: 0, mix: 0, archivos: new Set() });
+    }
+    const row = porLinea.get(lin);
+    row.naves.add(`${c.nave} (${c.viaje || '—'})`);
+    row.archivos.add(c.archivo);
+    if (c.tipo === 'CA') row.ca++;
+    else if (c.tipo === 'COLD') row.cold++;
+    else row.mix++;
+  }
+
+  const tbodyLinea = document.getElementById('cuerpoResumenLinea');
+  const filasLinea = Array.from(porLinea.values()).sort((a, b) => (b.ca + b.cold + b.mix) - (a.ca + a.cold + a.mix));
+
+  if (!filasLinea.length) {
+    tbodyLinea.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-slate-400">Sin contenedores CA o COLD registrados aún.</td></tr>';
+  } else {
+    tbodyLinea.innerHTML = filasLinea.map(r => {
+      const est = ESTILO_LINEA[r.linea] || { bg: '#e2e8f0', fg: '#0f172a' };
+      const tot = r.ca + r.cold + r.mix;
+      return `<tr class="hover:bg-slate-50">
+        <td class="py-2 px-3"><span class="px-2 py-0.5 rounded font-bold text-[11px]" style="background:${est.bg};color:${est.fg}">${r.linea}</span></td>
+        <td class="py-2 px-3 text-slate-700">${Array.from(r.naves).join(', ')}</td>
+        <td class="py-2 px-3 text-center font-bold text-teal-700">${r.ca}</td>
+        <td class="py-2 px-3 text-center font-bold text-indigo-700">${r.cold}</td>
+        <td class="py-2 px-3 text-center font-bold text-amber-700">${r.mix}</td>
+        <td class="py-2 px-3 text-center font-extrabold text-slate-900">${tot}</td>
+        <td class="py-2 px-3 text-right text-slate-500">${r.archivos.size}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Actualizar combo de líneas
+  const selLinea = document.getElementById('filtroLinea');
+  const valorActualLinea = selLinea.value;
+  const lineasUnicas = Array.from(porLinea.keys()).sort();
+  selLinea.innerHTML = '<option value="">Todas las líneas</option>' +
+    lineasUnicas.map(l => `<option value="${l}">${l}</option>`).join('');
+  if (lineasUnicas.includes(valorActualLinea)) selLinea.value = valorActualLinea;
+
+  renderizarTablaContenedores();
+}
+
+function renderizarTablaContenedores() {
+  const scope = obtenerContenedoresScope();
+  const tipoFiltro = document.getElementById('filtroTipo').value;
+  const lineaFiltro = document.getElementById('filtroLinea').value;
+  const q = document.getElementById('buscarContenedor').value.toUpperCase().trim();
+
+  const filtrados = scope.filter(c => {
+    if (tipoFiltro !== 'ALL' && c.tipo !== tipoFiltro) return false;
+    if (lineaFiltro && c.linea !== lineaFiltro) return false;
+    if (q) {
+      const hay = `${c.contenedor} ${c.linea} ${c.nave} ${c.tipo} ${c.parametros} ${c.archivo}`.toUpperCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const tbody = document.getElementById('cuerpoContenedores');
+  if (!filtrados.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-slate-400 font-sans">No hay contenedores que coincidan con el filtro actual.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtrados.map((c, i) => {
+    const badge = c.tipo === 'CA'
+      ? '<span class="px-2 py-0.5 rounded bg-teal-100 text-teal-800 font-sans font-bold text-[11px]">CA</span>'
+      : c.tipo === 'COLD'
+      ? '<span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-sans font-bold text-[11px]">COLD</span>'
+      : '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-sans font-bold text-[11px]">CA + COLD</span>';
+
+    return `<tr class="hover:bg-slate-50">
+      <td class="py-2 px-2.5 font-bold text-slate-900">${c.contenedor}</td>
+      <td class="py-2 px-2.5 font-sans font-semibold text-slate-700">${c.linea}</td>
+      <td class="py-2 px-2.5 font-sans text-slate-600">${c.nave}</td>
+      <td class="py-2 px-2.5">${badge}</td>
+      <td class="py-2 px-2.5 font-sans text-slate-700">${c.parametros}</td>
+      <td class="py-2 px-2.5 font-sans text-slate-500 max-w-[160px] truncate" title="${c.archivo}">${c.archivo}</td>
+      <td class="py-2 px-2.5 text-center font-sans">
+        <button type="button" onclick='abrirEvidencia(${JSON.stringify(c.contenedor)}, ${JSON.stringify(c.archivo)}, ${JSON.stringify(c.evidencia)})'
+          class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold cursor-pointer">
+          Ver
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function abrirEvidencia(cntr, archivo, evidencia) {
+  document.getElementById('tituloModalEvidencia').textContent = `Evidencia · ${cntr}`;
+  document.getElementById('contenidoModalEvidencia').innerHTML = `
+    <div class="text-slate-500">Archivo origen: <strong class="text-slate-800">${archivo}</strong></div>
+    <pre class="bg-slate-900 text-emerald-300 p-3 rounded-lg whitespace-pre-wrap font-mono text-[11px] mt-2">${evidencia || 'Sin extracto textual disponible.'}</pre>
+  `;
+  const modal = document.getElementById('modalEvidencia');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function cerrarModalEvidencia() {
+  const modal = document.getElementById('modalEvidencia');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+/* --- EXPORTACIÓN EXCEL (.XLSX) Y CSV --- */
+function exportarExcel() {
+  const datos = obtenerContenedoresScope();
+  if (!datos.length) {
+    alert('No hay contenedores para exportar.');
+    return;
+  }
+  const rows = datos.map(d => ({
+    Nave: d.nave,
+    Viaje: d.viaje,
+    Linea_Naviera: d.linea,
+    Contenedor: d.contenedor,
+    Clasificacion: d.tipo,
+    Parametros_CA_COLD: d.parametros,
+    Archivo_Manifiesto: d.archivo
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'CA_COLD_Acumulado');
+  const nave = obtenerNaveActiva();
+  const sufijo = nave ? nave.vesselName.replace(/\s+/g, '_') : 'manifiestos';
+  XLSX.writeFile(wb, `ReeferScan_${sufijo}_CA_COLD.xlsx`);
+}
+
+function exportarCSV() {
+  const datos = obtenerContenedoresScope();
+  if (!datos.length) {
+    alert('No hay contenedores para exportar.');
+    return;
+  }
+  const headers = ['Nave', 'Viaje', 'Linea_Naviera', 'Contenedor', 'Clasificacion', 'Parametros_CA_COLD', 'Archivo_Manifiesto'];
+  const lines = [headers.join(',')];
+  for (const d of datos) {
+    const vals = [d.nave, d.viaje, d.linea, d.contenedor, d.tipo, d.parametros, d.archivo]
+      .map(v => `"${String(v || '').replace(/"/g, '""')}"`);
+    lines.push(vals.join(','));
+  }
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ReeferScan_CA_COLD.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* --- COPILOTO REEFER AI --- */
+async function enviarConsultaCopiloto(ev) {
+  ev.preventDefault();
+  const input = document.getElementById('inputCopiloto');
+  const pregunta = input.value.trim();
+  if (!pregunta) return;
+  input.value = '';
+
+  const chat = document.getElementById('chatCopiloto');
+  chat.innerHTML += `<div class="bg-blue-600 text-white rounded-lg p-2.5 ml-6">${pregunta}</div>`;
+
+  const scope = obtenerContenedoresScope();
+  const resumenPorLinea = {};
+  for (const c of scope) {
+    const l = c.linea || 'SIN_LINEA';
+    if (!resumenPorLinea[l]) resumenPorLinea[l] = { CA: 0, COLD: 0, MIXTO: 0, contenedores: [] };
+    resumenPorLinea[l][c.tipo]++;
+    resumenPorLinea[l].contenedores.push(`${c.contenedor}(${c.tipo})`);
+  }
+
+  let respuestaTexto = '';
+  const apiKey = document.getElementById('geminiApiKey').value.trim();
+
+  if (apiKey) {
+    try {
+      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `Eres un asistente experto en logística reefer portuaria (Atmósfera Controlada CA y Cold Treatment). Responde de forma breve y clara en español basándote en este resumen acumulado:\n${JSON.stringify(resumenPorLinea, null, 2)}\n\nPregunta del usuario: ${pregunta}`
+            }]
+          }]
+        })
+      });
+      const data = await resp.json();
+      respuestaTexto = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } catch {
+      respuestaTexto = '';
+    }
+  }
+
+  if (!respuestaTexto) {
+    if (!scope.length) {
+      respuestaTexto = 'Todavía no hay contenedores CA ni COLD cargados en la vista actual.';
+    } else {
+      const partes = Object.entries(resumenPorLinea).map(([lin, info]) =>
+        `<strong>${lin}</strong>: ${info.CA} CA, ${info.COLD} COLD, ${info.MIXTO} Mixto (${info.contenedores.slice(0, 6).join(', ')}${info.contenedores.length > 6 ? '...' : ''})`
+      );
+      respuestaTexto = `Resumen acumulado (${scope.length} unidades):<br>` + partes.join('<br>');
+    }
+  }
+
+  chat.innerHTML += `<div class="bg-white border border-slate-200 rounded-lg p-2.5 text-slate-800">${respuestaTexto}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+/* --- DRAG & DROP EN ZONA DE ARCHIVOS --- */
+(function initDragDrop() {
+  const drop = document.getElementById('dropZone');
+  ['dragenter', 'dragover'].forEach(evt => {
+    drop.addEventListener(evt, e => {
+      e.preventDefault();
+      drop.classList.add('border-cyan-600', 'bg-cyan-100/60');
+    });
+  });
+  ['dragleave', 'drop'].forEach(evt => {
+    drop.addEventListener(evt, e => {
+      e.preventDefault();
+      drop.classList.remove('border-cyan-600', 'bg-cyan-100/60');
+    });
+  });
+  drop.addEventListener('drop', e => {
+    if (e.dataTransfer?.files?.length) {
+      procesarArchivosSeleccionados(e.dataTransfer.files);
+    }
+  });
+})();
+
+cargarApiKey();
+inicializarFechasPorDefecto();
+cargarDatosFlotante();
+</script>
+</body>
+</html>
