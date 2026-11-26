@@ -1,9 +1,27 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-26T03:13:55.184793+00:00",
-  "actualizado_ec": "2026-11-25 22:13:55",
-  "total": 55,
+  "actualizado_utc": "2026-11-26T12:52:54.616911+00:00",
+  "actualizado_ec": "2026-11-26 07:52:54",
+  "total": 54,
   "naves": [
+    {
+      "gkey": "1973738126",
+      "referencia": "CMA2026135",
+      "nave": "CMA CGM HARMONY",
+      "viaje": "0DVRDN1MA",
+      "viaje_salida": "0DVRDN1MA",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-12-10 07:00:00",
+      "etd": "2026-12-10 19:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PEPAI",
+      "destino": "PEPAI",
+      "servicio": "MEDCAR"
+    },
     {
       "gkey": "1978646500",
       "referencia": "HLC2026114",
@@ -285,9 +303,9 @@
       "linea": "CMA",
       "etb": "2026-11-26 06:00:00",
       "etd": "2026-11-26 17:00:00",
-      "ata": "",
+      "ata": "2026-11-26 06:20:00",
       "atd": "",
-      "status": "TO ARRIVE",
+      "status": "IN OPERATION",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
@@ -305,7 +323,7 @@
       "etd": "2026-11-25 15:00:00",
       "ata": "2026-11-25 01:00:00",
       "atd": "2026-11-25 15:30:00",
-      "status": "IN OPERATION",
+      "status": "DEPARTED",
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MSW"
@@ -957,42 +975,6 @@
       "origen": "PABLB",
       "destino": "PABLB",
       "servicio": "OC1"
-    },
-    {
-      "gkey": "1907959037",
-      "referencia": "MAE2026125",
-      "nave": "SEALAND LOS ANGELES",
-      "viaje": "642S",
-      "viaje_salida": "644N",
-      "reefer": "2026-10-25 12:00:00",
-      "dry": "2026-10-25 12:00:00",
-      "linea": "MAE",
-      "etb": "2026-10-26 18:00:00",
-      "etd": "2026-10-29 03:30:00",
-      "ata": "2026-10-26 17:36:00",
-      "atd": "2026-10-29 03:20:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "WCSA-SHTL"
-    },
-    {
-      "gkey": "1899495197",
-      "referencia": "HLC2026098",
-      "nave": "GUAYAQUIL EXPRESS",
-      "viaje": "6239S",
-      "viaje_salida": "6239S",
-      "reefer": "2026-10-26 07:00:00",
-      "dry": "2026-10-26 07:00:00",
-      "linea": "HLC",
-      "etb": "2026-10-26 13:00:00",
-      "etd": "2026-10-27 18:00:00",
-      "ata": "2026-10-26 12:54:00",
-      "atd": "2026-10-27 18:03:00",
-      "status": "DEPARTED",
-      "origen": "COBUN",
-      "destino": "COBUN",
-      "servicio": "SWX_SB"
     }
   ]
 }
