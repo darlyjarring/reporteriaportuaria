@@ -1,9 +1,27 @@
 {
   "fuente": "https://dponline.dpworldposorja.ec/ItinerarioNaves/data",
-  "actualizado_utc": "2026-11-27T04:19:42.789152+00:00",
-  "actualizado_ec": "2026-11-26 23:19:42",
-  "total": 54,
+  "actualizado_utc": "2026-11-27T14:05:50.963036+00:00",
+  "actualizado_ec": "2026-11-27 09:05:50",
+  "total": 53,
   "naves": [
+    {
+      "gkey": "1973738009",
+      "referencia": "CMA2026133",
+      "nave": "CMA CGM AUSTRAL",
+      "viaje": "M2X0N0W19",
+      "viaje_salida": "M2X0N0W19",
+      "reefer": "",
+      "dry": "",
+      "linea": "CMA",
+      "etb": "2026-12-11 22:00:00",
+      "etd": "2026-12-13 07:00:00",
+      "ata": "",
+      "atd": "",
+      "status": "TO ARRIVE",
+      "origen": "PECLL",
+      "destino": "PECLL",
+      "servicio": "ACSA"
+    },
     {
       "gkey": "1973738126",
       "referencia": "CMA2026135",
@@ -265,7 +283,7 @@
       "reefer": "2026-11-27 23:00:00",
       "dry": "2026-11-27 23:00:00",
       "linea": "CMA",
-      "etb": "2026-11-27 20:00:00",
+      "etb": "2026-11-27 19:00:00",
       "etd": "2026-11-29 06:00:00",
       "ata": "",
       "atd": "",
@@ -939,42 +957,6 @@
       "origen": "PEPAI",
       "destino": "PEPAI",
       "servicio": "MEDCAR"
-    },
-    {
-      "gkey": "1900828387",
-      "referencia": "HLC2026099",
-      "nave": "CAPE SCOTT",
-      "viaje": "644N",
-      "viaje_salida": "644N",
-      "reefer": "2026-10-26 16:00:00",
-      "dry": "2026-10-26 16:00:00",
-      "linea": "HLC",
-      "etb": "2026-10-27 22:00:00",
-      "etd": "2026-10-28 20:00:00",
-      "ata": "2026-10-27 22:05:00",
-      "atd": "2026-10-28 19:54:00",
-      "status": "DEPARTED",
-      "origen": "PEPAI",
-      "destino": "PEPAI",
-      "servicio": "MSW"
-    },
-    {
-      "gkey": "1934785893",
-      "referencia": "MAE2026127",
-      "nave": "MAERSK BUTON",
-      "viaje": "642S",
-      "viaje_salida": "642S",
-      "reefer": "2026-10-27 07:00:00",
-      "dry": "2026-10-27 07:00:00",
-      "linea": "MAE",
-      "etb": "2026-10-27 19:00:00",
-      "etd": "2026-10-28 08:00:00",
-      "ata": "2026-10-27 19:00:00",
-      "atd": "2026-10-28 07:30:00",
-      "status": "DEPARTED",
-      "origen": "PABLB",
-      "destino": "PABLB",
-      "servicio": "OC1"
     }
   ]
 }
